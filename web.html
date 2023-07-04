@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie App</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .favorite-button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      color: gray;
+    }
+
+    .favorite-button.favorited {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <nav class="navbar">
+    <div class="navbar-tabs">
+      <button id="home-tab" class="nav-tab active">Home</button>
+      <button id="favorites-button" class="nav-tab">Favorites</button>
+      <button id="top-movies-tab" class="nav-tab">Top Movies</button>
+    </div>
+    <button id="night-mode-button" class="toggle-button">Switch Theme</button>
+  </nav>
+
+  <div class="search-bar">
+    <input id="search-input" class="search-input" type="text" placeholder="Search movies...">
+    <button id="search-button" class="search-button">Search</button>
+  </div>
+</header>
+
+
+  <main id="movies-container"></main>
+
+  <div class="page-selector">
+    <button id="prev-button" class="page-button">Prev</button>
+    <span id="page-number"></span>
+    <button id="next-button" class="page-button">Next</button>
+  </div>
+
+  <script>
+    const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
+
+    async function fetchMovies(page) {
+      const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=${page}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          return data.results;
+        } else {
+          throw new Error(data.status_message || 'Failed to fetch movies');
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+    function displayMovies(movies) {
+      const moviesContainer = document.getElementById('movies-container');
+      moviesContainer.innerHTML = '';
+
+      movies.forEach(movie => {
+        const movieElement = document.createElement('div');
+        movieElement.classList.add('movie-card');
+
+        const favoriteButton = document.createElement('button');
+        favoriteButton.classList.add('favorite-button');
+        favoriteButton.innerHTML = '<i class="far fa-heart"></i>';
+        favoriteButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          toggleFavorite(movie, favoriteButton);
+        });
+
+        if (isMovieInFavorites(movie)) {
+          favoriteButton.classList.add('favorited');
+          favoriteButton.innerHTML = '<i class="fas fa-heart"></i>';
+        }
+
+        movieElement.innerHTML = `
+          <h2>${movie.title}</h2>
+          <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
+          <p>${movie.overview}</p>
+          <p>Release Date: ${movie.release_date}</p>
+          <p>Rating: ${movie.vote_average}</p>
+        `;
+        
+        movieElement.appendChild(favoriteButton);
+
+        movieElement.addEventListener('click', () => {
+          window.location.href = `movie.html?movieId=${movie.id}`;
+        });
+
+        moviesContainer.appendChild(movieElement);
+      });
+    }
+
+    function updatePageNumber(page) {
+      const pageNumberElement = document.getElementById('page-number');
+      pageNumberElement.textContent = `Page ${page}`;
+    }
+
+    function handlePrevButtonClick() {
+      const currentPage = getCurrentPageFromURL();
+
+      if (currentPage > 1) {
+        navigateToPage(currentPage - 1);
+      }
+    }
+
+    function handleNextButtonClick() {
+      const currentPage = getCurrentPageFromURL();
+
+      navigateToPage(currentPage + 1);
+    }
+
+    function getCurrentPageFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return parseInt(urlParams.get('page')) || 1;
+    }
+
+    function navigateToPage(page) {
+      const url = `web.html?page=${page}`;
+      window.location.href = url;
+    }
+
+    function toggleNightMode() {
+      const body = document.body;
+      body.classList.toggle('dark-theme');
+
+      const nightModeEnabled = body.classList.contains('dark-theme');
+      localStorage.setItem('nightMode', nightModeEnabled);
+    }
+
+    function applyNightModePreference() {
+      const body = document.body;
+      const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+      if (nightModeEnabled) {
+        body.classList.add('dark-theme');
+      } else {
+        body.classList.remove('dark-theme');
+      }
+    }
+
+    window.addEventListener('load', applyNightModePreference);
+
+    async function searchMovies(query) {
+      const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          return data.results;
+        } else {
+          throw new Error(data.status_message || 'Failed to search movies');
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+    function isMovieInFavorites(movie) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      return favorites.some((fav) => fav.id === movie.id);
+    }
+
+    function toggleFavorite(movie, favoriteButton) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const isFavorite = isMovieInFavorites(movie);
+
+      if (isFavorite) {
+        favoriteButton.classList.remove('favorited');
+        favoriteButton.innerHTML = '<i class="far fa-heart"></i>';
+        removeMovieFromFavorites(movie);
+      } else {
+        favoriteButton.classList.add('favorited');
+        favoriteButton.innerHTML = '<i class="fas fa-heart"></i>';
+        addMovieToFavorites(movie);
+      }
+    }
+
+    function addMovieToFavorites(movie) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      favorites.push(movie);
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
+    function removeMovieFromFavorites(movie) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const updatedFavorites = favorites.filter((fav) => fav.id !== movie.id);
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    }
+
+    async function init() {
+      const currentPage = getCurrentPageFromURL();
+
+      try {
+        const movies = await fetchMovies(currentPage);
+        displayMovies(movies);
+        updatePageNumber(currentPage);
+      } catch (error) {
+        console.error(error);
+
+        const moviesContainer = document.getElementById('movies-container');
+        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    }
+
+    window.addEventListener('load', init);
+
+    const nightModeButton = document.getElementById('night-mode-button');
+    nightModeButton.addEventListener('click', toggleNightMode);
+
+    const searchButton = document.getElementById('search-button');
+    searchButton.addEventListener('click', async () => {
+      const searchInput = document.getElementById('search-input');
+      const query = searchInput.value;
+
+      try {
+        const movies = await searchMovies(query);
+        displayMovies(movies);
+      } catch (error) {
+        console.error(error);
+
+        const moviesContainer = document.getElementById('movies-container');
+        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    });
+
+    const favoritesButton = document.getElementById('favorites-button');
+    favoritesButton.addEventListener('click', navigateToFavorites);
+
+    function navigateToFavorites() {
+      window.location.href = 'favorites.html';
+    }
+
+    const topButton = document.getElementById('top-movies-tab');
+    topButton.addEventListener('click', navigateToFavorites1);
+
+    function navigateToFavorites1() {
+      window.location.href = 'top.html';
+    }
+    
+    const prevButton = document.getElementById('prev-button');
+    prevButton.addEventListener('click', handlePrevButtonClick);
+
+    const nextButton = document.getElementById('next-button');
+    nextButton.addEventListener('click', handleNextButtonClick);
+  </script>
+</body>
+</html>

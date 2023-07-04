@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie Details</title>
+  <link rel="stylesheet" href="moviestyle.css">
+  <script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="navbar-tabs">
+        <button id="home-tab" class="nav-tab active">Home</button>
+        <button id="favorites-button" class="nav-tab">Favorites</button>
+        <button id="top-movies-tab" class="nav-tab">Top Movies</button>
+      </div>
+    <h1>Movie Details</h1>
+    <button id="night-mode-button" class="toggle-button">Night Mode</button>
+  </header>
+
+  <main id="movie-details-container" class="container">
+    <div class="movie-details-card">
+      <div class="poster-container">
+        <img id="movie-poster" src="" alt="Movie Poster">
+      </div>
+      <div class="movie-info">
+        <h2 id="movie-title" style="font-size: 40px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, sans-serif;"></h2>
+        <p id="movie-overview" style="font-size: 25px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
+        <p id="movie-release-date" style="font-size: 14px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
+        <p id="movie-rating" style="font-size: 14px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
+        <h3>Cast</h3>
+        <ul id="cast-list"></ul>
+      </div>
+      <div id="trailer-container" class="trailer-container">
+        <div id="trailer-wrapper"></div>
+      </div>
+      <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
+    </div>
+  </main>
+
+  <button id="back-button" class="back-button">Back</button>
+
+  <script>
+    function toggleNightMode() {
+      const body = document.body;
+      body.classList.toggle('dark-theme');
+      const nightModeEnabled = body.classList.contains('dark-theme');
+      localStorage.setItem('nightMode', nightModeEnabled);
+    }
+
+    function applyNightModePreference() {
+      const body = document.body;
+      const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+      if (nightModeEnabled) {
+        body.classList.add('dark-theme');
+      } else {
+        body.classList.remove('dark-theme');
+      }
+    }
+
+    window.addEventListener('load', applyNightModePreference);
+
+    function handleBackButtonClick() {
+      window.history.back();
+    }
+
+    async function fetchMovieDetails(movieId) {
+      const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
+      const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          return data;
+        } else {
+          throw new Error(data.status_message || 'Failed to fetch movie details');
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+    async function fetchMovieCast(movieId) {
+      const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
+      const url = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          return data.cast;
+        } else {
+          throw new Error(data.status_message || 'Failed to fetch the movie cast');
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+    async function fetchOfficialTrailer(movieId) {
+      const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
+      const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          const trailer = data.results.find(trailer => trailer.type === 'Trailer' && trailer.site === 'YouTube');
+          return trailer;
+        } else {
+          throw new Error(data.status_message || 'Failed to fetch the official trailer');
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+    function displayMovieDetails(movie) {
+      const moviePoster = document.getElementById('movie-poster');
+      const movieTitle = document.getElementById('movie-title');
+      const movieOverview = document.getElementById('movie-overview');
+      const movieReleaseDate = document.getElementById('movie-release-date');
+      const movieRating = document.getElementById('movie-rating');
+
+      moviePoster.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+      movieTitle.textContent = movie.title;
+      movieOverview.textContent = movie.overview;
+      movieReleaseDate.textContent = `Release Date: ${movie.release_date}`;
+      movieRating.textContent = `Rating: ${movie.vote_average}`;
+    }
+
+    function displayCastList(cast) {
+      const castList = document.getElementById('cast-list');
+      const castNames = cast.map(actor => actor.name).join(', ');
+      castList.textContent = castNames;
+    }
+
+    async function displayOfficialTrailer(movieId) {
+      const trailerContainer = document.getElementById('trailer-container');
+
+      try {
+        const trailer = await fetchOfficialTrailer(movieId);
+
+        if (trailer) {
+          const trailerHTML = `
+            <h3>Official Trailer</h3>
+            <div class="trailer-wrapper">
+              <iframe class="trailer-iframe" width="640" height="480" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>
+            </div>
+          `;
+
+          trailerContainer.innerHTML = trailerHTML;
+        } else {
+          trailerContainer.innerHTML = `<h3>No official trailer found</h3>`;
+        }
+      } catch (error) {
+        console.error(error);
+        trailerContainer.innerHTML = `<p>Error: Failed to fetch the official trailer</p>`;
+      }
+    }
+
+    function isMovieInFavorites(movie) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      return favorites.some((fav) => fav.id === movie.id);
+    }
+
+    function toggleFavorite(movie, favoriteButton) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const isFavorite = isMovieInFavorites(movie);
+
+      if (isFavorite) {
+        favoriteButton.classList.remove('favorited');
+        favoriteButton.innerHTML = '<i class="far fa-heart"></i>';
+        removeMovieFromFavorites(movie);
+      } else {
+        favoriteButton.classList.add('favorited');
+        favoriteButton.innerHTML = '<i class="fas fa-heart"></i>';
+        addMovieToFavorites(movie);
+      }
+    }
+
+    function addMovieToFavorites(movie) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      favorites.push(movie);
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
+    function removeMovieFromFavorites(movie) {
+      let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      favorites = favorites.filter((fav) => fav.id !== movie.id);
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
+    function handleFavoriteButtonClick() {
+      const movieId = new URLSearchParams(window.location.search).get('movieId');
+      const favoriteButton = document.getElementById('favorite-button');
+
+      fetchMovieDetails(movieId)
+        .then((movie) => {
+          toggleFavorite(movie, favoriteButton);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    async function init() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const movieId = urlParams.get('movieId');
+
+      try {
+        const movie = await fetchMovieDetails(movieId);
+        const cast = await fetchMovieCast(movieId);
+
+        displayMovieDetails(movie);
+        displayCastList(cast);
+        await displayOfficialTrailer(movieId);
+
+        const favoriteButton = document.getElementById('favorite-button');
+        if (isMovieInFavorites(movie)) {
+          favoriteButton.classList.add('favorited');
+          favoriteButton.innerHTML = '<i class="fas fa-heart"></i>';
+        }
+
+        favoriteButton.addEventListener('click', handleFavoriteButtonClick);
+      } catch (error) {
+        console.error(error);
+        const movieDetailsContainer = document.getElementById('movie-details-container');
+        movieDetailsContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+
+    const nightModeButton = document.getElementById('night-mode-button');
+    nightModeButton.addEventListener('click', toggleNightMode);
+
+    const favoritesButton = document.getElementById('favorites-button');
+    favoritesButton.addEventListener('click', navigateToFavorites);
+
+    function navigateToFavorites() {
+      window.location.href = 'favorites.html';
+    }
+
+    const homeButton = document.getElementById('home-tab');
+    homeButton.addEventListener('click', navigateToFavorites1);
+
+    function navigateToFavorites1() {
+      window.location.href = 'web.html';
+    }
+
+    const topButton = document.getElementById('top-movies-tab');
+    topButton.addEventListener('click', navigateToFavorites2);
+
+    function navigateToFavorites2() {
+      window.location.href = 'top.html';
+    }
+
+
+
+    const backButton = document.getElementById('back-button');
+    backButton.addEventListener('click', handleBackButtonClick);
+  </script>
+</body>
+</html>

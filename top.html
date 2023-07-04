@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Highest Reviewed Movies</title>
+  <link rel="stylesheet" href="top.css">
+  
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="navbar-tabs">
+        <button id="home-tab" class="nav-tab">Home</button>
+        <button id="favorites-button" class="nav-tab">Favorites</button>
+        <button id="top-movies-tab" class="nav-tab active">Top Movies</button>
+      </div>
+    </nav>
+    <h1>Highest Reviewed Movies</h1>
+    <button id="night-mode-button" class="toggle-button">Switch Theme</button>
+  </header>
+
+  <main id="top-movies-container" class="container">
+    <ul id="movies-container"></ul>
+  </main>
+
+  <button id="back-button" class="back-button">Back</button>
+
+  <script>
+    function toggleNightMode() {
+      const body = document.body;
+      body.classList.toggle('dark-theme');
+      const nightModeEnabled = body.classList.contains('dark-theme');
+      localStorage.setItem('nightMode', nightModeEnabled);
+    }
+
+    function applyNightModePreference() {
+      const body = document.body;
+      const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+      if (nightModeEnabled) {
+        body.classList.add('dark-theme');
+      } else {
+        body.classList.remove('dark-theme');
+      }
+    }
+
+    window.addEventListener('load', applyNightModePreference);
+
+    function handleBackButtonClick() {
+      window.history.back();
+    }
+
+    async function fetchTopMovies() {
+      const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
+      const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          return data.results;
+        } else {
+          throw new Error(data.status_message || 'Failed to fetch top movies');
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+    function displayTopMovies(movies) {
+      const movieList = document.getElementById('movies-container');
+
+      movies.forEach((movie) => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('movie-card'); // Add the movie-card class
+
+        const moviePoster = document.createElement('img');
+        moviePoster.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+        moviePoster.alt = `${movie.title} Poster`;
+
+        const movieTitle = document.createElement('h2');
+        movieTitle.textContent = movie.title;
+
+        const movieRating = document.createElement('p');
+        movieRating.textContent = `Rating: ${movie.vote_average}`;
+
+        listItem.appendChild(moviePoster);
+        listItem.appendChild(movieTitle);
+        listItem.appendChild(movieRating);
+
+        movieList.appendChild(listItem);
+      });
+    }
+
+    async function init() {
+      try {
+        const topMovies = await fetchTopMovies();
+        displayTopMovies(topMovies);
+      } catch (error) {
+        console.error(error);
+        const topMoviesContainer = document.getElementById('top-movies-container');
+        topMoviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+
+    const nightModeButton = document.getElementById('night-mode-button');
+    nightModeButton.addEventListener('click', toggleNightMode);
+
+    const homeButton = document.getElementById('home-tab');
+    homeButton.addEventListener('click', () => {
+      location.href = 'web.html';
+    });
+
+    const favoritesButton = document.getElementById('favorites-button');
+    favoritesButton.addEventListener('click', () => {
+      location.href = 'favorites.html';
+    });
+
+    const backButton = document.getElementById('back-button');
+    backButton.addEventListener('click', handleBackButtonClick);
+  </script>
+</body>
+</html>

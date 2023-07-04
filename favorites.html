@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Favorite Movies</title>
+  <link rel="stylesheet" href="favorite.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="navbar-tabs">
+        <button id="home-tab" class="nav-tab active">Home</button>
+        <button id="favorites-button" class="nav-tab">Favorites</button>
+        <button id="top-movies-tab" class="nav-tab">Top Movies</button>
+
+    </div>
+
+    <button id="night-mode-button" class="toggle-button">Night Mode</button>
+
+
+
+  </header>
+  <h1>Favourite Movies</h1>
+
+  <main id="movies-container"></main>
+
+  <div class="page-selector">
+    <button id="prev-button" class="page-button">Prev</button>
+    <span id="page-number"></span>
+    <button id="next-button" class="page-button">Next</button>
+  </div>
+  <html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="favorites.css">
+</head>
+<body>
+  <header>
+  </header>
+  <main>
+    <!-- Rest of your HTML content -->
+  </main>
+</body>
+</html>
+
+  <script>
+    const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
+
+    async function fetchMoviesByIds(movieIds) {
+      const promises = movieIds.map(async (movieId) => {
+        const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+      });
+
+      try {
+        const movies = await Promise.all(promises);
+        return movies;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+    function displayMovies(movies) {
+      const moviesContainer = document.getElementById('movies-container');
+      moviesContainer.innerHTML = '';
+
+      movies.forEach(movie => {
+        const movieElement = document.createElement('div');
+        movieElement.classList.add('movie-card');
+
+        movieElement.innerHTML = `
+          <h2>${movie.title}</h2>
+          <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
+          <p>${movie.overview}</p>
+          <p>Release Date: ${movie.release_date}</p>
+          <p>Rating: ${movie.vote_average}</p>
+          <button class="favorite-button">Remove from Favorites</button>
+        `;
+
+        movieElement.addEventListener('click', () => {
+          window.location.href = `movie.html?movieId=${movie.id}`;
+        });
+
+        const favoriteButton = movieElement.querySelector('.favorite-button');
+        favoriteButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          removeFromFavorites(movie.id);
+        });
+
+        moviesContainer.appendChild(movieElement);
+      });
+    }
+
+    function updatePageNumber(page) {
+      const pageNumberElement = document.getElementById('page-number');
+      pageNumberElement.textContent = `Page ${page}`;
+    }
+
+    function handlePrevButtonClick() {
+      const currentPage = getCurrentPageFromURL();
+
+      if (currentPage > 1) {
+        navigateToPage(currentPage - 1);
+      }
+    }
+
+    function handleNextButtonClick() {
+      const currentPage = getCurrentPageFromURL();
+
+      navigateToPage(currentPage + 1);
+    }
+
+    function getCurrentPageFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return parseInt(urlParams.get('page')) || 1;
+    }
+
+    function navigateToPage(page) {
+      const url = `favorites.html?page=${page}`;
+      window.location.href = url;
+    }
+
+    function toggleNightMode() {
+      const body = document.body;
+      body.classList.toggle('dark-theme');
+
+      const nightModeEnabled = body.classList.contains('dark-theme');
+      localStorage.setItem('nightMode', nightModeEnabled);
+    }
+
+    function applyNightModePreference() {
+      const body = document.body;
+      const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+      if (nightModeEnabled) {
+        body.classList.add('dark-theme');
+      } else {
+        body.classList.remove('dark-theme');
+      }
+    }
+
+    window.addEventListener('load', applyNightModePreference);
+
+    async function searchMovies(query) {
+      const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          return data.results;
+        } else {
+          throw new Error(data.status_message || 'Failed to search movies');
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+    function removeFromFavorites(movieId) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const updatedFavorites = favorites.filter((fav) => fav.id !== movieId);
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+
+      // Reload the page to update the favorites list
+      location.reload();
+    }
+
+    async function init() {
+      const currentPage = getCurrentPageFromURL();
+
+      try {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const moviesPerPage = 10;
+        const start = (currentPage - 1) * moviesPerPage;
+        const end = start + moviesPerPage;
+        const movieIds = favorites.slice(start, end).map((movie) => movie.id);
+        const movies = await fetchMoviesByIds(movieIds);
+        displayMovies(movies);
+        updatePageNumber(currentPage);
+      } catch (error) {
+        console.error(error);
+
+        const moviesContainer = document.getElementById('movies-container');
+        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    }
+
+    window.addEventListener('load', init);
+
+    const nightModeButton = document.getElementById('night-mode-button');
+    nightModeButton.addEventListener('click', toggleNightMode);
+
+    const favoritesButton = document.getElementById('favorites-button');
+    favoritesButton.addEventListener('click', navigateToFavorites);
+
+    function navigateToFavorites() {
+      window.location.href = 'favorites.html';
+    }
+
+    const homeButton = document.getElementById('home-tab');
+    homeButton.addEventListener('click', navigateToFavorites1);
+
+    function navigateToFavorites1() {
+      window.location.href = 'web.html';
+    }
+
+    const topButton = document.getElementById('top-movies-tab');
+    topButton.addEventListener('click', navigateToFavorites2);
+
+    function navigateToFavorites2() {
+      window.location.href = 'top.html';
+    }
+
+
+    const searchButton = document.getElementById('search-button');
+    searchButton.addEventListener('click', async () => {
+      const searchInput = document.getElementById('search-input');
+      const query = searchInput.value;
+
+      try {
+        const movies = await searchMovies(query);
+        displayMovies(movies);
+      } catch (error) {
+        console.error(error);
+
+        const moviesContainer = document.getElementById('movies-container');
+        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    });
+
+    const prevButton = document.getElementById('prev-button');
+    prevButton.addEventListener('click', handlePrevButtonClick);
+
+    const nextButton = document.getElementById('next-button');
+    nextButton.addEventListener('click', handleNextButtonClick);
+  </script>
+</body>
+</html>

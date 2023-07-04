@@ -21,7 +21,7 @@ async function fetchMovies() {
 }
 
 function handleHomeButtonClick() {
-  window.location.href = 'web.html';
+  window.location.href = 'index.html';
 }
 
 const homeButton = document.getElementById('home-tab');

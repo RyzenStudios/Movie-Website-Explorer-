@@ -228,17 +228,15 @@ main {
 .back-button {
   background-color: #808080;
   color: #fff;
-  border: none;
   padding: 10px 20px;
   font-size: 16px;
   font-weight: bold;
   border-radius: 5px;
-  text-decoration: none;
   transition: background-color 0.3s ease;
 }
 
 .back-button:hover {
-  background-color: #b9c9e0;
+  background-color: #d4b9e0;
 }
 
 .favorite-button {

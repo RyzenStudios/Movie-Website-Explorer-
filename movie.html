@@ -3,7 +3,6 @@
 <head>
   <title>Movie Details</title>
   <link rel="stylesheet" href="moviestyle.css">
-  <script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <header>
@@ -13,8 +12,7 @@
         <button id="favorites-button" class="nav-tab">Favorites</button>
         <button id="top-movies-tab" class="nav-tab">Top Movies</button>
       </div>
-    <h1>Movie Details</h1>
-    <button id="night-mode-button" class="toggle-button">Night Mode</button>
+    <button id="night-mode-button" class="toggle-button">Switch Theme</button>
   </header>
 
   <main id="movie-details-container" class="container">
@@ -25,8 +23,8 @@
       <div class="movie-info">
         <h2 id="movie-title" style="font-size: 40px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, sans-serif;"></h2>
         <p id="movie-overview" style="font-size: 25px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
-        <p id="movie-release-date" style="font-size: 14px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
-        <p id="movie-rating" style="font-size: 14px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
+        <p id="movie-release-date" style="font-size: 18px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
+        <p id="movie-rating" style="font-size: 18px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
         <h3>Cast</h3>
         <ul id="cast-list"></ul>
       </div>
@@ -134,13 +132,33 @@
       movieOverview.textContent = movie.overview;
       movieReleaseDate.textContent = `Release Date: ${movie.release_date}`;
       movieRating.textContent = `Rating: ${movie.vote_average}`;
-    }
 
-    function displayCastList(cast) {
-      const castList = document.getElementById('cast-list');
-      const castNames = cast.map(actor => actor.name).join(', ');
-      castList.textContent = castNames;
+  const imdbLogo = document.createElement('img');
+  imdbLogo.src = 'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/171_Imdb_logo_logos-512.png';
+  imdbLogo.alt = 'IMDb Logo';
+  imdbLogo.style.width = '25px';
+  imdbLogo.style.height = '25px';
+  imdbLogo.style.marginRight = '15px';
+  imdbLogo.style.marginBottom = '10px';
+  imdbLogo.style.verticalAlign = 'middle';
+
+  // Create a link to the movie's IMDb page
+  const imdbLink = document.createElement('a');
+  imdbLink.href = `https://www.imdb.com/title/${movie.imdb_id}`;
+  imdbLink.target = '_blank';
+  imdbLink.appendChild(imdbLogo);
+
+  // Append the IMDb link to the movie rating element
+  movieRating.appendChild(imdbLink);
     }
+    
+
+    async function displayCastList(cast) {
+  const castList = document.getElementById('cast-list');
+  const castNames = cast.slice(0, 25).map(actor => actor.name).join(', ');
+  castList.textContent = castNames;
+}
+
 
     async function displayOfficialTrailer(movieId) {
       const trailerContainer = document.getElementById('trailer-container');

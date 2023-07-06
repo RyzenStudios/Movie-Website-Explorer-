@@ -3,7 +3,6 @@
 <head>
   <title>Highest Reviewed Movies</title>
   <link rel="stylesheet" href="top.css">
-  
 </head>
 <body>
   <header>
@@ -45,10 +44,6 @@
 
     window.addEventListener('load', applyNightModePreference);
 
-    function handleBackButtonClick() {
-      window.history.back();
-    }
-
     async function fetchTopMovies() {
       const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
       const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`;
@@ -68,12 +63,19 @@
       }
     }
 
+    function handleMovieCardClick(movie) {
+      window.location.href = `movie.html?movieId=${movie.id}`;
+    }
+
     function displayTopMovies(movies) {
       const movieList = document.getElementById('movies-container');
 
       movies.forEach((movie) => {
         const listItem = document.createElement('li');
         listItem.classList.add('movie-card'); // Add the movie-card class
+
+        // Set up the movie card click event listener
+        listItem.addEventListener('click', () => handleMovieCardClick(movie));
 
         const moviePoster = document.createElement('img');
         moviePoster.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
@@ -120,7 +122,10 @@
     });
 
     const backButton = document.getElementById('back-button');
-    backButton.addEventListener('click', handleBackButtonClick);
+    backButton.addEventListener('click', () => {
+      location.href = 'index.html';
+    });
+
   </script>
 </body>
 </html>

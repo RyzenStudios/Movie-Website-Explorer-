@@ -142,26 +142,26 @@ main {
   .favorite-button {
     background-color: #00000000;
     color: white;
-    width: 32px; /* Adjust the width as desired */
-    height: 32px; /* Adjust the height as desired */
+    width: 32px; 
+    height: 32px; 
     border: none;
     border-radius: 5px;
     cursor: pointer;
     position: absolute;
-    top: 77px; /* Adjust the top position as desired */
-    left: 529px; /* Adjust the left position as desired */
+    top: 77px; 
+    left: 529px; 
     z-index: 1;
   }
   
   .favorite-button:before {
-    content: '\2764'; /* Heart icon Unicode character */
-    font-family: 'Arial', sans-serif; /* Use an appropriate font family */
+    content: '\2764'; 
+    font-family: 'Arial', sans-serif; 
     position: relative;
-    font-size: 24px; /* Adjust the font size of the heart icon */
+    font-size: 24px; 
   }
   
   .favorite-button.favorited:before {
-    color: #f44336; /* Adjust the color of the filled heart icon */
+    color: #f44336; 
   }
 
   .navbar {
@@ -192,3 +192,14 @@ main {
   .nav-tab:hover {
     color: #a25bff;
   }
+
+  #cast-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#cast-list li {
+    margin-bottom: 5px;
+}
+

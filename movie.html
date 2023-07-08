@@ -19,6 +19,9 @@
     <div class="movie-details-card">
       <div class="poster-container">
         <img id="movie-poster" src="" alt="Movie Poster">
+        <button id="watch-button" class="watch-button">Watch</button>
+
+        
       </div>
       <div class="movie-info">
         <h2 id="movie-title" style="font-size: 40px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, sans-serif;"></h2>
@@ -28,12 +31,22 @@
         <h3>Cast</h3>
         <ul id="cast-list"></ul>
         <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
+        
       </div>
       <div id="trailer-container" class="trailer-container">
         <div id="trailer-wrapper"></div>
       </div>
+      
 
     </div>
+    <div class="comment-section">
+      <h3>Comments</h3>
+      <div class="comments-container" id="comments-container"></div>
+      <form id="comment-form">
+        <input type="text" id="name-input" placeholder="Your Name" required>
+        <textarea id="comment-input" placeholder="Add a comment" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
     <div class="related-movies">
       <h3>Related Movies</h3>
       <div id="related-movies-container" class="related-movies-container"></div>
@@ -61,6 +74,101 @@
         body.classList.remove('dark-theme');
       }
     }
+    const commentForm = document.getElementById('comment-form');
+const nameInput = document.getElementById('name-input');
+const commentInput = document.getElementById('comment-input');
+const commentsContainer = document.getElementById('comments-container');
+
+commentForm.addEventListener('submit', handleCommentSubmission);
+
+function handleCommentSubmission(event) {
+  event.preventDefault();
+
+  const name = nameInput.value.trim();
+  const comment = commentInput.value.trim();
+
+  if (name === '' || comment === '') {
+    return; // Do not submit empty comments
+  }
+
+  const timestamp = new Date().toLocaleString();
+  const commentElement = createCommentElement(name, comment, timestamp);
+  commentsContainer.appendChild(commentElement);
+
+  // Clear the input fields after submission
+  nameInput.value = '';
+  commentInput.value = '';
+}
+
+const profilePicUrl = [
+  'https://soccerpointeclaire.com/wp-content/uploads/2021/06/default-profile-pic-e1513291410505.jpg',
+  'https://i.pinimg.com/474x/f8/3c/cc/f83ccca88e2a190c2736f0f4fab02520.jpg',
+  'https://i.pinimg.com/236x/a0/f1/fc/a0f1fc7cbbb9f9637d90cd90170cbb57.jpg',
+  'https://i.pinimg.com/originals/46/72/f8/4672f876389036583190d93a71aa6cb2.jpg',
+  'https://i.pinimg.com/474x/f1/da/a7/f1daa70c9e3343cebd66ac2342d5be3f.jpg',
+  'https://i.pinimg.com/564x/c0/fc/f1/c0fcf164efd9a75a5f7d8065d4365451.jpg',
+  'https://i.pinimg.com/originals/bd/70/22/bd702201a2b6d8960734f60f34a22754.jpg',
+  'https://64.media.tumblr.com/95b73026318bb9174fe3528d2a3f868d/f8d3140061ff47ac-71/s400x600/1fd8a90993dab6281c333f0a061430ae618011f2.jpg',
+  'https://www.heurekalabs.org/content/images/2022/03/originalApe6808-1.png',
+  'https://d9jhi50qo719s.cloudfront.net/1e8f/samples/1owu_800.png?221105025618',
+];
+
+function getRandomProfilePicUrl() {
+  const randomIndex = Math.floor(Math.random() * profilePicUrl.length);
+  return profilePicUrl[randomIndex];
+}
+
+function createCommentElement(name, comment, timestamp) {
+  const commentContainer = document.createElement('div');
+  commentContainer.classList.add('comment');
+
+  const profilePicElement = document.createElement('img');
+  profilePicElement.classList.add('profile-pic');
+  profilePicElement.src = getRandomProfilePicUrl();
+
+  const commentContent = document.createElement('div');
+  commentContent.classList.add('comment-content');
+
+  const authorElement = document.createElement('div');
+  authorElement.classList.add('author');
+  authorElement.textContent = name;
+
+  const commentTextElement = document.createElement('div');
+  commentTextElement.classList.add('comment-text');
+  commentTextElement.textContent = comment;
+
+  const timestampElement = document.createElement('div');
+  timestampElement.classList.add('timestamp');
+  timestampElement.textContent = timestamp;
+
+  commentContent.appendChild(authorElement);
+  commentContent.appendChild(commentTextElement);
+  commentContent.appendChild(timestampElement);
+
+  commentContainer.appendChild(profilePicElement);
+  commentContainer.appendChild(commentContent);
+
+  return commentContainer;
+}
+
+
+    function applyWatchedState() {
+  const watchButton = document.getElementById('watch-button');
+  const movieId = new URLSearchParams(window.location.search).get('movieId');
+  const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
+
+  // Set the initial watched state and update the button appearance
+  if (watchedMovies.includes(movieId)) {
+    watchButton.textContent = 'Watched';
+    watchButton.classList.add('watched');
+  } else {
+    watchButton.textContent = 'Watch';
+    watchButton.classList.remove('watched');
+  }
+}
+
+window.addEventListener('load', applyWatchedState);
+
 
     window.addEventListener('load', applyNightModePreference);
 
@@ -190,6 +298,49 @@
       }
     }
 
+    function isMovieWatched() {
+      return localStorage.getItem('watched') === 'true';
+    }
+
+    function toggleWatchedState(movieId) {
+  const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
+
+  // Toggle the watched state
+  if (watchedMovies.includes(movieId)) {
+    // Remove movie from watched list
+    const index = watchedMovies.indexOf(movieId);
+    watchedMovies.splice(index, 1);
+  } else {
+    // Add movie to watched list
+    watchedMovies.push(movieId);
+  }
+
+  localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
+}
+
+
+
+function handleWatchButtonClick() {
+  const watchButton = document.getElementById('watch-button');
+  const movieId = new URLSearchParams(window.location.search).get('movieId');
+  const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
+
+  // Toggle the watched state
+  toggleWatchedState(movieId);
+
+  // Update the button appearance based on the watched state
+  if (watchedMovies.includes(movieId)) {
+    watchButton.textContent = 'Watch';
+    watchButton.classList.remove('watched');
+  } else {
+    watchButton.textContent = 'Watched';
+    watchButton.classList.add('watched');
+  }
+}
+
+
+
+
     function isMovieInFavorites(movie) {
       const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
       return favorites.some((fav) => fav.id === movie.id);
@@ -293,6 +444,7 @@ function displayRelatedMovies(relatedMovies) {
           favoriteButton.classList.add('favorited');
           favoriteButton.innerHTML = '<i class="fas fa-heart"></i>';
         }
+        
 
         favoriteButton.addEventListener('click', handleFavoriteButtonClick);
       } catch (error) {
@@ -303,6 +455,10 @@ function displayRelatedMovies(relatedMovies) {
     }
 
     window.addEventListener('DOMContentLoaded', init);
+
+      const watchButton = document.getElementById('watch-button');
+      toggleWatchedState(watchButton);
+      watchButton.addEventListener('click', handleWatchButtonClick);
 
     const nightModeButton = document.getElementById('night-mode-button');
     nightModeButton.addEventListener('click', toggleNightMode);

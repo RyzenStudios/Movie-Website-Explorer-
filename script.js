@@ -61,6 +61,46 @@ function toggleNightMode() {
   body.classList.toggle('dark-theme');
 }
 
+// Function to handle the watch button click
+function handleWatchButtonClick() {
+  const watchButton = document.getElementById('watch-button');
+
+  // Check if the button has the 'watched' class
+  if (watchButton.classList.contains('watched')) {
+    // Button is already marked as watched, do nothing
+    return;
+  }
+
+  // Toggle the 'watched' class on the button
+  watchButton.classList.toggle('watched');
+
+  // Update the button text based on the class
+  if (watchButton.classList.contains('watched')) {
+    watchButton.textContent = 'Watched';
+    // Store the watched state in local storage
+    localStorage.setItem('watched', 'true');
+  } else {
+    watchButton.textContent = 'Watch';
+    // Remove the watched state from local storage
+    localStorage.removeItem('watched');
+  }
+}
+
+// Add event listener to the watch button
+document.addEventListener('DOMContentLoaded', function() {
+  const watchButton = document.getElementById('watch-button');
+
+  watchButton.addEventListener('click', handleWatchButtonClick);
+
+  // Check the watched state from local storage and update the button accordingly
+  const watchedState = localStorage.getItem('watched');
+  if (watchedState === 'true') {
+    watchButton.classList.add('watched');
+    watchButton.textContent = 'Watched';
+  }
+});
+
+
 // Function to search movies
 async function searchMovies(query) {
   const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
@@ -126,3 +166,4 @@ function displayCast(cast, listId) {
     castList.appendChild(listItem);
   });
 }
+

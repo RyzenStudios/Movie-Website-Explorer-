@@ -24,6 +24,7 @@
       <button id="favorites-button" class="nav-tab">Favorites</button>
       <button id="top-movies-tab" class="nav-tab">Top Movies</button>
     </div>
+    
     <button id="night-mode-button" class="toggle-button">Switch Theme</button>
   </nav>
 
@@ -40,9 +41,13 @@
     <button id="prev-button" class="page-button">Prev</button>
     <span id="page-number"></span>
     <button id="next-button" class="page-button">Next</button>
+    
   </div>
 
   <script>
+
+    
+
     const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
 
     async function fetchMovies(page) {
@@ -74,6 +79,7 @@
         const favoriteButton = document.createElement('button');
         favoriteButton.classList.add('favorite-button');
         favoriteButton.innerHTML = '<i class="far fa-heart"></i>';
+        
         favoriteButton.addEventListener('click', (event) => {
           event.stopPropagation();
           toggleFavorite(movie, favoriteButton);
@@ -99,6 +105,8 @@
         movieElement.addEventListener('click', () => {
           window.location.href = `movie.html?movieId=${movie.id}`;
         });
+
+        
 
         moviesContainer.appendChild(movieElement);
       });
@@ -220,6 +228,7 @@
     }
 
     window.addEventListener('load', init);
+
 
     const nightModeButton = document.getElementById('night-mode-button');
     nightModeButton.addEventListener('click', toggleNightMode);

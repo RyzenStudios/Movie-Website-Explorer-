@@ -2,8 +2,18 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    transition: background-color 0.3s ease;
-}
+    opacity: 0;
+    animation: fade-in 0.9s forwards;
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 
 header {
     background: linear-gradient(to bottom, #f5f8f8, #271e2e69);
@@ -146,6 +156,7 @@ main {
     height: auto;
     border-radius: 7px;
     margin-right: 20px; /* Add margin-right to create spacing between the poster and movie info */
+    z-index: 1;
 }
 
 
@@ -262,6 +273,12 @@ main {
     width: 150px;
     margin: 0 5px;
     text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.related-movie-card:hover{
+    transform: scale(1.05);
+    opacity: 70%;
 }
 
 .related-movie-card img {
@@ -276,3 +293,126 @@ main {
     font-size: 16px;
     font-weight: bold;
 }
+
+
+/* Add your existing CSS styles here */
+
+.watch-button {
+    display: block;
+    margin-top: -55px;
+    margin-left: 2px; 
+    padding: 1px 210px;
+    font-size: 12px;
+    background-color: #2e1e1e;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color, padding 0.3s ease;
+  }
+  
+  .watch-button:hover {
+    background-color:#4d3333;
+    padding: 10px 210px;
+  }
+  
+  .watched {
+    background-color: #252b26;
+    color: darkgray;
+  }
+
+  .watched:hover{
+    background-color: #353f37;
+
+  }
+
+  .comment {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  
+  .comment-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 15px;
+    color: #fff;
+  }
+  
+  .comment-text {
+    margin: 0;
+    color: #fff;
+    font-weight: 100;
+  }
+
+  
+  
+  #comment-form {
+    display: flex;
+    margin-top: 10px;
+    width: 1200px;
+  }
+  
+  #comment-input {
+    flex: 1;
+    padding: 18px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    margin-right: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    border-width: 2px;
+    transition: all 0.3s ease;
+  }
+
+  #comment-input:hover{
+    border-color: #a25bff;
+  }
+  
+  #comment-input:focus {
+    outline: none;
+    border-color: #ff5b5b;
+  }
+
+  #name-input{
+    border-width: 2px;
+    border-radius: 15%;
+    transition: all 0.3s ease;
+    width: 70px;
+    
+  }
+
+  #name-input:hover{
+    border-radius: 20%;
+    border-color: #a25bff;
+
+  }
+  
+  #comment-form button {
+    background-color: #a25bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 80px;
+    height: 30px;
+    margin-top: 47px;
+    margin-left: -90px;
+    transition: background-color 0.3s ease;
+  }
+  
+  #comment-form button:hover {
+    background-color: #8128c9;
+  }

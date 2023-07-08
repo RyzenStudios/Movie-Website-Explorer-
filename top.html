@@ -21,9 +21,19 @@
     <ul id="movies-container"></ul>
   </main>
 
+  <div class="page-selector">
+    <button id="previous-page-button" class="page-button" disabled>Previous</button>
+    <span id="current-page"></span>
+    <button id="next-page-button" class="page-button" disabled>Next</button>
+  </div>
+
   <button id="back-button" class="back-button">Back</button>
 
   <script>
+    // Global variables to track the current page and total pages
+    let currentPage = 1;
+    let totalPages = 0;
+
     function toggleNightMode() {
       const body = document.body;
       body.classList.toggle('dark-theme');
@@ -44,15 +54,16 @@
 
     window.addEventListener('load', applyNightModePreference);
 
-    async function fetchTopMovies() {
+    async function fetchTopMovies(page) {
       const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
-      const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`;
+      const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&page=${page}`;
 
       try {
         const response = await fetch(url);
         const data = await response.json();
 
         if (response.ok) {
+          totalPages = data.total_pages; // Update the total pages
           return data.results;
         } else {
           throw new Error(data.status_message || 'Failed to fetch top movies');
@@ -69,6 +80,7 @@
 
     function displayTopMovies(movies) {
       const movieList = document.getElementById('movies-container');
+      movieList.innerHTML = ''; // Clear the existing movie list
 
       movies.forEach((movie) => {
         const listItem = document.createElement('li');
@@ -95,14 +107,34 @@
       });
     }
 
-    async function init() {
+    async function goToPage(page) {
       try {
-        const topMovies = await fetchTopMovies();
+        const topMovies = await fetchTopMovies(page);
         displayTopMovies(topMovies);
+        currentPage = page;
+        updatePageSelector();
       } catch (error) {
         console.error(error);
         const topMoviesContainer = document.getElementById('top-movies-container');
         topMoviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    }
+
+    function updatePageSelector() {
+      const previousButton = document.getElementById('previous-page-button');
+      const nextButton = document.getElementById('next-page-button');
+      const currentPageSpan = document.getElementById('current-page');
+
+      previousButton.disabled = currentPage === 1;
+      nextButton.disabled = currentPage === totalPages;
+      currentPageSpan.textContent = `Page ${currentPage} of ${totalPages}`;
+    }
+
+    async function init() {
+      try {
+        await goToPage(currentPage);
+      } catch (error) {
+        console.error(error);
       }
     }
 
@@ -124,6 +156,20 @@
     const backButton = document.getElementById('back-button');
     backButton.addEventListener('click', () => {
       location.href = 'index.html';
+    });
+
+    const previousPageButton = document.getElementById('previous-page-button');
+    previousPageButton.addEventListener('click', () => {
+      if (currentPage > 1) {
+        goToPage(currentPage - 1);
+      }
+    });
+
+    const nextPageButton = document.getElementById('next-page-button');
+    nextPageButton.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        goToPage(currentPage + 1);
+      }
     });
 
   </script>

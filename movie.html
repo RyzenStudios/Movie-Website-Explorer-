@@ -27,13 +27,19 @@
         <p id="movie-rating" style="font-size: 18px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
         <h3>Cast</h3>
         <ul id="cast-list"></ul>
+        <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
       </div>
       <div id="trailer-container" class="trailer-container">
         <div id="trailer-wrapper"></div>
       </div>
-      <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
+
+    </div>
+    <div class="related-movies">
+      <h3>Related Movies</h3>
+      <div id="related-movies-container" class="related-movies-container"></div>
     </div>
   </main>
+  
 
   <button id="back-button" class="back-button">Back</button>
 
@@ -228,6 +234,45 @@
           console.error(error);
         });
     }
+    async function fetchRelatedMovies(movieId) {
+  const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
+  const url = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (response.ok) {
+      return data.results;
+    } else {
+      throw new Error(data.status_message || 'Failed to fetch related movies');
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+function displayRelatedMovies(relatedMovies) {
+  const relatedMoviesContainer = document.getElementById('related-movies-container');
+  relatedMoviesContainer.innerHTML = '';
+
+  relatedMovies.forEach((movie) => {
+    const movieElement = document.createElement('div');
+    movieElement.classList.add('related-movie-card');
+
+    movieElement.innerHTML = `
+      <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
+      <h4>${movie.title}</h4>
+    `;
+
+    movieElement.addEventListener('click', () => {
+      window.location.href = `movie.html?movieId=${movie.id}`;
+    });
+
+    relatedMoviesContainer.appendChild(movieElement);
+  });
+}
 
     async function init() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -236,9 +281,11 @@
       try {
         const movie = await fetchMovieDetails(movieId);
         const cast = await fetchMovieCast(movieId);
+        const relatedMovies = await fetchRelatedMovies(movieId);
 
         displayMovieDetails(movie);
         displayCastList(cast);
+        displayRelatedMovies(relatedMovies);
         await displayOfficialTrailer(movieId);
 
         const favoriteButton = document.getElementById('favorite-button');

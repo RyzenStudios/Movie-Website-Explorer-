@@ -48,23 +48,25 @@
   <script>
     const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
 
-    async function fetchMoviesByIds(movieIds) {
-  const promises = movieIds.map(async (movieId) => {
-    const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`;
+ 
+    async function fetchTVShowsByIds(showIds) {
+  const promises = showIds.map(async (showId) => {
+    const url = `https://api.themoviedb.org/3/tv/${showId}?api_key=${API_KEY}`;
     const response = await fetch(url);
     const data = await response.json();
     return data;
   });
 
   try {
-    const movieData = await Promise.all(promises);
-    const movies = movieData.filter((movie) => movie && movie.title && !movie.first_air_date);
-    return movies;
+    const showData = await Promise.all(promises);
+    const shows = showData.filter((show) => show && show.name && !show.release_date);
+    return shows;
   } catch (error) {
     console.error(error);
     throw error;
   }
 }
+
 
     function displayMovies(movies) {
   const moviesContainer = document.getElementById('movies-container');
@@ -76,10 +78,10 @@
       movieElement.classList.add('movie-card');
 
       movieElement.innerHTML = `
-        <h2>${movie.title}</h2>
+        <h2>${movie.name}</h2>
         <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
         <p>${movie.overview}</p>
-        <p>Release Date: ${movie.release_date}</p>
+        <p>Release Date: ${movie.first_air_date}</p>
         <p>Rating: ${movie.vote_average}</p>
         <button class="favorite-button">Remove from Favorites</button>
       `;
@@ -99,7 +101,6 @@
   });
 }
 
-
     function updatePageNumber(page) {
       const pageNumberElement = document.getElementById('page-number');
       pageNumberElement.textContent = `Page ${page}`;
@@ -118,8 +119,6 @@
 
       navigateToPage(currentPage + 1);
     }
-
-    
 
     function getCurrentPageFromURL() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -188,7 +187,7 @@
         const start = (currentPage - 1) * moviesPerPage;
         const end = start + moviesPerPage;
         const movieIds = favorites.slice(start, end).map((movie) => movie.id);
-        const movies = await fetchMoviesByIds(movieIds);
+        const movies = await fetchTVShowsByIds(movieIds);
         displayMovies(movies);
         updatePageNumber(currentPage);
       } catch (error) {
@@ -239,8 +238,6 @@
     function navigateToTopShows() {
       window.location.href = 'tvshows.html';
     }
-
-
 
     const searchButton = document.getElementById('search-button');
     searchButton.addEventListener('click', async () => {

@@ -176,13 +176,16 @@ body {
     cursor: pointer;
     font-size: 20px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    transition: all 0.3s ease-in-out;
     color: rgb(209, 209, 209)
     
   }
 
   
+
   .nav-tab:hover {
     color: #a25bff;
+    transform: scale(1.05);
   }
 
 

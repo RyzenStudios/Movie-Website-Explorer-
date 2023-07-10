@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Your Profile</title>
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+  <h1>Create Your Profile</h1>
+
+  <form id="profile-form">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+      <label for="bio">Bio:</label>
+      <textarea id="bio" name="bio"></textarea>
+    </div>
+    <div>
+      <label for="avatar">Avatar:</label>
+      <input type="file" id="avatar" name="avatar" accept="image/*">
+    </div>
+    <div>
+      <input type="submit" value="Create Profile">
+    </div>
+  </form>
+
+  <div id="profile-container"></div>
+
+  <script>
+    const profileForm = document.getElementById('profile-form');
+    const profileContainer = document.getElementById('profile-container');
+
+    profileForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const bio = document.getElementById('bio').value;
+      const avatar = document.getElementById('avatar').files[0];
+      
+      const reader = new FileReader();
+
+      reader.addEventListener('load', function() {
+        const profileData = {
+          name: name,
+          email: email,
+          bio: bio,
+          avatar: reader.result
+        };
+
+        displayProfile(profileData);
+        profileForm.reset();
+      });
+
+      if (avatar) {
+        reader.readAsDataURL(avatar);
+      }
+    });
+
+    function displayProfile(profile) {
+      const profileCard = document.createElement('div');
+      profileCard.classList.add('profile-card');
+
+      profileCard.innerHTML = `
+        <h2>${profile.name}</h2>
+        <p>Email: ${profile.email}</p>
+        <p>Bio: ${profile.bio}</p>
+        <img src="${profile.avatar}" alt="Avatar">
+
+        <button class="edit-button">Edit</button>
+        <button class="delete-button">Delete</button>
+      `;
+
+      const editButton = profileCard.querySelector('.edit-button');
+      editButton.addEventListener('click', function() {
+        editProfile(profile);
+      });
+
+      const deleteButton = profileCard.querySelector('.delete-button');
+      deleteButton.addEventListener('click', function() {
+        deleteProfile(profileCard);
+      });
+
+      profileContainer.appendChild(profileCard);
+    }
+
+    function editProfile(profile) {
+      const nameField = document.getElementById('name');
+      const emailField = document.getElementById('email');
+      const bioField = document.getElementById('bio');
+
+      nameField.value = profile.name;
+      emailField.value = profile.email;
+      bioField.value = profile.bio;
+    }
+
+    function deleteProfile(profileCard) {
+      profileCard.remove();
+    }
+  </script>
+</body>
+</html>

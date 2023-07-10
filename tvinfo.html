@@ -12,7 +12,7 @@
         <button id="favorites-button" class="nav-tab">Favorite Movies</button>
         <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
         <button id="top-movies-tab" class="nav-tab">Top Movies</button>
-        <button id="top-shows-tab" class="nav-tab">Top Tv Shows</button>
+        <button id="top-shows-tab" class="nav-tab">Top Tv Show</button>
 
       </div>
     <button id="night-mode-button" class="toggle-button">Switch Theme</button>
@@ -51,7 +51,7 @@
         <button type="submit">Submit</button>
       </form>
     <div class="related-movies">
-      <h3>Related Movies</h3>
+      <h3>Related Shows</h3>
       <div id="related-movies-container" class="related-movies-container"></div>
     </div>
   </main>
@@ -181,7 +181,7 @@ window.addEventListener('load', applyWatchedState);
 
     async function fetchMovieDetails(movieId) {
       const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
-      const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`;
+      const url = `https://api.themoviedb.org/3/tv/${movieId}?api_key=${API_KEY}`;
 
       try {
         const response = await fetch(url);
@@ -200,7 +200,7 @@ window.addEventListener('load', applyWatchedState);
 
     async function fetchMovieCast(movieId) {
       const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
-      const url = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}`;
+      const url = `https://api.themoviedb.org/3/tv/${movieId}/credits?api_key=${API_KEY}`;
 
       try {
         const response = await fetch(url);
@@ -219,7 +219,7 @@ window.addEventListener('load', applyWatchedState);
 
     async function fetchOfficialTrailer(movieId) {
       const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
-      const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}`;
+      const url = `https://api.themoviedb.org/3/tv/${movieId}/videos?api_key=${API_KEY}`;
 
       try {
         const response = await fetch(url);
@@ -245,28 +245,12 @@ window.addEventListener('load', applyWatchedState);
       const movieRating = document.getElementById('movie-rating');
 
       moviePoster.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
-      movieTitle.textContent = movie.title;
+      movieTitle.textContent = movie.name;
       movieOverview.textContent = movie.overview;
-      movieReleaseDate.textContent = `Release Date: ${movie.release_date}`;
+      movieReleaseDate.textContent = `Air Date: ${movie.first_air_date}`;
       movieRating.textContent = `Rating: ${movie.vote_average}`;
 
-  const imdbLogo = document.createElement('img');
-  imdbLogo.src = 'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/171_Imdb_logo_logos-512.png';
-  imdbLogo.alt = 'IMDb Logo';
-  imdbLogo.style.width = '25px';
-  imdbLogo.style.height = '25px';
-  imdbLogo.style.marginRight = '15px';
-  imdbLogo.style.marginBottom = '10px';
-  imdbLogo.style.verticalAlign = 'middle';
 
-  // Create a link to the movie's IMDb page
-  const imdbLink = document.createElement('a');
-  imdbLink.href = `https://www.imdb.com/title/${movie.imdb_id}`;
-  imdbLink.target = '_blank';
-  imdbLink.appendChild(imdbLogo);
-
-  // Append the IMDb link to the movie rating element
-  movieRating.appendChild(imdbLink);
     }
     
 
@@ -390,7 +374,7 @@ function handleWatchButtonClick() {
     }
     async function fetchRelatedMovies(movieId) {
   const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
-  const url = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}`;
+  const url = `https://api.themoviedb.org/3/tv/${movieId}/similar?api_key=${API_KEY}`;
 
   try {
     const response = await fetch(url);
@@ -465,6 +449,7 @@ function displayRelatedMovies(relatedMovies) {
 
     const nightModeButton = document.getElementById('night-mode-button');
     nightModeButton.addEventListener('click', toggleNightMode);
+
     const homeButton = document.getElementById('home-tab');
     homeButton.addEventListener('click', navigateToHome);
 
@@ -500,6 +485,7 @@ function displayRelatedMovies(relatedMovies) {
     function navigateToTopShows() {
       window.location.href = 'tvshows.html';
     }
+
 
 
     const backButton = document.getElementById('back-button');

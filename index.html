@@ -21,8 +21,10 @@
   <nav class="navbar">
     <div class="navbar-tabs">
       <button id="home-tab" class="nav-tab active">Home</button>
-      <button id="favorites-button" class="nav-tab">Favorites</button>
+      <button id="favorites-button" class="nav-tab">Favorite Movies</button>
+      <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
       <button id="top-movies-tab" class="nav-tab">Top Movies</button>
+      <button id="top-shows-tab" class="nav-tab">Top Tv Shows</button>
     </div>
     
     <button id="night-mode-button" class="toggle-button">Switch Theme</button>
@@ -68,48 +70,136 @@
       }
     }
 
-    function displayMovies(movies) {
-      const moviesContainer = document.getElementById('movies-container');
-      moviesContainer.innerHTML = '';
+    async function fetchTVShows(page) {
+      const url = `https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&page=${page}`;
 
-      movies.forEach(movie => {
-        const movieElement = document.createElement('div');
-        movieElement.classList.add('movie-card');
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
 
-        const favoriteButton = document.createElement('button');
-        favoriteButton.classList.add('favorite-button');
-        favoriteButton.innerHTML = '<i class="far fa-heart"></i>';
-        
-        favoriteButton.addEventListener('click', (event) => {
-          event.stopPropagation();
-          toggleFavorite(movie, favoriteButton);
-        });
-
-        if (isMovieInFavorites(movie)) {
-          favoriteButton.classList.add('favorited');
-          favoriteButton.innerHTML = '<i class="fas fa-heart"></i>';
+        if (response.ok) {
+          return data.results;
+        } else {
+          throw new Error(data.status_message || 'Failed to fetch TV shows');
         }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
 
-        movieElement.innerHTML = `
-          <h2>${movie.title}</h2>
-          <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
-          <p>${movie.overview}</p>
-          <p>‎ </p>
-          <p>Release Date: ${movie.release_date}</p>
-          <p>‎ </p>
-          <p>Rating: ${movie.vote_average}</p>
-        `;
-        
-        movieElement.appendChild(favoriteButton);
+  
+    function displayResults(results) {
+  const moviesContainer = document.getElementById('movies-container');
+  moviesContainer.innerHTML = '';
+  const sortedResults = results.sort((a, b) => b.vote_average - a.vote_average);
 
-        movieElement.addEventListener('click', () => {
-          window.location.href = `movie.html?movieId=${movie.id}`;
-        });
+  sortedResults.forEach((result, index) => {
+    const resultElement = document.createElement('div');
+    resultElement.classList.add('movie-card');
 
-        
+    const favoriteButton = document.createElement('button');
+    favoriteButton.classList.add('favorite-button');
+    favoriteButton.innerHTML = '<i class="far fa-heart"></i>';
 
-        moviesContainer.appendChild(movieElement);
+    favoriteButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toggleFavorite(result, favoriteButton);
+    });
+
+    if (isMovieInFavorites(result)) {
+      favoriteButton.classList.add('favorited');
+      favoriteButton.innerHTML = '<i class="fas fa-heart"></i>';
+    }
+
+    let resultHTML = '';
+    if (result.title) {
+      // It's a movie
+      resultHTML += `
+        <h2>${result.title}</h2>
+        <p><em>Movie</em></p>
+
+        <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.title}">
+        <p>${result.overview}</p>
+        <p>‎ </p>
+        <p>Release Date: ${result.release_date}</p>
+        <p>‎ </p>
+        <p>Rating: ${result.vote_average}</p>
+      `;
+    } else if (result.name) {
+      // It's a TV show
+      resultHTML += `
+        <h2>${result.name}</h2>
+        <p><em>TV Show</em></p>
+
+        <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.name}">
+        <p>${result.overview}</p>
+        <p>‎ </p>
+        <p>First Air Date: ${result.first_air_date}</p>
+        <p>‎ </p>
+        <p>Rating: ${result.vote_average}</p>
+      `;
+    }
+
+    resultElement.innerHTML = resultHTML;
+    resultElement.appendChild(favoriteButton);
+
+    if (result.title) {
+      resultElement.addEventListener('click', () => {
+        window.location.href = `movie.html?movieId=${result.id}`;
       });
+    } else if (result.name) {
+      resultElement.addEventListener('click', () => {
+        window.location.href = `tvinfo.html?movieId=${result.id}`;
+      });
+    }
+
+    moviesContainer.appendChild(resultElement);
+  });
+}
+
+
+async function searchMovies(query) {
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (response.ok) {
+      return data.results;
+    } else {
+      throw new Error(data.status_message || 'Failed to search movies');
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async function searchTVShows(query) {
+  const url = `https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${query}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (response.ok) {
+      return data.results;
+    } else {
+      throw new Error(data.status_message || 'Failed to search TV shows');
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+
+
+    function isShowInFavorites(show) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      return favorites.some((fav) => fav.id === show.id);
     }
 
     function updatePageNumber(page) {
@@ -162,23 +252,7 @@
 
     window.addEventListener('load', applyNightModePreference);
 
-    async function searchMovies(query) {
-      const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
-
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (response.ok) {
-          return data.results;
-        } else {
-          throw new Error(data.status_message || 'Failed to search movies');
-        }
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    }
+   
 
     function isMovieInFavorites(movie) {
       const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -217,7 +291,7 @@
 
       try {
         const movies = await fetchMovies(currentPage);
-        displayMovies(movies);
+        displayResults(movies);
         updatePageNumber(currentPage);
       } catch (error) {
         console.error(error);
@@ -234,34 +308,61 @@
     nightModeButton.addEventListener('click', toggleNightMode);
 
     const searchButton = document.getElementById('search-button');
-    searchButton.addEventListener('click', async () => {
-      const searchInput = document.getElementById('search-input');
-      const query = searchInput.value;
+searchButton.addEventListener('click', async () => {
+  const searchInput = document.getElementById('search-input');
+  const query = searchInput.value.trim(); // Trim any leading or trailing whitespace
 
-      try {
-        const movies = await searchMovies(query);
-        displayMovies(movies);
-      } catch (error) {
-        console.error(error);
+  if (query !== '') {
+    try {
+      const [movies, shows] = await Promise.all([searchMovies(query), searchTVShows(query)]);
+      displayResults([...movies, ...shows]);
+    } catch (error) {
+      console.error(error);
 
-        const moviesContainer = document.getElementById('movies-container');
-        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-      }
-    });
+      const moviesContainer = document.getElementById('movies-container');
+      moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+    }
+  }
+});
 
-    const favoritesButton = document.getElementById('favorites-button');
-    favoritesButton.addEventListener('click', navigateToFavorites);
+
+
+const homeButton = document.getElementById('home-tab');
+    homeButton.addEventListener('click', navigateToHome);
+
+    function navigateToHome() {
+      window.location.href = 'index.html';
+    }
+
+    const favoritesMovieButton = document.getElementById('favorites-button');
+    favoritesMovieButton.addEventListener('click', navigateToFavorites);
 
     function navigateToFavorites() {
       window.location.href = 'favorites.html';
     }
 
-    const topButton = document.getElementById('top-movies-tab');
-    topButton.addEventListener('click', navigateToFavorites1);
 
-    function navigateToFavorites1() {
+    const favTvButton = document.getElementById('fav-tv-button');
+    favTvButton.addEventListener('click', navigateToFavoriteTv);
+
+    function navigateToFavoriteTv() {
+      window.location.href = 'favoritestv.html';
+    }
+
+    const topMovie = document.getElementById('top-movies-tab');
+    topMovie.addEventListener('click', NavtoTop);
+
+    function NavtoTop() {
       window.location.href = 'top.html';
     }
+
+    const TopShows = document.getElementById('top-shows-tab');
+    TopShows.addEventListener('click', navigateToTopShows);
+
+    function navigateToTopShows() {
+      window.location.href = 'tvshows.html';
+    }
+    
     
     const prevButton = document.getElementById('prev-button');
     prevButton.addEventListener('click', handlePrevButtonClick);

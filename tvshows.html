@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Highest Reviewed Movies</title>
+  <title>Highest Reviewed TV Shows</title>
   <link rel="stylesheet" href="top.css">
 </head>
 <body>
@@ -12,11 +12,11 @@
         <button id="favorites-button" class="nav-tab">Favorite Movies</button>
         <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
         <button id="top-movies-tab" class="nav-tab active">Top Movies</button>
-        <button id="top-shows-tab" class="nav-tab">Top Tv Shows</button>
+        <button id="top-shows-tab" class="nav-tab">Top Tv Show</button>
 
       </div>
     </nav>
-    <h1>Highest Reviewed Movies</h1>
+    <h1>Highest Reviewed TV Shows</h1>
     <button id="night-mode-button" class="toggle-button">Switch Theme</button>
   </header>
 
@@ -59,7 +59,7 @@
 
     async function fetchTopMovies(page) {
       const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
-      const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&page=${page}`;
+      const url = `https://api.themoviedb.org/3/tv/top_rated?api_key=${API_KEY}&page=${page}`;
 
       try {
         const response = await fetch(url);
@@ -78,8 +78,13 @@
     }
 
     function handleMovieCardClick(movie) {
-      window.location.href = `movie.html?movieId=${movie.id}`;
+      window.location.href = `tvinfo.html?movieId=${movie.id}`;
     }
+
+    function handleTVShowCardClick(tvShow) {
+  window.location.href = `tvinfo.html?tvShowId=${tvShow.id}`;
+}
+
 
     function displayTopMovies(movies) {
       const movieList = document.getElementById('movies-container');
@@ -94,10 +99,10 @@
 
         const moviePoster = document.createElement('img');
         moviePoster.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
-        moviePoster.alt = `${movie.title} Poster`;
+        moviePoster.alt = `${movie.name} Poster`;
 
         const movieTitle = document.createElement('h2');
-        movieTitle.textContent = movie.title;
+        movieTitle.textContent = movie.name;
 
         const movieRating = document.createElement('p');
         movieRating.textContent = `Rating: ${movie.vote_average}`;
@@ -181,6 +186,14 @@
     function navigateToTopShows() {
       window.location.href = 'tvshows.html';
     }
+
+
+    const previousPageButton = document.getElementById('previous-page-button');
+    previousPageButton.addEventListener('click', () => {
+      if (currentPage > 1) {
+        goToPage(currentPage - 1);
+      }
+    });
 
     const nextPageButton = document.getElementById('next-page-button');
     nextPageButton.addEventListener('click', () => {

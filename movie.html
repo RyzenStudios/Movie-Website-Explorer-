@@ -3,6 +3,8 @@
 <head>
   <title>Movie Details</title>
   <link rel="stylesheet" href="moviestyle.css">
+  <link rel="icon" href="png.ico" type="image/x-icon">
+
 </head>
 <body>
   <header>
@@ -389,23 +391,23 @@ function handleWatchButtonClick() {
         });
     }
     async function fetchRelatedMovies(movieId) {
-  const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
-  const url = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}`;
+      const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
+      const url = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}`;
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
 
-    if (response.ok) {
-      return data.results;
-    } else {
-      throw new Error(data.status_message || 'Failed to fetch related movies');
+        if (response.ok) {
+          return data.results;
+        } else {
+          throw new Error(data.status_message || 'Failed to fetch related movies');
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     }
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
 
 function displayRelatedMovies(relatedMovies) {
   const relatedMoviesContainer = document.getElementById('related-movies-container');

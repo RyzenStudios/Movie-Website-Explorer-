@@ -3,6 +3,8 @@
 <head>
   <title>Movie Details</title>
   <link rel="stylesheet" href="moviestyle.css">
+  <link rel="icon" href="png.ico" type="image/x-icon">
+
 </head>
 <body>
   <header>
@@ -390,7 +392,6 @@ function handleWatchButtonClick() {
     throw error;
   }
 }
-
 function displayRelatedMovies(relatedMovies) {
   const relatedMoviesContainer = document.getElementById('related-movies-container');
   relatedMoviesContainer.innerHTML = '';
@@ -401,16 +402,21 @@ function displayRelatedMovies(relatedMovies) {
 
     movieElement.innerHTML = `
       <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
-      <h4>${movie.title}</h4>
+      <h4>${movie.name}</h4>
     `;
 
     movieElement.addEventListener('click', () => {
-      window.location.href = `movie.html?movieId=${movie.id}`;
+      if (movie.title) {
+        window.location.href = `movie.html?movieId=${movie.id}`;
+      } else if (movie.name) {
+        window.location.href = `tvinfo.html?movieId=${movie.id}`;
+      }
     });
 
     relatedMoviesContainer.appendChild(movieElement);
   });
 }
+
 
     async function init() {
       const urlParams = new URLSearchParams(window.location.search);

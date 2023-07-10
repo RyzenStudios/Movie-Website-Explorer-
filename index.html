@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Movie App</title>
+  <title>MovieHub</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="png.ico" type="image/x-icon">
   <style>
     .favorite-button {
       background-color: transparent;
@@ -92,7 +93,7 @@
     function displayResults(results) {
   const moviesContainer = document.getElementById('movies-container');
   moviesContainer.innerHTML = '';
-  const sortedResults = results.sort((a, b) => b.vote_average - a.vote_average);
+  const sortedResults = results.sort((a, b) => b.vote_count - a.vote_count);
 
   sortedResults.forEach((result, index) => {
     const resultElement = document.createElement('div');

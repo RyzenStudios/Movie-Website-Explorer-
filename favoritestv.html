@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Favorite Movies</title>
+  <title>Favorite Shows</title>
   <link rel="stylesheet" href="favorite.css">
+  <link rel="icon" href="png.ico" type="image/x-icon">
+
 </head>
 <body>
   <header>
@@ -22,7 +24,7 @@
 
 
   </header>
-  <h1>Favourite Movies</h1>
+  <h1>Favourite Shows</h1>
 
   <main id="movies-container"></main>
 
@@ -87,7 +89,7 @@
       `;
 
       movieElement.addEventListener('click', () => {
-        window.location.href = `movie.html?movieId=${movie.id}`;
+        window.location.href = `tvinfo.html?movieId=${movie.id}`;
       });
 
       const favoriteButton = movieElement.querySelector('.favorite-button');

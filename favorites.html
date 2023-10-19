@@ -4,24 +4,27 @@
   <title>Favorite Movies</title>
   <link rel="stylesheet" href="favorite.css">
   <link rel="icon" href="png.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Coda&display=swap" rel="stylesheet">
+
 
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <div class="navbar-tabs">
-        <button id="home-tab" class="nav-tab active">Home</button>
-        <button id="favorites-button" class="nav-tab">Favorite Movies</button>
-        <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
-        <button id="top-movies-tab" class="nav-tab">Top Movies</button>
-        <button id="top-shows-tab" class="nav-tab">Top Tv Shows</button>
+  <nav class="navbar">
+    <img src="logo.png" alt="Logo" class="logo">
 
-
+    <div class="navbar-tabs">
+      <button id="home-tab" class="nav-tab active">Home</button>
+      <button id="favorites-button" class="nav-tab">Favorite Movies</button>
+      <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
+      <button id="top-movies-tab" class="nav-tab">Top Movies</button>
+      <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
     </div>
 
-    <button id="night-mode-button" class="toggle-button">Switch Theme</button>
-
-
+    <button id="night-mode-button" class="toggle-button">
+      <span class="icon moon-icon">&#9728;</span>
+      <span class="icon sun-icon">&#9790;</span>
+    </button>
+      </nav>
 
   </header>
   <h1>Favourite Movies</h1>
@@ -42,7 +45,6 @@
   <header>
   </header>
   <main>
-    <!-- Rest of your HTML content -->
   </main>
 </body>
 </html>
@@ -102,26 +104,30 @@
 }
 
 
-    function updatePageNumber(page) {
-      const pageNumberElement = document.getElementById('page-number');
-      pageNumberElement.textContent = `Page ${page}`;
-    }
+function handlePrevButtonClick() {
+  const currentPage = getCurrentPageFromURL();
 
-    function handlePrevButtonClick() {
-      const currentPage = getCurrentPageFromURL();
+  if (currentPage > 1) {
+    navigateToPage(currentPage - 1);
+  }
+}
 
-      if (currentPage > 1) {
-        navigateToPage(currentPage - 1);
-      }
-    }
+function handleNextButtonClick() {
+  const currentPage = getCurrentPageFromURL();
 
-    function handleNextButtonClick() {
-      const currentPage = getCurrentPageFromURL();
+  // In your case, you can control the maximum number of pages based on your data
+  // For example, if there are 5 pages, you can use currentPage < 5
+  // Adjust this condition according to your data and pagination logic
+  if (currentPage < maxNumberOfPages) {
+    navigateToPage(currentPage + 1);
+  }
+}
 
-      navigateToPage(currentPage + 1);
-    }
+function updatePageNumber(currentPage, maxNumberOfPages) {
+  const pageNumberElement = document.getElementById('page-number');
+  pageNumberElement.textContent = `Page ${currentPage} of ${maxNumberOfPages}`;
+}
 
-    
 
     function getCurrentPageFromURL() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -180,26 +186,45 @@
       // Reload the page to update the favorites list
       location.reload();
     }
-
     async function init() {
-      const currentPage = getCurrentPageFromURL();
+  const currentPage = getCurrentPageFromURL();
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  const moviesPerPage = 10;
+  const maxNumberOfPages = Math.ceil(favorites.length / moviesPerPage);
 
-      try {
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        const moviesPerPage = 10;
-        const start = (currentPage - 1) * moviesPerPage;
-        const end = start + moviesPerPage;
-        const movieIds = favorites.slice(start, end).map((movie) => movie.id);
-        const movies = await fetchMoviesByIds(movieIds);
-        displayMovies(movies);
-        updatePageNumber(currentPage);
-      } catch (error) {
-        console.error(error);
+  try {
+    const start = (currentPage - 1) * moviesPerPage;
+    const end = start + moviesPerPage;
+    const movieIds = favorites.slice(start, end).map((movie) => movie.id);
+    const movies = await fetchMoviesByIds(movieIds);
+    displayMovies(movies);
+    updatePageNumber(currentPage, maxNumberOfPages);
 
-        const moviesContainer = document.getElementById('movies-container');
-        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+    const prevButton = document.getElementById('prev-button');
+    prevButton.addEventListener('click', handlePrevButtonClick);
+
+    const nextButton = document.getElementById('next-button');
+    nextButton.addEventListener('click', handleNextButtonClick);
+
+    function handlePrevButtonClick() {
+      if (currentPage > 1) {
+        navigateToPage(currentPage - 1);
       }
     }
+
+    function handleNextButtonClick() {
+      if (currentPage < maxNumberOfPages) {
+        navigateToPage(currentPage + 1);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+
+    const moviesContainer = document.getElementById('movies-container');
+    moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+}
+
 
     window.addEventListener('load', init);
 

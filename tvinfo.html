@@ -4,20 +4,28 @@
   <title>Movie Details</title>
   <link rel="stylesheet" href="moviestyle.css">
   <link rel="icon" href="png.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Coda&display=swap" rel="stylesheet">
+
 
 </head>
 <body>
   <header>
     <nav class="navbar">
+      <img src="logo.png" alt="Logo" class="logo">
+  
       <div class="navbar-tabs">
         <button id="home-tab" class="nav-tab active">Home</button>
         <button id="favorites-button" class="nav-tab">Favorite Movies</button>
         <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
         <button id="top-movies-tab" class="nav-tab">Top Movies</button>
-        <button id="top-shows-tab" class="nav-tab">Top Tv Show</button>
-
+        <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
       </div>
-    <button id="night-mode-button" class="toggle-button">Switch Theme</button>
+
+      <button id="night-mode-button" class="toggle-button">
+        <span class="icon moon-icon">&#9728;</span>
+        <span class="icon sun-icon">&#9790;</span>
+      </button>
+        </nav>
   </header>
 
   <main id="movie-details-container" class="container">

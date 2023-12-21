@@ -16,8 +16,8 @@ body {
 }
 
 header {
-  background: linear-gradient(to bottom, #f5f8f8, #271e2e60);
-  color: #111010;
+  background: linear-gradient(to bottom, #ffffff, #ffffff	);
+  color: #d4d4d42d;
   padding: 0px;
   text-align: center;
   transition: color 0.2s ease;
@@ -40,27 +40,26 @@ header {
   }
 
   .movie-card {
-    background: linear-gradient(to bottom, #ececec, #bdbdbd);
+    background: linear-gradient(to bottom, #ffffff, #ececec);
     padding: 15px;
     border-radius: 15px;
-    border: 2px solid #a928ff0e; /* Border color */
+    border: 2px solid #9191910e; /* Border color */
   
     transition: all 0.3s ease-in-out, color 0.3s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgb(65, 65, 65); /* Drop shadow */
+    box-shadow: 0 2px 4px rgba(65, 65, 65, 0.212); /* Drop shadow */
     animation: border-animation 3s ease-in-out infinite;
     transition: all 0.3s ease-in-out;
   }
   
   
-  
   .movie-card:hover {
     transform: scale(1.05);
-    box-shadow: 0 2px 14px rgb(0, 0, 0); /* Drop shadow */
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.205); /* Drop shadow */
     outline: none;
     position: relative;
-    border: 2px solid #43007a; /* Border color */
+    border: 2px solid #301944; /* Border color */
     
   }
   
@@ -72,7 +71,7 @@ header {
     right: -2px;
     bottom: -2px;
     z-index: -1;
-    background-image: radial-gradient(circle, #c3ccd1 0%, #ffffff 60%, #c3ccd1 100%);
+    background-image: radial-gradient(circle, #cfcfcf 0%, #ffffff 60%, #ffffff 100%);
     background-size: 200% 200%;
     background-position: -2px -2px;
     animation: border-animation 3s ease-in-out infinite;
@@ -130,11 +129,11 @@ header {
       animation: border-animation 3s ease-in-out infinite;
     }
 
-  .dark-theme header{
-    background: linear-gradient(to bottom, #272d2e, #16003349);
-    color: rgb(253, 253, 253);
-  }
 
+    .dark-theme header{
+      background: linear-gradient(to bottom, rgb(20, 20, 26), #16003349);
+      color: rgb(253, 253, 253);
+    }
   #night-mode-button {
     width: 40px;
     height: 40px;
@@ -189,11 +188,11 @@ header {
 
 .navbar {
   display: flex;
-  justify-content: flex-start; /* Change this to flex-start */
+  justify-content: flex-start;
   align-items: center;
   padding: 10px;
-  background-color: #0c0c165b;
   border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   transition: all 0.3s ease-in-out;
 }
 
@@ -208,15 +207,15 @@ header {
   cursor: pointer;
   font-size: 16px;
   transition: all 0.3s ease-in-out;
-  color: rgb(209, 209, 209);
+  color: rgb(0, 0, 0);
   font-family: 'Coda', sans-serif;
   margin-right: 10px;
 }
 
+.dark-theme .nav-tab {
+  color: rgb(255, 255, 255);
+}
 
-  .light-theme .nav-tab {
-    color: black;
-  }
 
   .logo {
   width: 80px; 
@@ -250,12 +249,13 @@ header {
 }
 
 .search-input {
-  width: 0;
+  width: 450px;
   height: 20px;
   padding: 10px;
-  border: none;
+  border: 1px solid #3b3b3b; /* Border color */
   border-radius: 10px;
-  background-color: #0000007a;
+  color: rgb(255, 255, 255);
+  background-color: #94949421;
   outline: none;
   font-size: 16px;
   box-shadow: 10px 44px 55px rgba(0, 0, 0, 0.21);
@@ -264,9 +264,9 @@ header {
 
 }
 
-.search-bar:hover .search-input {
-  width: 350px; /* Adjust the width as needed */
-  outline: 2px solid #ffffff7a; /* Add outline when hovered */
+.dark-theme .search-input {
+  color: white;
+  background-color: #0000007a;
 
 }
 
@@ -274,9 +274,6 @@ header {
   display: none;
 }
 
-.search-bar:hover .search-button {
-  display: block;
-}
 
 .search-button {
   height: 40px;
@@ -284,16 +281,18 @@ header {
   padding: 0 20px;
   border: none;
   border-radius: 10px;
-  background-color: #23303d;
+  background-color: #28213d;
   color: white;
   font-size: 16px;
   cursor: pointer;
   font-family: 'Coda', sans-serif;
   transition: background-color 0.3s ease;
+  display: block;
+
 }
 
 .search-button:hover {
-  background-color: #304253;
+  background-color: #392f50;
 }
 
   
@@ -335,7 +334,7 @@ header {
   
   .favorite-button {
     background-color: #f44336;
-    color: white;
+    color: rgb(175, 175, 175);
     padding: 8px 8px;
     border: none;
     border-radius: 19px;

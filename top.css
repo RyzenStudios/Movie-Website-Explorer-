@@ -16,8 +16,8 @@ body {
 }
 
 header {
-  background: linear-gradient(to bottom, #f5f8f8, #271e2e60);
-  color: #111010;
+  background: linear-gradient(to bottom, #ffffff, #817a7a	);
+  color: #d4d4d42d;
   padding: 0px;
   text-align: center;
   transition: color 0.2s ease;
@@ -47,7 +47,7 @@ main {
 }
 
 .movie-card {
-  background: linear-gradient(to bottom, #ececec, #bdbdbd);
+  background: linear-gradient(to bottom, #ececec, #ffffff);
   padding: 15px;
   border-radius: 15px;
   border: 2px solid #a928ff0e; /* Border color */
@@ -79,7 +79,7 @@ main {
   right: -2px;
   bottom: -2px;
   z-index: -1;
-  background-image: radial-gradient(circle, #c3ccd1 0%, #ffffff 60%, #c3ccd1 100%);
+  background-image: radial-gradient(circle, #c3ccd1 0%, #ffffff 60%, #e0e0e0 100%);
   background-size: 200% 200%;
   background-position: -2px -2px;
   animation: border-animation 3s ease-in-out infinite;
@@ -137,15 +137,15 @@ main {
     animation: border-animation 3s ease-in-out infinite;
   }
 
-.dark-theme header{
-  background: linear-gradient(to bottom, #272d2e, #16003349);
-  color: rgb(253, 253, 253);
-}
+  .dark-theme header{
+    background: linear-gradient(to bottom, rgb(20, 20, 26), #16003349);
+    color: rgb(253, 253, 253);
+  }
 
 
 
 header {
-  background: linear-gradient(to bottom, #f5f8f8, #271e2e60);
+  background: linear-gradient(to bottom, #ffffff, #fcfcfc60);
   color: #111010;
   padding: 0px;
   text-align: center;
@@ -163,7 +163,7 @@ header {
 
 
   .movie-card {
-    background: linear-gradient(to bottom, #ececec, #bdbdbd);
+    background: linear-gradient(to bottom, #ececec, #f0f0f0);
     padding: 15px;
     border-radius: 15px;
     border: 2px solid #a928ff0e; /* Border color */
@@ -171,7 +171,7 @@ header {
     transition: all 0.3s ease-in-out, color 0.3s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgb(65, 65, 65); /* Drop shadow */
+    box-shadow: 0 2px 4px rgba(65, 65, 65, 0.356); /* Drop shadow */
     animation: border-animation 3s ease-in-out infinite;
     transition: all 0.3s ease-in-out;
   }
@@ -254,7 +254,7 @@ header {
     }
 
   .dark-theme header{
-    background: linear-gradient(to bottom, #272d2e, #16003349);
+    background: linear-gradient(to bottom, #141414, #16003349);
     color: rgb(253, 253, 253);
   }
 
@@ -312,11 +312,11 @@ header {
 
 .navbar {
   display: flex;
-  justify-content: flex-start; /* Change this to flex-start */
+  justify-content: flex-start;
   align-items: center;
   padding: 10px;
-  background-color: #0c0c165b;
   border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   transition: all 0.3s ease-in-out;
 }
 
@@ -331,16 +331,14 @@ header {
   cursor: pointer;
   font-size: 16px;
   transition: all 0.3s ease-in-out;
-  color: rgb(209, 209, 209);
+  color: rgb(0, 0, 0);
   font-family: 'Coda', sans-serif;
   margin-right: 10px;
 }
 
-
-  .light-theme .nav-tab {
-    color: black;
-  }
-
+.dark-theme .nav-tab {
+  color: rgb(255, 255, 255);
+}
   .logo {
   width: 80px; 
   margin-right: 10px; 

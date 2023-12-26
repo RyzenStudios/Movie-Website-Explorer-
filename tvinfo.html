@@ -49,9 +49,11 @@
       <div id="trailer-container" class="trailer-container">
         <div id="trailer-wrapper"></div>
       </div>
-      
 
     </div>
+    <div id="tvShowEmbedContainer"></div>
+    
+
     <div class="comment-section">
       <h3>Comments</h3>
       <div class="comments-container" id="comments-container"></div>
@@ -66,6 +68,7 @@
     </div>
   </main>
   
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
   <button id="back-button" class="back-button">Back</button>
 
@@ -101,14 +104,13 @@ function handleCommentSubmission(event) {
   const comment = commentInput.value.trim();
 
   if (name === '' || comment === '') {
-    return; // Do not submit empty comments
+    return; 
   }
 
   const timestamp = new Date().toLocaleString();
   const commentElement = createCommentElement(name, comment, timestamp);
   commentsContainer.appendChild(commentElement);
 
-  // Clear the input fields after submission
   nameInput.value = '';
   commentInput.value = '';
 }
@@ -170,7 +172,6 @@ function createCommentElement(name, comment, timestamp) {
   const movieId = new URLSearchParams(window.location.search).get('movieId');
   const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
 
-  // Set the initial watched state and update the button appearance
   if (watchedMovies.includes(movieId)) {
     watchButton.textContent = 'Watched';
     watchButton.classList.add('watched');
@@ -253,6 +254,10 @@ window.addEventListener('load', applyWatchedState);
       const movieOverview = document.getElementById('movie-overview');
       const movieReleaseDate = document.getElementById('movie-release-date');
       const movieRating = document.getElementById('movie-rating');
+      const movieId = new URLSearchParams(window.location.search).get('movieId');
+
+      const imdbID = movieId; 
+
 
       moviePoster.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
       movieTitle.textContent = movie.name;
@@ -261,6 +266,17 @@ window.addEventListener('load', applyWatchedState);
       movieRating.textContent = `Rating: ${movie.vote_average}`;
 
 
+// TV SHOW PLAYER
+var tvShowId = imdbID; 
+var embedTvShowUrl = 'https://vidsrc.xyz/embed/tv/' + tvShowId;
+
+$('#tvShowEmbedContainer').html('<iframe width="900" height="550" src="' + embedTvShowUrl + '" frameborder="0" allowfullscreen></iframe>');
+$('#tvShowEmbedContainer').css({
+    'display': 'flex',
+    'justify-content': 'center',
+    'align-items': 'center',
+    'height': '70vh' 
+  });
     }
     
 
@@ -302,13 +318,10 @@ window.addEventListener('load', applyWatchedState);
     function toggleWatchedState(movieId) {
   const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
 
-  // Toggle the watched state
   if (watchedMovies.includes(movieId)) {
-    // Remove movie from watched list
     const index = watchedMovies.indexOf(movieId);
     watchedMovies.splice(index, 1);
   } else {
-    // Add movie to watched list
     watchedMovies.push(movieId);
   }
 
@@ -322,10 +335,8 @@ function handleWatchButtonClick() {
   const movieId = new URLSearchParams(window.location.search).get('movieId');
   const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
 
-  // Toggle the watched state
   toggleWatchedState(movieId);
 
-  // Update the button appearance based on the watched state
   if (watchedMovies.includes(movieId)) {
     watchButton.textContent = 'Watch';
     watchButton.classList.remove('watched');

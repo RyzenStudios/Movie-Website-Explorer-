@@ -43,7 +43,6 @@
   <button id="back-button" class="back-button">Back</button>
 
   <script>
-    // Global variables to track the current page and total pages
     let currentPage = 1;
     let totalPages = 0;
 
@@ -93,13 +92,12 @@
 
     function displayTopMovies(movies) {
       const movieList = document.getElementById('movies-container');
-      movieList.innerHTML = ''; // Clear the existing movie list
+      movieList.innerHTML = ''; 
 
       movies.forEach((movie) => {
         const listItem = document.createElement('li');
-        listItem.classList.add('movie-card'); // Add the movie-card class
+        listItem.classList.add('movie-card'); 
 
-        // Set up the movie card click event listener
         listItem.addEventListener('click', () => handleMovieCardClick(movie));
 
         const moviePoster = document.createElement('img');

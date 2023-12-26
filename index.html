@@ -254,7 +254,7 @@ function applyNightModePreference() {
   if (nightModeEnabled) {
     body.classList.add('dark-theme');
   } else {
-    body.classList.add('light-theme'); // Apply light theme by default
+    body.classList.add('light-theme');
   }
 }
 
@@ -318,7 +318,7 @@ window.addEventListener('load', applyNightModePreference);
     const searchButton = document.getElementById('search-button');
 searchButton.addEventListener('click', async () => {
   const searchInput = document.getElementById('search-input');
-  const query = searchInput.value.trim(); // Trim any leading or trailing whitespace
+  const query = searchInput.value.trim(); 
 
   if (query !== '') {
     try {

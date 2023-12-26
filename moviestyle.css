@@ -51,7 +51,7 @@ main {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .movie-details-card:hover {
-    transform: scale(1.02);
+    transform: scale(1.005);
 }
 
 .movie-details-card::after {
@@ -78,7 +78,7 @@ main {
 }
 
 .movie-details-card p {
-    margin: 15px; /* Add the missing unit (e.g., px) */
+    margin: 15px; 
 }
 
 .dark-theme {
@@ -152,7 +152,7 @@ color: #f5d430;
 
 .navbar {
 display: flex;
-justify-content: flex-start; /* Change this to flex-start */
+justify-content: flex-start;
 align-items: center;
 padding: 10px;
 background-color: #0c0c165b;
@@ -213,8 +213,8 @@ margin-right: 10px;
 
 .movie-details-card {
     display: flex;
-    flex-direction: row; /* Change to column */
-    align-items: flex-start; /* Change to flex-start */
+    flex-direction: row;
+    align-items: flex-start; 
     
 }
 
@@ -227,13 +227,13 @@ margin-right: 10px;
     width: 90%;
     height: auto;
     border-radius: 7px;
-    margin-right: 20px; /* Add margin-right to create spacing between the poster and movie info */
+    margin-right: 20px; 
     z-index: 1;
 }
 
 
 .movie-info {
-    flex: 1; /* Add flex property to make the movie info container take remaining width */
+    flex: 1; 
     margin-left: 20px;
 }
 
@@ -339,7 +339,6 @@ margin-right: 10px;
 }
 
 
-/* Add your existing CSS styles here */
 
 .watch-button {
     display: block;

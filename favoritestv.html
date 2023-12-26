@@ -175,7 +175,6 @@
       const updatedFavorites = favorites.filter((fav) => fav.id !== movieId);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
 
-      // Reload the page to update the favorites list
       location.reload();
     }
 

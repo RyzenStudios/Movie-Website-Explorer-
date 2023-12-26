@@ -44,12 +44,12 @@ header {
     background: linear-gradient(to bottom, #ececec, #bdbdbd);
     padding: 15px;
     border-radius: 15px;
-    border: 2px solid #a928ff0e; /* Border color */
+    border: 2px solid #a928ff0e; 
   
     transition: all 0.3s ease-in-out, color 0.3s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgb(65, 65, 65); /* Drop shadow */
+    box-shadow: 0 2px 4px rgb(65, 65, 65); 
     animation: border-animation 3s ease-in-out infinite;
     transition: all 0.3s ease-in-out;
   }
@@ -58,10 +58,10 @@ header {
   
   .movie-card:hover {
     transform: scale(1.05);
-    box-shadow: 0 2px 14px rgb(0, 0, 0); /* Drop shadow */
+    box-shadow: 0 2px 14px rgb(0, 0, 0); 
     outline: none;
     position: relative;
-    border: 2px solid #43007a; /* Border color */
+    border: 2px solid #43007a; 
     
   }
   
@@ -190,7 +190,7 @@ header {
 
 .navbar {
   display: flex;
-  justify-content: flex-start; /* Change this to flex-start */
+  justify-content: flex-start;
   align-items: center;
   padding: 10px;
   background-color: #0c0c165b;

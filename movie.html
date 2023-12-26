@@ -35,6 +35,7 @@
         <button id="watch-button" class="watch-button">Watch</button>
 
         
+
       </div>
       <div class="movie-info">
         <h2 id="movie-title" style="font-size: 40px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, sans-serif;"></h2>
@@ -52,24 +53,34 @@
       
 
     </div>
-    <div class="comment-section">
-      <h3>Comments</h3>
-      <div class="comments-container" id="comments-container"></div>
-      <form id="comment-form">
-        <input type="text" id="name-input" placeholder="Your Name" required>
-        <textarea id="comment-input" placeholder="Add a comment" required></textarea>
-        <button type="submit">Submit</button>
-      </form>
+    
+
+      <div id="movieEmbedContainer"></div>
+      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+      <div class="comment-section">
+        <h3>Comments</h3>
+        <div class="comments-container" id="comments-container"></div>
+        <form id="comment-form">
+          <input type="text" id="name-input" placeholder="Your Name" required>
+          <textarea id="comment-input" placeholder="Add a comment" required></textarea>
+          <button type="submit">Submit</button>
+        </form>
+    
     <div class="related-movies">
       <h3>Related Movies</h3>
       <div id="related-movies-container" class="related-movies-container"></div>
     </div>
   </main>
-  
+
 
   <button id="back-button" class="back-button">Back</button>
 
   <script>
+
+
+
     function toggleNightMode() {
       const body = document.body;
       body.classList.toggle('dark-theme');
@@ -101,14 +112,13 @@ function handleCommentSubmission(event) {
   const comment = commentInput.value.trim();
 
   if (name === '' || comment === '') {
-    return; // Do not submit empty comments
+    return; 
   }
 
   const timestamp = new Date().toLocaleString();
   const commentElement = createCommentElement(name, comment, timestamp);
   commentsContainer.appendChild(commentElement);
 
-  // Clear the input fields after submission
   nameInput.value = '';
   commentInput.value = '';
 }
@@ -170,7 +180,6 @@ function createCommentElement(name, comment, timestamp) {
   const movieId = new URLSearchParams(window.location.search).get('movieId');
   const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
 
-  // Set the initial watched state and update the button appearance
   if (watchedMovies.includes(movieId)) {
     watchButton.textContent = 'Watched';
     watchButton.classList.add('watched');
@@ -269,16 +278,31 @@ window.addEventListener('load', applyWatchedState);
   imdbLogo.style.marginBottom = '10px';
   imdbLogo.style.verticalAlign = 'middle';
 
-  // Create a link to the movie's IMDb page
+  const movieId = new URLSearchParams(window.location.search).get('movieId');
   const imdbLink = document.createElement('a');
   imdbLink.href = `https://www.imdb.com/title/${movie.imdb_id}`;
   imdbLink.target = '_blank';
+  const imdbID = movieId; 
   imdbLink.appendChild(imdbLogo);
 
-  // Append the IMDb link to the movie rating element
   movieRating.appendChild(imdbLink);
+  $(document).ready(function() {
+  var embedUrl = 'https://vidsrc.to/embed/movie/' + imdbID;
+
+  $('#movieEmbedContainer').html('<iframe width="900" height="550" src="' + embedUrl + '" frameborder="0" allowfullscreen></iframe>');
+
+  $('#movieEmbedContainer').css({
+    'display': 'flex',
+    'justify-content': 'center',
+    'align-items': 'center',
+    'height': '70vh'
+  });
+});
+
     }
     
+
+
 
     async function displayCastList(cast) {
   const castList = document.getElementById('cast-list');
@@ -338,10 +362,8 @@ function handleWatchButtonClick() {
   const movieId = new URLSearchParams(window.location.search).get('movieId');
   const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
 
-  // Toggle the watched state
   toggleWatchedState(movieId);
 
-  // Update the button appearance based on the watched state
   if (watchedMovies.includes(movieId)) {
     watchButton.textContent = 'Watch';
     watchButton.classList.remove('watched');

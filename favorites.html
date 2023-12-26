@@ -115,9 +115,7 @@ function handlePrevButtonClick() {
 function handleNextButtonClick() {
   const currentPage = getCurrentPageFromURL();
 
-  // In your case, you can control the maximum number of pages based on your data
-  // For example, if there are 5 pages, you can use currentPage < 5
-  // Adjust this condition according to your data and pagination logic
+
   if (currentPage < maxNumberOfPages) {
     navigateToPage(currentPage + 1);
   }
@@ -183,7 +181,6 @@ function updatePageNumber(currentPage, maxNumberOfPages) {
       const updatedFavorites = favorites.filter((fav) => fav.id !== movieId);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
 
-      // Reload the page to update the favorites list
       location.reload();
     }
     async function init() {

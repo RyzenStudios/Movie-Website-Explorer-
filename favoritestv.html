@@ -12,7 +12,7 @@
 
     <div class="navbar-tabs">
       <button id="home-tab" class="nav-tab active">Home</button>
-      <button id="favorites-button" class="nav-tab">Favorite Movies</button>
+      <button id="favourite-button" class="nav-tab">Favorite Movies</button>
       <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
       <button id="top-movies-tab" class="nav-tab">Top Movies</button>
       <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
@@ -20,7 +20,7 @@
 
     <button id="night-mode-button" class="toggle-button">
       <span class="icon moon-icon">&#9728;</span>
-      <span class="icon sun-icon">&#9790;</span>
+      <span class="icon sun-icon" style="color: black;">&#9790;</span>
     </button>
       </nav>
   </header>
@@ -83,15 +83,15 @@
         <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
         <p>${movie.overview}</p>
         <p>Release Date: ${movie.first_air_date}</p>
-        <p>Rating: ${movie.vote_average}</p>
-        <button class="favorite-button">Remove from Favorites</button>
+        <p>Rating: ${movie.vote_average.toFixed(1)}</p>
+        <button class="favourite-button">Remove from Favorites</button>
       `;
 
       movieElement.addEventListener('click', () => {
         window.location.href = `tvinfo.html?movieId=${movie.id}`;
       });
 
-      const favoriteButton = movieElement.querySelector('.favorite-button');
+      const favoriteButton = movieElement.querySelector('.favourite-button');
       favoriteButton.addEventListener('click', (event) => {
         event.stopPropagation();
         removeFromFavorites(movie.id);
@@ -183,7 +183,7 @@
 
       try {
         const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        const moviesPerPage = 10;
+        const moviesPerPage = 6;
         const start = (currentPage - 1) * moviesPerPage;
         const end = start + moviesPerPage;
         const movieIds = favorites.slice(start, end).map((movie) => movie.id);
@@ -210,7 +210,7 @@
       window.location.href = 'index.html';
     }
 
-    const favoritesMovieButton = document.getElementById('favorites-button');
+    const favoritesMovieButton = document.getElementById('favourite-button');
     favoritesMovieButton.addEventListener('click', navigateToFavorites);
 
     function navigateToFavorites() {

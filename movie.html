@@ -23,11 +23,15 @@
 
       <button id="night-mode-button" class="toggle-button">
         <span class="icon moon-icon">&#9728;</span>
-        <span class="icon sun-icon">&#9790;</span>
+        <span class="icon sun-icon" style="color: black;">&#9790;</span>
       </button>
         </nav>
   
   </header>
+  <h2 id="movie-title" style="font-size: 30px; font-family: 'Trebuchet MS'; margin-left: 350px;">Movie Title</h2>
+
+  <div id="movieEmbedContainer"></div>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <main id="movie-details-container" class="container">
     <div class="movie-details-card">
       <div class="poster-container">
@@ -55,8 +59,7 @@
     </div>
     
 
-      <div id="movieEmbedContainer"></div>
-      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 
 
       <div class="comment-section">
@@ -267,7 +270,7 @@ window.addEventListener('load', applyWatchedState);
       movieTitle.textContent = movie.title;
       movieOverview.textContent = movie.overview;
       movieReleaseDate.textContent = `Release Date: ${movie.release_date}`;
-      movieRating.textContent = `Rating: ${movie.vote_average}`;
+      movieRating.textContent = `Rating: ${movie.vote_average.toFixed(1)}`;
 
   const imdbLogo = document.createElement('img');
   imdbLogo.src = 'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/171_Imdb_logo_logos-512.png';
@@ -289,7 +292,7 @@ window.addEventListener('load', applyWatchedState);
   $(document).ready(function() {
   var embedUrl = 'https://vidsrc.to/embed/movie/' + imdbID;
 
-  $('#movieEmbedContainer').html('<iframe width="900" height="550" src="' + embedUrl + '" frameborder="0" allowfullscreen></iframe>');
+  $('#movieEmbedContainer').html('<iframe width="1200" height="650" src="' + embedUrl + '" frameborder="0" allowfullscreen></iframe>');
 
   $('#movieEmbedContainer').css({
     'display': 'flex',

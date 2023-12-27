@@ -23,7 +23,7 @@
 
       <button id="night-mode-button" class="toggle-button">
         <span class="icon moon-icon">&#9728;</span>
-        <span class="icon sun-icon">&#9790;</span>
+        <span class="icon sun-icon" style="color: black;">&#9790;</span>
       </button>
         </nav>
   </header>
@@ -263,7 +263,7 @@ window.addEventListener('load', applyWatchedState);
       movieTitle.textContent = movie.name;
       movieOverview.textContent = movie.overview;
       movieReleaseDate.textContent = `Air Date: ${movie.first_air_date}`;
-      movieRating.textContent = `Rating: ${movie.vote_average}`;
+      movieRating.textContent = `Rating: ${movie.vote_average.toFixed(1)}`;
 
 
 // TV SHOW PLAYER

@@ -16,7 +16,7 @@ body {
   }
 
   header {
-    background: linear-gradient(to bottom, #f5f8f8, #271e2e60);
+    background: linear-gradient(to bottom, #f3f3f3, #dbdbdb60);
     color: #111010;
     padding: 0px;
     text-align: center;
@@ -50,9 +50,7 @@ main {
     max-width: 1800px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.movie-details-card:hover {
-    transform: scale(1.005);
-}
+
 
 .movie-details-card::after {
     content: '';
@@ -89,12 +87,12 @@ main {
 
 .dark-theme .movie-details-card {
     background-color: #333;
-    background: linear-gradient(to bottom, #181818, #000);
+    background: linear-gradient(to bottom, rgb(12, 0, 24), #0b0a0c);
 }
 
-.dark-theme header {
-    background: linear-gradient(to bottom, #1d2122, #14012477);
-    color: rgb(253, 253, 253);
+.dark-theme header{
+  background: linear-gradient(to bottom, rgb(12, 12, 15), #06001f49);
+  color: rgb(253, 253, 253);
 }
 
 #night-mode-button {
@@ -116,7 +114,6 @@ main {
   background-color: rgba(255, 255, 255, 0.1);
 
 }
-
 
 .icon {
 display: none;
@@ -150,35 +147,39 @@ display: none;
 color: #f5d430;
 }
 
+
 .navbar {
-display: flex;
-justify-content: flex-start;
-align-items: center;
-padding: 10px;
-background-color: #0c0c165b;
-border-radius: 5px;
-transition: all 0.3s ease-in-out;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  transition: all 0.3s ease-in-out;
 }
 
 .navbar-tabs {
 display: flex;
 gap: 1.5rem;
+
 }
 
 .nav-tab {
 background: none;
 border: none;
 cursor: pointer;
+
 font-size: 16px;
 transition: all 0.3s ease-in-out;
-color: rgb(209, 209, 209);
+color: rgb(0, 0, 0);
 font-family: 'Coda', sans-serif;
 margin-right: 10px;
 }
 
 
-.light-theme .nav-tab {
-  color: black;
+.dark-theme .nav-tab {
+  color: rgb(255, 255, 255);
+  
 }
 
 .logo {
@@ -195,7 +196,7 @@ margin-right: 10px;
     position: fixed;
     top: 0%;
     right: 0%;
-    background-color: #3f2068;
+    background-color: #1d0e30;
     color: white;
     border: none;
     border-radius: 5px;
@@ -356,7 +357,7 @@ margin-right: 10px;
   
   .watch-button:hover {
     background-color:#4d3333;
-    padding: 10px 210px;
+    padding: 2px 210px;
   }
   
   .watched {

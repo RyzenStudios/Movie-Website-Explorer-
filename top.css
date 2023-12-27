@@ -286,29 +286,16 @@ header {
 
 
 
-.dark-theme .sun-icon {
-  display: none;
-}
-
 .dark-theme .moon-icon {
   display: inline;
-}
-
-.dark-theme .night-mode-button {
-  color: #f5d430;
 }
 
 .light-theme .sun-icon {
   display: inline;
 }
 
-.light-theme .moon-icon {
-  display: none;
-}
 
-.light-theme .night-mode-button {
-  color: #f5d430;
-}
+
 
 .navbar {
   display: flex;

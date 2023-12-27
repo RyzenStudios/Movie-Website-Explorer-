@@ -23,7 +23,7 @@
 
       <button id="night-mode-button" class="toggle-button">
         <span class="icon moon-icon">&#9728;</span>
-        <span class="icon sun-icon">&#9790;</span>
+        <span class="icon sun-icon" style="color: black;">&#9790;</span>
       </button>
         </nav>
     </nav>
@@ -108,7 +108,7 @@
         movieTitle.textContent = movie.title;
 
         const movieRating = document.createElement('p');
-        movieRating.textContent = `Rating: ${movie.vote_average}`;
+        movieRating.textContent = `Rating: ${movie.vote_average.toFixed(1)}`;
 
         listItem.appendChild(moviePoster);
         listItem.appendChild(movieTitle);

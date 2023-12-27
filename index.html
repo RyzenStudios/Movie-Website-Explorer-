@@ -17,6 +17,15 @@
     .favorite-button.favorited {
       color: red;
     }
+
+    .text {
+  color: #f2f2f2;
+  font-size: 25px;
+  bottom: 8px;
+  width: 100%;
+  font-weight: bold;
+  
+}
   </style>
 </head>
 <body>
@@ -40,11 +49,130 @@
       <span class="icon sun-icon" style="color: black;">&#9790;</span>
     </button>
       </nav>
+<div class="slideshow-container">
+
+  <div class="mySlides fade">
+    <div class="numbertext">1 / 3</div>
+    <img src="logo.png" style="width:100%">
+    <div class="text">Caption Text</div>
+  </div>
+
+  <div class="mySlides fade">
+    <div class="numbertext">2 / 3</div>
+    <img src="img2.jpg" style="width:100%">
+    <div class="text">Caption Two</div>
+  </div>
+
+  <div class="mySlides fade">
+    <div class="numbertext">3 / 3</div>
+    <img src="img3.jpg" style="width:100%">
+    <div class="text">Caption Three</div>
+  </div>
+<br>
+
+<!-- The dots/circles -->
+<div style="text-align:center">
+  <span class="dot" onclick="currentSlide(1)"></span>
+  <span class="dot" onclick="currentSlide(2)"></span>
+  <span class="dot" onclick="currentSlide(3)"></span>
+</div>
+
+<script>
+let currentMovieIndex = -1;
+
+function showSlides() {
+  fetch('https://api.themoviedb.org/3/trending/movie/day?language=en-US&api_key=a566fb0fc4bcb2f908b405cf49a573b7')
+    .then(response => response.json())
+    .then(data => {
+      const slideshowContainer = document.querySelector('.slideshow-container');
+      slideshowContainer.innerHTML = '';
+      const totalMovies = Math.min(data.results.length, 20);
+
+      data.results.slice(0, totalMovies).forEach((movie, index) => {
+        const slide = document.createElement('div');
+        slide.classList.add('mySlides', 'fade');
+
+        const numbertext = document.createElement('div');
+        numbertext.classList.add('numbertext');
+        numbertext.textContent = `${index + 1} / ${data.results.length}`;
+
+        const image = document.createElement('img');
+        image.src = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
+        image.style.width = '15%';
+        image.style.objectFit = 'cover';
+        image.style.objectPosition = '50% 50%';
+
+        const text = document.createElement('div');
+        text.classList.add('text');
+        text.textContent = movie.title;
+
+        const rating = document.createElement('div');
+        rating.classList.add('rating');
+        rating.textContent = `Rating: ${movie.vote_average.toFixed(1)}`;
+
+        const description = document.createElement('div');
+        description.classList.add('description');
+        description.style.width = '500px'; 
+        description.style.height = '70px'; 
+
+        description.style.overflowWrap = 'break-word'; 
+        description.style.margin = 'auto'; 
+        description.textContent = movie.overview;
+
+
+        slide.appendChild(numbertext);
+        slide.appendChild(image);
+        slide.appendChild(text);
+        slide.appendChild(rating);
+        slide.appendChild(description);
+        slideshowContainer.appendChild(slide);
+
+        const spaceUnderDescription = document.createElement('div');
+        spaceUnderDescription.style.height = '20px'; 
+        slide.appendChild(spaceUnderDescription);
+      });
+
+      showCurrentSlide();
+
+    })
+    .catch(err => console.error(err));
+}
+
+function showCurrentSlide() {
+  let i;
+  let slides = document.getElementsByClassName('mySlides');
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = 'none';
+  }
+
+  currentMovieIndex = (currentMovieIndex + 1) % slides.length;
+  slides[currentMovieIndex].style.display = 'block';
+
+  const slideshowContainer = document.querySelector('.slideshow-container');
+  const currentMovie = slides[currentMovieIndex];
+  if (currentMovie) {
+    slideshowContainer.style.background = `linear-gradient(to bottom, #08080f, #08001db7), url(${currentMovie.querySelector('img').src}) center/cover no-repeat`;
+    slideshowContainer.style.borderRadius = '15px';
+
+  }
+
+  setTimeout(showCurrentSlide, 5000); 
+}
+
+showSlides();
+
+</script>
+
 
 </header>
-
+ 
+<strong>Featured Movies</strong>
 
   <main id="movies-container"></main>
+
+  <strong>Trending Shows</strong>
+
+  <main id="tv-container"></main>
 
   <div class="page-selector">
     <button id="prev-button" class="page-button">Prev</button>
@@ -67,7 +195,7 @@
         const data = await response.json();
 
         if (response.ok) {
-          return data.results;
+          return data.results.slice(0, 8);
         } else {
           throw new Error(data.status_message || 'Failed to fetch movies');
         }
@@ -96,9 +224,10 @@
     }
 
   
-    function displayResults(results) {
-  const moviesContainer = document.getElementById('movies-container');
-  moviesContainer.innerHTML = '';
+    function displayResults(results, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+
   const sortedResults = results.sort((a, b) => b.vote_count - a.vote_count);
 
   sortedResults.forEach((result, index) => {
@@ -125,26 +254,20 @@
       resultHTML += `
         <h2>${result.title}</h2>
         <p><em>Movie</em></p>
-
         <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.title}">
-        <p>${result.overview}</p>
-        <p>‎ </p>
         <p>Release Date: ${result.release_date}</p>
         <p>‎ </p>
-        <p>Rating: ${result.vote_average}</p>
+        <p>Rating: ${result.vote_average.toFixed(1)}</p>
       `;
     } else if (result.name) {
       // It's a TV show
       resultHTML += `
         <h2>${result.name}</h2>
         <p><em>TV Show</em></p>
-
         <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.name}">
-        <p>${result.overview}</p>
-        <p>‎ </p>
         <p>First Air Date: ${result.first_air_date}</p>
         <p>‎ </p>
-        <p>Rating: ${result.vote_average}</p>
+        <p>Rating: ${result.vote_average.toFixed(1)}</p>
       `;
     }
 
@@ -161,10 +284,39 @@
       });
     }
 
-    moviesContainer.appendChild(resultElement);
+    container.appendChild(resultElement);
   });
 }
 
+async function fetchTrendingTVShows() {
+  const url = `https://api.themoviedb.org/3/trending/tv/day?language=en-US&api_key=${API_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (response.ok) {
+      return data.results.slice(0, 7);
+    } else {
+      throw new Error(data.status_message || 'Failed to fetch trending TV shows');
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async function displayTrendingTVShows() {
+  try {
+    const trendingShows = await fetchTrendingTVShows();
+    displayResults(trendingShows, 'tv-container');
+  } catch (error) {
+    console.error(error);
+
+    const tvContainer = document.getElementById('tv-container');
+    tvContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+}
 
 async function searchMovies(query) {
   const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
@@ -294,22 +446,33 @@ window.addEventListener('load', applyNightModePreference);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
     }
 
+
     async function init() {
-      const currentPage = getCurrentPageFromURL();
+  const currentPage = getCurrentPageFromURL();
 
-      try {
-        const movies = await fetchMovies(currentPage);
-        displayResults(movies);
-        updatePageNumber(currentPage);
-      } catch (error) {
-        console.error(error);
+  try {
+    const movies = await fetchMovies(currentPage);
+    displayResults(movies, 'movies-container'); 
+    updatePageNumber(currentPage);
+  } catch (error) {
+    console.error(error);
 
-        const moviesContainer = document.getElementById('movies-container');
-        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-      }
-    }
+    const moviesContainer = document.getElementById('movies-container');
+    moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
 
-    window.addEventListener('load', init);
+  try {
+    await displayTrendingTVShows();
+  } catch (error) {
+    console.error(error);
+
+    const tvContainer = document.getElementById('tv-container');
+    tvContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+}
+
+
+window.addEventListener('load', init);
 
 
     const nightModeButton = document.getElementById('night-mode-button');
@@ -328,6 +491,8 @@ searchButton.addEventListener('click', async () => {
       console.error(error);
 
       const moviesContainer = document.getElementById('movies-container');
+      const tvContainer = document.getElementById('tv-container');
+
       moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
     }
   }
@@ -378,5 +543,18 @@ const homeButton = document.getElementById('home-tab');
     const nextButton = document.getElementById('next-button');
     nextButton.addEventListener('click', handleNextButtonClick);
   </script>
+ <footer>
+  <div class="footer-content">
+    <div class="contact-info">
+      <p>Free movies online, here you can watch movies online in high quality for free without annoying of advertising, just come and enjoy your movies online.</p>
+    </div>
+
+  </div>
+
+  <div class="copyright">
+    <p>&copy; 2024 Ryzen Movie Haven. All rights reserved.</p>
+  </div>
+</footer>
 </body>
+
 </html>

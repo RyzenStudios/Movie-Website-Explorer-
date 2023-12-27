@@ -102,6 +102,12 @@ function showSlides() {
         image.style.objectFit = 'cover';
         image.style.objectPosition = '50% 50%';
 
+        // Add a click event listener to each movie poster
+        image.addEventListener('click', () => {
+          // Redirect to the movie page with the movie ID
+          window.location.href = `movie.html?movieId=${movie.id}`;
+        });
+
         const text = document.createElement('div');
         text.classList.add('text');
         text.textContent = movie.title;
@@ -114,11 +120,9 @@ function showSlides() {
         description.classList.add('description');
         description.style.width = '500px'; 
         description.style.height = '70px'; 
-
         description.style.overflowWrap = 'break-word'; 
         description.style.margin = 'auto'; 
         description.textContent = movie.overview;
-
 
         slide.appendChild(numbertext);
         slide.appendChild(image);
@@ -137,6 +141,7 @@ function showSlides() {
     })
     .catch(err => console.error(err));
 }
+
 
 function showCurrentSlide() {
   let i;
@@ -285,6 +290,74 @@ showSlides();
     }
 
     container.appendChild(resultElement);
+  });
+}
+
+
+function displayResults2(results) {
+  const moviesContainer = document.getElementById('movies-container');
+  moviesContainer.innerHTML = '';
+  const sortedResults = results.sort((a, b) => b.vote_count - a.vote_count);
+
+  sortedResults.forEach((result, index) => {
+    const resultElement = document.createElement('div');
+    resultElement.classList.add('movie-card');
+
+    const favoriteButton = document.createElement('button');
+    favoriteButton.classList.add('favorite-button');
+    favoriteButton.innerHTML = '<i class="far fa-heart"></i>';
+
+    favoriteButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toggleFavorite(result, favoriteButton);
+    });
+
+    if (isMovieInFavorites(result)) {
+      favoriteButton.classList.add('favorited');
+      favoriteButton.innerHTML = '<i class="fas fa-heart"></i>';
+    }
+
+    let resultHTML = '';
+    if (result.title) {
+      // It's a movie
+      resultHTML += `
+        <h2>${result.title}</h2>
+        <p><em>Movie</em></p>
+
+        <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.title}">
+        <p>‎ </p>
+        <p>Release Date: ${result.release_date}</p>
+        <p>‎ </p>
+        <p>Rating: ${result.vote_average.toFixed(1)}</p>
+      `;
+    } else if (result.name) {
+      // It's a TV show
+      resultHTML += `
+        <h2>${result.name}</h2>
+        <p><em>TV Show</em></p>
+
+        <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.name}">
+        <p>‎ </p>
+        <p>First Air Date: ${result.first_air_date}</p>
+        <p>‎ </p>
+        <p>Rating: ${result.vote_average.toFixed(1)}</p>
+      `;
+    }
+
+    resultElement.innerHTML = resultHTML;
+    resultElement.appendChild(favoriteButton);
+
+    if (result.title) {
+      resultElement.addEventListener('click', () => {
+        window.location.href = `movie.html?movieId=${result.id}`;
+      });
+    } else if (result.name) {
+      resultElement.addEventListener('click', () => {
+        window.location.href = `tvinfo.html?movieId=${result.id}`;
+      });
+    }
+
+    moviesContainer.appendChild(resultElement);
   });
 }
 
@@ -486,7 +559,7 @@ searchButton.addEventListener('click', async () => {
   if (query !== '') {
     try {
       const [movies, shows] = await Promise.all([searchMovies(query), searchTVShows(query)]);
-      displayResults([...movies, ...shows]);
+      displayResults2([...movies, ...shows]);
     } catch (error) {
       console.error(error);
 

@@ -231,12 +231,12 @@ header {
     .dark-theme {
       background-color: #222;
       color: #fff;
-      background: linear-gradient(to bottom,#0a0a13, #010102);
+      background: linear-gradient(to bottom,#000000, #030303);
     }
     
     .dark-theme .movie-card {
       background-color: #333;
-      background: linear-gradient(to bottom, #0f0c14, #0a080c);
+      background: linear-gradient(to bottom, #04040f, #020208);
     }
   
     .dark-theme .movie-card::before {
@@ -247,14 +247,14 @@ header {
       right: -2px;
       bottom: -2px;
       z-index: -1;
-      background-image: radial-gradient(circle, #0a0616 0%, #160d30 60%, #0a0616 100%);
+      background-image: radial-gradient(circle, #000000 0%, #0b0618 60%, #0a0616 100%);
       background-size: 200% 200%;
       background-position: -2px -2px;
       animation: border-animation 3s ease-in-out infinite;
     }
 
   .dark-theme header{
-    background: linear-gradient(to bottom, #141414, #16003349);
+    background: linear-gradient(to bottom, #000000, #0b001a49);
     color: rgb(253, 253, 253);
   }
 

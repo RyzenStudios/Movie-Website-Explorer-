@@ -470,7 +470,11 @@ hr {
 }
 
 #movies-container p {
-  color: rgb(224, 224, 224);  
+  color: rgb(0, 0, 0);  
   font-size: 15px;
-  font-weight: bold;
+}
+
+.dark-theme #movies-container p {
+  color: rgb(255, 255, 255);  
+  font-size: 15px;
 }

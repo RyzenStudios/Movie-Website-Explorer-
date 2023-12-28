@@ -281,4 +281,17 @@ header {
     transition: border-radius 0.5s ease;
     }
 
-   
+    footer {
+      background: linear-gradient(to bottom,#eaedee, #cfcfcf);
+      color: rgb(0, 0, 0);
+      text-align: center;
+      padding: 10px;
+    }
+  
+    .dark-theme footer{
+      background: linear-gradient(to bottom,#08080f, #010102);
+      color: rgb(156, 156, 156);
+      text-align: center;
+      padding: 10px;
+    }
+  

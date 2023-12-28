@@ -10,8 +10,10 @@
 </head>
 <body>
   <nav class="navbar">
-    <img src="logo.png" alt="Logo" class="logo">
-
+    <a href="index.html">
+      <img src="logo.png" alt="Logo" class="logo">
+    </a>
+    
     <div class="navbar-tabs">
       <button id="home-tab" class="nav-tab active">Home</button>
       <button id="favourite-button" class="nav-tab">Favorite Movies</button>
@@ -183,19 +185,32 @@ function updatePageNumber(currentPage, maxNumberOfPages) {
 
       location.reload();
     }
-    async function init() {
+
+
+
+  async function init() {
   const currentPage = getCurrentPageFromURL();
   const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  const moviesPerPage = 6;
+  let moviesPerPage = 18;  
+
+  const moviesContainer = document.getElementById('movies-container');
+
   const maxNumberOfPages = Math.ceil(favorites.length / moviesPerPage);
 
   try {
     const start = (currentPage - 1) * moviesPerPage;
     const end = start + moviesPerPage;
-    const movieIds = favorites.slice(start, end).map((movie) => movie.id);
+
+    const movieIds = favorites.slice(start, Math.min(end, favorites.length)).map((movie) => movie.id);
     const movies = await fetchMoviesByIds(movieIds);
-    displayMovies(movies);
-    updatePageNumber(currentPage, maxNumberOfPages);
+
+    if (movies.length === 0) {
+      moviesContainer.innerHTML = '<p>No Movies Favourited</p>' ;
+    } else {
+      displayMovies(movies);
+      updatePageNumber(currentPage, maxNumberOfPages);
+    }
+
 
     const prevButton = document.getElementById('prev-button');
     prevButton.addEventListener('click', handlePrevButtonClick);
@@ -221,6 +236,7 @@ function updatePageNumber(currentPage, maxNumberOfPages) {
     moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
   }
 }
+
 
 
     window.addEventListener('load', init);
@@ -288,5 +304,20 @@ function updatePageNumber(currentPage, maxNumberOfPages) {
     const nextButton = document.getElementById('next-button');
     nextButton.addEventListener('click', handleNextButtonClick);
   </script>
+
+  
 </body>
+
 </html>
+<footer>
+  <div class="footer-content">
+    <div class="contact-info">
+      <p>Free movies online, here you can watch movies online in high quality for free without annoying of advertising, just come and enjoy your movies online.</p>
+    </div>
+
+  </div>
+
+  <div class="copyright">
+    <p>&copy; 2024 Ryzen Movie Haven. All rights reserved.</p>
+  </div>
+</footer>

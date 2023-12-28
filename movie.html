@@ -11,12 +11,14 @@
 <body>
   <header>
     <nav class="navbar">
-      <img src="logo.png" alt="Logo" class="logo">
-  
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo">
+      </a>
+        
       <div class="navbar-tabs">
         <button id="home-tab" class="nav-tab active">Home</button>
-        <button id="favorites-button" class="nav-tab">Favorite Movies</button>
-        <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
+        <button id="favorites-button" class="nav-tab">Favourite Movies</button>
+        <button id="fav-tv-button" class="nav-tab">Favourite Shows</button>
         <button id="top-movies-tab" class="nav-tab">Top Movies</button>
         <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
       </div>
@@ -44,10 +46,10 @@
 
       </div>
       <div class="movie-info">
-        <h2 id="movie-title" style="font-size: 40px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, sans-serif;"></h2>
-        <p id="movie-overview" style="font-size: 25px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
-        <p id="movie-release-date" style="font-size: 18px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
-        <p id="movie-rating" style="font-size: 18px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;"></p>
+        <h2 id="movie-title-info"></h2>
+        <p id="movie-overview"> </p>
+        <p id="movie-release-date" ></p>
+        <p id="movie-rating" ></p>
         <h3>Cast</h3>
         <ul id="cast-list"></ul>
         <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
@@ -63,15 +65,14 @@
 
 
 
-
-      <div class="comment-section">
-        <h3>Comments</h3>
-        <div class="comments-container" id="comments-container"></div>
-        <form id="comment-form">
-          <input type="text" id="name-input" placeholder="Your Name" required>
-          <textarea id="comment-input" placeholder="Add a comment" required></textarea>
-          <button type="submit">Submit</button>
-        </form>
+    <div class="comment-section">
+      <h3>Comments</h3>
+      <div class="comments-container" id="comments-container"></div>
+      <form id="comment-form">
+        <input type="text" id="name-input" placeholder="Your Name" required>
+        <textarea id="comment-input" placeholder="Add a comment" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
     
     <div class="related-movies">
       <h3>Related Movies</h3>
@@ -80,7 +81,6 @@
   </main>
 
 
-  <button id="back-button" class="back-button">Back</button>
 
   <script>
 
@@ -103,12 +103,102 @@
         body.classList.remove('dark-theme');
       }
     }
-    const commentForm = document.getElementById('comment-form');
-const nameInput = document.getElementById('name-input');
-const commentInput = document.getElementById('comment-input');
-const commentsContainer = document.getElementById('comments-container');
 
-commentForm.addEventListener('submit', handleCommentSubmission);
+    const commentForm = document.getElementById('comment-form');
+    const nameInput = document.getElementById('name-input');
+    const commentInput = document.getElementById('comment-input');
+    const commentsContainer = document.getElementById('comments-container');
+
+    commentForm.addEventListener('submit', handleCommentSubmission);
+
+    function handleCommentSubmission(event) {
+      event.preventDefault();
+
+      const name = nameInput.value.trim();
+      const comment = commentInput.value.trim();
+
+      if (name === '' || comment === '') {
+        return;
+      }
+
+      const timestamp = new Date().toLocaleString();
+      const commentElement = createCommentElement(name, comment, timestamp);
+      commentsContainer.appendChild(commentElement);
+
+      nameInput.value = '';
+      commentInput.value = '';
+    }
+
+    const profilePicUrl = [
+      'https://soccerpointeclaire.com/wp-content/uploads/2021/06/default-profile-pic-e1513291410505.jpg',
+      'https://i.pinimg.com/474x/f8/3c/cc/f83ccca88e2a190c2736f0f4fab02520.jpg',
+      'https://i.pinimg.com/236x/a0/f1/fc/a0f1fc7cbbb9f9637d90cd90170cbb57.jpg',
+      'https://i.pinimg.com/originals/46/72/f8/4672f876389036583190d93a71aa6cb2.jpg',
+      'https://i.pinimg.com/474x/f1/da/a7/f1daa70c9e3343cebd66ac2342d5be3f.jpg',
+      'https://i.pinimg.com/564x/c0/fc/f1/c0fcf164efd9a75a5f7d8065d4365451.jpg',
+      'https://i.pinimg.com/originals/bd/70/22/bd702201a2b6d8960734f60f34a22754.jpg',
+      'https://64.media.tumblr.com/95b73026318bb9174fe3528d2a3f868d/f8d3140061ff47ac-71/s400x600/1fd8a90993dab6281c333f0a061430ae618011f2.jpg',
+      'https://i.pinimg.com/736x/e5/9e/51/e59e51dcbba47985a013544769015f25.jpg',
+      'https://i.pinimg.com/474x/3c/81/4a/3c814a534b0cf42c80fd5cba6e2ac07f.jpg',
+    ];
+
+    function getRandomProfilePicUrl() {
+      const randomIndex = Math.floor(Math.random() * profilePicUrl.length);
+      return profilePicUrl[randomIndex];
+    }
+
+    function createCommentElement(name, comment, timestamp) {
+      
+      const commentContainer = document.createElement('div');
+      commentContainer.classList.add('comment');
+
+      const profilePicElement = document.createElement('img');
+      profilePicElement.classList.add('profile-pic');
+      profilePicElement.src = getRandomProfilePicUrl();
+
+      const commentContent = document.createElement('div');
+      commentContent.classList.add('comment-content');
+
+      const authorElement = document.createElement('div');
+      authorElement.classList.add('author');
+      authorElement.textContent = name;
+
+      const commentTextElement = document.createElement('div');
+      commentTextElement.classList.add('comment-text');
+      commentTextElement.textContent = comment;
+
+      const timestampElement = document.createElement('div');
+      timestampElement.classList.add('timestamp');
+      timestampElement.textContent = timestamp;
+
+      commentContent.appendChild(authorElement);
+      commentContent.appendChild(commentTextElement);
+      commentContent.appendChild(timestampElement);
+
+      commentContainer.appendChild(profilePicElement);
+      commentContainer.appendChild(commentContent);
+
+      const deleteButton = document.createElement('button');
+  deleteButton.classList.add('delete-button');
+  deleteButton.innerHTML = '&#10006;'; 
+  deleteButton.addEventListener('click', () => {
+    deleteComment(name, timestamp);
+    commentContainer.remove(); 
+  });
+
+    commentContainer.appendChild(deleteButton);
+      
+
+      return commentContainer;
+}
+
+function deleteComment(name, timestamp) {
+    const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
+    const updatedComments = existingComments.filter(
+      (comment) => comment.name !== name || comment.timestamp !== timestamp
+    );
+    localStorage.setItem('comments', JSON.stringify(updatedComments));
+  }
 
 function handleCommentSubmission(event) {
   event.preventDefault();
@@ -117,67 +207,35 @@ function handleCommentSubmission(event) {
   const comment = commentInput.value.trim();
 
   if (name === '' || comment === '') {
-    return; 
+    return;
   }
 
   const timestamp = new Date().toLocaleString();
   const commentElement = createCommentElement(name, comment, timestamp);
   commentsContainer.appendChild(commentElement);
 
+  saveCommentToLocalStorage(name, comment, timestamp);
+
   nameInput.value = '';
   commentInput.value = '';
 }
 
-const profilePicUrl = [
-  'https://soccerpointeclaire.com/wp-content/uploads/2021/06/default-profile-pic-e1513291410505.jpg',
-  'https://i.pinimg.com/474x/f8/3c/cc/f83ccca88e2a190c2736f0f4fab02520.jpg',
-  'https://i.pinimg.com/236x/a0/f1/fc/a0f1fc7cbbb9f9637d90cd90170cbb57.jpg',
-  'https://i.pinimg.com/originals/46/72/f8/4672f876389036583190d93a71aa6cb2.jpg',
-  'https://i.pinimg.com/474x/f1/da/a7/f1daa70c9e3343cebd66ac2342d5be3f.jpg',
-  'https://i.pinimg.com/564x/c0/fc/f1/c0fcf164efd9a75a5f7d8065d4365451.jpg',
-  'https://i.pinimg.com/originals/bd/70/22/bd702201a2b6d8960734f60f34a22754.jpg',
-  'https://64.media.tumblr.com/95b73026318bb9174fe3528d2a3f868d/f8d3140061ff47ac-71/s400x600/1fd8a90993dab6281c333f0a061430ae618011f2.jpg',
-  'https://www.heurekalabs.org/content/images/2022/03/originalApe6808-1.png',
-  'https://d9jhi50qo719s.cloudfront.net/1e8f/samples/1owu_800.png?221105025618',
-];
-
-function getRandomProfilePicUrl() {
-  const randomIndex = Math.floor(Math.random() * profilePicUrl.length);
-  return profilePicUrl[randomIndex];
+function saveCommentToLocalStorage(name, comment, timestamp) {
+  const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
+  existingComments.push({ name, comment, timestamp });
+  localStorage.setItem('comments', JSON.stringify(existingComments));
 }
 
-function createCommentElement(name, comment, timestamp) {
-  const commentContainer = document.createElement('div');
-  commentContainer.classList.add('comment');
+function loadCommentsFromLocalStorage() {
+  const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
 
-  const profilePicElement = document.createElement('img');
-  profilePicElement.classList.add('profile-pic');
-  profilePicElement.src = getRandomProfilePicUrl();
-
-  const commentContent = document.createElement('div');
-  commentContent.classList.add('comment-content');
-
-  const authorElement = document.createElement('div');
-  authorElement.classList.add('author');
-  authorElement.textContent = name;
-
-  const commentTextElement = document.createElement('div');
-  commentTextElement.classList.add('comment-text');
-  commentTextElement.textContent = comment;
-
-  const timestampElement = document.createElement('div');
-  timestampElement.classList.add('timestamp');
-  timestampElement.textContent = timestamp;
-
-  commentContent.appendChild(authorElement);
-  commentContent.appendChild(commentTextElement);
-  commentContent.appendChild(timestampElement);
-
-  commentContainer.appendChild(profilePicElement);
-  commentContainer.appendChild(commentContent);
-
-  return commentContainer;
+  existingComments.forEach(({ name, comment, timestamp }) => {
+    const commentElement = createCommentElement(name, comment, timestamp);
+    commentsContainer.appendChild(commentElement);
+  });
 }
+
+window.addEventListener('load', loadCommentsFromLocalStorage);
 
 
     function applyWatchedState() {
@@ -193,15 +251,12 @@ function createCommentElement(name, comment, timestamp) {
     watchButton.classList.remove('watched');
   }
 }
-
 window.addEventListener('load', applyWatchedState);
 
 
     window.addEventListener('load', applyNightModePreference);
 
-    function handleBackButtonClick() {
-      window.history.back();
-    }
+
 
     async function fetchMovieDetails(movieId) {
       const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
@@ -264,12 +319,22 @@ window.addEventListener('load', applyWatchedState);
     function displayMovieDetails(movie) {
       const moviePoster = document.getElementById('movie-poster');
       const movieTitle = document.getElementById('movie-title');
+      const movieTitleInfo = document.getElementById('movie-title-info');
       const movieOverview = document.getElementById('movie-overview');
       const movieReleaseDate = document.getElementById('movie-release-date');
       const movieRating = document.getElementById('movie-rating');
 
-      moviePoster.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+      moviePoster.src = movie.poster_path
+  ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+  : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg';
+  moviePoster.alt = `${movie.title}`;
+moviePoster.style.width = '450px'; 
+moviePoster.style.height = 'auto';  
+  
+  
       movieTitle.textContent = movie.title;
+      movieTitleInfo.textContent = movie.title;
+
       movieOverview.textContent = movie.overview;
       movieReleaseDate.textContent = `Release Date: ${movie.release_date}`;
       movieRating.textContent = `Rating: ${movie.vote_average.toFixed(1)}`;
@@ -347,13 +412,10 @@ window.addEventListener('load', applyWatchedState);
     function toggleWatchedState(movieId) {
   const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
 
-  // Toggle the watched state
   if (watchedMovies.includes(movieId)) {
-    // Remove movie from watched list
     const index = watchedMovies.indexOf(movieId);
     watchedMovies.splice(index, 1);
   } else {
-    // Add movie to watched list
     watchedMovies.push(movieId);
   }
 
@@ -453,9 +515,11 @@ function displayRelatedMovies(relatedMovies) {
     movieElement.classList.add('related-movie-card');
 
     movieElement.innerHTML = `
-      <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
-      <h4>${movie.title}</h4>
-    `;
+  <img src="${movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+    : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg'}" alt="${movie.title}">
+  <h4>${movie.title}</h4>
+`;
 
     movieElement.addEventListener('click', () => {
       window.location.href = `movie.html?movieId=${movie.id}`;
@@ -539,8 +603,7 @@ function displayRelatedMovies(relatedMovies) {
     }
 
 
-    const backButton = document.getElementById('back-button');
-    backButton.addEventListener('click', handleBackButtonClick);
+
   </script>
 </body>
 </html>

@@ -4,16 +4,19 @@
   <title>Favorite Shows</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="png.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Coda&display=swap" rel="stylesheet">
 
 </head>
 <body>
   <nav class="navbar">
-    <img src="logo.png" alt="Logo" class="logo">
-
+    <a href="index.html">
+      <img src="logo.png" alt="Logo" class="logo">
+    </a>
+    
     <div class="navbar-tabs">
       <button id="home-tab" class="nav-tab active">Home</button>
-      <button id="favourite-button" class="nav-tab">Favorite Movies</button>
-      <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
+      <button id="favourite-button" class="nav-tab">Favourite Movies</button>
+      <button id="fav-tv-button" class="nav-tab">Favourite Shows</button>
       <button id="top-movies-tab" class="nav-tab">Top Movies</button>
       <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
     </div>
@@ -127,7 +130,7 @@
     }
 
     function navigateToPage(page) {
-      const url = `favorites.html?page=${page}`;
+      const url = `favoritestv.html?page=${page}`;
       window.location.href = url;
     }
 
@@ -180,23 +183,54 @@
 
     async function init() {
       const currentPage = getCurrentPageFromURL();
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  let moviesPerPage = 18;  
 
-      try {
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        const moviesPerPage = 6;
-        const start = (currentPage - 1) * moviesPerPage;
-        const end = start + moviesPerPage;
-        const movieIds = favorites.slice(start, end).map((movie) => movie.id);
-        const movies = await fetchTVShowsByIds(movieIds);
-        displayMovies(movies);
-        updatePageNumber(currentPage);
-      } catch (error) {
-        console.error(error);
 
-        const moviesContainer = document.getElementById('movies-container');
-        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+  const maxNumberOfPages = Math.ceil(favorites.length / moviesPerPage);
+  const moviesContainer = document.getElementById('movies-container');
+
+  try {
+    const start = (currentPage - 1) * moviesPerPage;
+    const end = start + moviesPerPage;
+
+    const movieIds = favorites.slice(start, Math.min(end, favorites.length)).map((movie) => movie.id);
+    const movies = await fetchTVShowsByIds(movieIds);
+
+    if (movies.length === 0) {
+      moviesContainer.innerHTML = '<p>No TV Shows Favourited</p>' ;
+    } else {
+      displayMovies(movies);
+      updatePageNumber(currentPage, maxNumberOfPages);
+    }
+
+
+    const prevButton = document.getElementById('prev-button');
+    prevButton.addEventListener('click', handlePrevButtonClick);
+
+    const nextButton = document.getElementById('next-button');
+    nextButton.addEventListener('click', handleNextButtonClick);
+
+    function handlePrevButtonClick() {
+      if (currentPage > 1) {
+        navigateToPage(currentPage - 1);
       }
     }
+
+    function handleNextButtonClick() {
+      if (currentPage < maxNumberOfPages) {
+        navigateToPage(currentPage + 1);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+
+
+    const moviesContainer = document.getElementById('movies-container');
+        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+}
+
 
     window.addEventListener('load', init);
 
@@ -262,4 +296,16 @@
     nextButton.addEventListener('click', handleNextButtonClick);
   </script>
 </body>
+<footer>
+  <div class="footer-content">
+    <div class="contact-info">
+      <p>Free movies online, here you can watch movies online in high quality for free without annoying of advertising, just come and enjoy your movies online.</p>
+    </div>
+
+  </div>
+
+  <div class="copyright">
+    <p>&copy; 2024 Ryzen Movie Haven. All rights reserved.</p>
+  </div>
+</footer>
 </html>

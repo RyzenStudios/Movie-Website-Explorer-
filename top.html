@@ -11,12 +11,14 @@
 <body>
   <header>
     <nav class="navbar">
-      <img src="logo.png" alt="Logo" class="logo">
-  
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo">
+      </a>
+        
       <div class="navbar-tabs">
         <button id="home-tab" class="nav-tab active">Home</button>
-        <button id="favorites-button" class="nav-tab">Favorite Movies</button>
-        <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
+        <button id="favorites-button" class="nav-tab">Favourite Movies</button>
+        <button id="fav-tv-button" class="nav-tab">Favourite Shows</button>
         <button id="top-movies-tab" class="nav-tab">Top Movies</button>
         <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
       </div>
@@ -35,12 +37,11 @@
   </main>
 
   <div class="page-selector">
-    <button id="previous-page-button" class="page-button" disabled>Previous</button>
+    <button id="previous-page-button" class="page-button" disabled>←</button>
     <span id="current-page"></span>
-    <button id="next-page-button" class="page-button" disabled>Next</button>
+    <button id="next-page-button" class="page-button" disabled>→</button>
   </div>
 
-  <button id="back-button" class="back-button">Back</button>
 
   <script>
     let currentPage = 1;
@@ -69,14 +70,15 @@
     async function fetchTopMovies(page) {
       const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
       const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&page=${page}`;
+      const moviesPerPage = 18; 
 
       try {
         const response = await fetch(url);
         const data = await response.json();
 
         if (response.ok) {
-          totalPages = data.total_pages; // Update the total pages
-          return data.results;
+          totalPages = data.total_pages; 
+          return data.results.slice(0, moviesPerPage); 
         } else {
           throw new Error(data.status_message || 'Failed to fetch top movies');
         }
@@ -119,17 +121,18 @@
     }
 
     async function goToPage(page) {
-      try {
-        const topMovies = await fetchTopMovies(page);
-        displayTopMovies(topMovies);
-        currentPage = page;
-        updatePageSelector();
-      } catch (error) {
-        console.error(error);
-        const topMoviesContainer = document.getElementById('top-movies-container');
-        topMoviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-      }
-    }
+  try {
+    const topMovies = await fetchTopMovies(page);
+    displayTopMovies(topMovies);
+    currentPage = page;
+    updatePageSelector();
+  } catch (error) {
+    console.error(error);
+    const topMoviesContainer = document.getElementById('top-movies-container');
+    topMoviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+}
+
 
     function updatePageSelector() {
       const previousButton = document.getElementById('previous-page-button');
@@ -190,6 +193,14 @@
       window.location.href = 'tvshows.html';
     }
 
+    
+    const previousPageButton = document.getElementById('previous-page-button');
+    previousPageButton.addEventListener('click', () => {
+      if (currentPage > 1) {
+        goToPage(currentPage - 1);
+      }
+    });
+
     const nextPageButton = document.getElementById('next-page-button');
     nextPageButton.addEventListener('click', () => {
       if (currentPage < totalPages) {
@@ -199,4 +210,16 @@
 
   </script>
 </body>
+<footer>
+  <div class="footer-content">
+    <div class="contact-info">
+      <p>Free movies online, here you can watch movies online in high quality for free without annoying of advertising, just come and enjoy your movies online.</p>
+    </div>
+
+  </div>
+
+  <div class="copyright">
+    <p>&copy; 2024 Ryzen Movie Haven. All rights reserved.</p>
+  </div>
+</footer>
 </html>

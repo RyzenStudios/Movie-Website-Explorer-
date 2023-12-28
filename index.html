@@ -31,12 +31,16 @@
 <body>
 <header>
   <nav class="navbar">
-    <img src="logo.png" alt="Logo" class="logo">
-
+    <a href="index.html">
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo">
+      </a>
+          </a>
+    
     <div class="navbar-tabs">
       <button id="home-tab" class="nav-tab active">Home</button>
-      <button id="favorites-button" class="nav-tab">Favorite Movies</button>
-      <button id="fav-tv-button" class="nav-tab">Favorite Shows</button>
+      <button id="favorites-button" class="nav-tab">Favourite Movies</button>
+      <button id="fav-tv-button" class="nav-tab">Favourite Shows</button>
       <button id="top-movies-tab" class="nav-tab">Top Movies</button>
       <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
     </div>
@@ -101,9 +105,7 @@ function showSlides() {
         image.style.objectFit = 'cover';
         image.style.objectPosition = '50% 50%';
 
-        // Add a click event listener to each movie poster
         image.addEventListener('click', () => {
-          // Redirect to the movie page with the movie ID
           window.location.href = `movie.html?movieId=${movie.id}`;
         });
 
@@ -169,8 +171,8 @@ showSlides();
 
 
 </header>
- 
-<strong>Featured Movies</strong>
+<strong id="featured-movies-title">Featured Movies</strong>
+
 <div class="page-selector">
   <button id="prev-button" class="page-button">←</button>
   <span id="page-number"></span>
@@ -182,7 +184,7 @@ showSlides();
   <hr> 
 
 
-  <strong>Trending Shows</strong>
+  <strong id="trending-shows-title">Trending Shows</strong>
 
   <main id="tv-container"></main>
 
@@ -261,7 +263,7 @@ showSlides();
       resultHTML += `
         <h2>${result.title}</h2>
         <p><em>Movie</em></p>
-        <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.title}">
+        <img src="${result.poster_path ? `https://image.tmdb.org/t/p/w500/${result.poster_path}` : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg'}" alt="${result.title}">
         <p>Release Date: ${result.release_date}</p>
         <p>‎ </p>
         <p>Rating: ${result.vote_average.toFixed(1)}</p>
@@ -271,7 +273,7 @@ showSlides();
       resultHTML += `
         <h2>${result.name}</h2>
         <p><em>TV Show</em></p>
-        <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.name}">
+        <img src="${result.poster_path ? `https://image.tmdb.org/t/p/w500/${result.poster_path}` : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg'}" alt="${result.title}">
         <p>First Air Date: ${result.first_air_date}</p>
         <p>‎ </p>
         <p>Rating: ${result.vote_average.toFixed(1)}</p>
@@ -326,7 +328,7 @@ function displayResults2(results) {
         <h2>${result.title}</h2>
         <p><em>Movie</em></p>
 
-        <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.title}">
+        <img src="${result.poster_path ? `https://image.tmdb.org/t/p/w500/${result.poster_path}` : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg'}" alt="${result.title}">
         <p>‎ </p>
         <p>Release Date: ${result.release_date}</p>
         <p>‎ </p>
@@ -338,7 +340,7 @@ function displayResults2(results) {
         <h2>${result.name}</h2>
         <p><em>TV Show</em></p>
 
-        <img src="https://image.tmdb.org/t/p/w500/${result.poster_path}" alt="${result.name}">
+        <img src="${result.poster_path ? `https://image.tmdb.org/t/p/w500/${result.poster_path}` : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg'}" alt="${result.name}">
         <p>‎ </p>
         <p>First Air Date: ${result.first_air_date}</p>
         <p>‎ </p>
@@ -553,15 +555,34 @@ window.addEventListener('load', init);
     const nightModeButton = document.getElementById('night-mode-button');
     nightModeButton.addEventListener('click', toggleNightMode);
 
-    const searchButton = document.getElementById('search-button');
-searchButton.addEventListener('click', async () => {
+
+  const searchButton = document.getElementById('search-button');
+  searchButton.addEventListener('click', async () => {
   const searchInput = document.getElementById('search-input');
-  const query = searchInput.value.trim(); 
+  const query = searchInput.value.trim();
+
+  const elementsToHide = [
+    document.querySelector('.slideshow-container'),
+    document.getElementById('prev-button'),
+    document.getElementById('next-button'),
+    document.getElementById('page-number'),
+    document.getElementById('tv-container'),
+    document.getElementById('trending-shows-title'),
+    document.getElementById('featured-movies-title'),
+  ];
+
 
   if (query !== '') {
     try {
       const [movies, shows] = await Promise.all([searchMovies(query), searchTVShows(query)]);
       displayResults2([...movies, ...shows]);
+      
+      elementsToHide.forEach(element => {
+      if (element) {
+        element.style.display = 'none';
+      }
+    })
+  
     } catch (error) {
       console.error(error);
 

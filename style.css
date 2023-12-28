@@ -43,7 +43,7 @@ header {
   @media (min-width: 600px) {
     #movies-container,
     #tv-container {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 0.2fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 0.15fr));
     }
   }
 
@@ -52,11 +52,11 @@ header {
     background: linear-gradient(to bottom, #ffffff, #ececec);
     padding: 15px;
     border-radius: 15px;
-    border: 2px solid #9191910e; /* Border color */
-    font-size: 10px;
+    border: 2px solid #9191910e; 
+    font-size: 11px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(65, 65, 65, 0.212); /* Drop shadow */
+    box-shadow: 0 2px 4px rgba(65, 65, 65, 0.212); 
     transition: all 0.3s ease-in-out, color 0.3s ease;
 
   }
@@ -65,10 +65,10 @@ header {
 
   .movie-card:hover {
     transform: scale(1.05);
-    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.205); /* Drop shadow */
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.205); 
     outline: none;
     position: relative;
-    border: 2px solid #301944; /* Border color */
+    border: 2px solid #301944; 
     color: rgb(233, 225, 236);
   animation: borderAnimation 2s infinite;
 
@@ -137,7 +137,7 @@ header {
 
 
     .dark-theme header{
-      background: linear-gradient(to bottom, rgb(12, 12, 15), #1a008b49);
+      background: linear-gradient(to bottom, rgb(12, 12, 15), #04001849);
       color: rgb(253, 253, 253);
     }
   #night-mode-button {
@@ -224,11 +224,11 @@ header {
   }
 
 .search-bar {
-  margin-left: auto; /* Pushes the search bar to the right side */
+  margin-left: auto; 
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 250px; /* Set a fixed width for the search bar */
+  width: 250px; 
   position: relative;
 }
 
@@ -248,7 +248,7 @@ header {
   width: 450px;
   height: 20px;
   padding: 10px;
-  border: 1px solid #3b3b3b; /* Border color */
+  border: 1px solid #3b3b3b; 
   border-radius: 10px;
   color: rgb(255, 255, 255);
   background-color: #94949421;
@@ -267,7 +267,7 @@ header {
 }
 
 .dark-theme .search-input:hover {
-  border: 1px solid #5c5c5c; /* Border color */
+  border: 1px solid #5c5c5c; 
   background-color: #4444442a;
 
 }
@@ -279,7 +279,7 @@ header {
 
 .search-button {
   height: 40px;
-  width: 90px; /* Adjust as needed */
+  width: 90px; 
   padding: 0 20px;
   border: none;
   border-radius: 10px;
@@ -393,7 +393,7 @@ header {
 
   .dark-theme footer{
     background: linear-gradient(to bottom,#08080f, #010102);
-    color: white;
+    color: rgb(156, 156, 156);
     text-align: center;
     padding: 10px;
   }
@@ -462,9 +462,15 @@ header {
 }
 
 hr {
-  background-color: #1f1529; /* Set the background color to red */
-  height: 2px; /* Set the height of the line */
+  background-color: #1f1529;
+  height: 2px; 
   border: #01010200;
   margin-top: 50px;
   margin-bottom: 50px;
+}
+
+#movies-container p {
+  color: rgb(224, 224, 224);  
+  font-size: 15px;
+  font-weight: bold;
 }

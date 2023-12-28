@@ -161,13 +161,12 @@ header {
     padding: 20px;
   }
 
-
   .movie-card {
     background: linear-gradient(to bottom, #ececec, #f0f0f0);
     padding: 15px;
     border-radius: 15px;
     border: 2px solid #a928ff0e;
-  
+    cursor: pointer;
     transition: all 0.3s ease-in-out, color 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -336,23 +335,28 @@ header {
     transform: scale(1.05);
   }
 
-.page-selector {
-  display: flex;
-  justify-content: center;
-}
-
-.page-selector button {
-  font-size: 16px;
-  margin-bottom: 10px;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-.page-selector button:hover {
-  background-color: #555;
-}
+  .page-selector {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .page-selector button {
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: #21213385;
+    color: #fff;
+    margin-right: 10px;
+    margin-left: 10px;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px; 
+  }
+  
+  .page-selector button:hover {
+    background-color: #555;
+  }
+  
 
 .back-button {
   background-color: #808080;
@@ -393,4 +397,18 @@ header {
 
 .favorite-button.favorited:before {
   content: '\2764';
+}
+
+footer {
+  background: linear-gradient(to bottom,#eaedee, #cfcfcf);
+  color: rgb(0, 0, 0);
+  text-align: center;
+  padding: 10px;
+}
+
+.dark-theme footer{
+  background: linear-gradient(to bottom,#08080f, #010102);
+  color: rgb(156, 156, 156);
+  text-align: center;
+  padding: 10px;
 }

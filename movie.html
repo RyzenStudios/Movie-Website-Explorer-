@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="moviestyle.css">
   <link rel="icon" href="png.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Coda&display=swap" rel="stylesheet">
-
+  <meta name="referrer" content="origin" />
 
 </head>
 
@@ -360,7 +360,7 @@ moviePoster.style.height = 'auto';
   $(document).ready(function() {
   var embedUrl = 'https://vidsrc.to/embed/movie/' + imdbID;
 
-  $('#movieEmbedContainer').html('<iframe width="1200" height="650" src="' + embedUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
+  $('#movieEmbedContainer').html('<iframe width="900" height="550" src="' + embedUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
 
 $('#movieEmbedContainer').css({
   'display': 'flex',

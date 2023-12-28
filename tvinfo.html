@@ -328,13 +328,15 @@ window.addEventListener('load', applyWatchedState);
 var tvShowId = imdbID; 
 var embedTvShowUrl = 'https://vidsrc.xyz/embed/tv/' + tvShowId;
 
-$('#tvShowEmbedContainer').html('<iframe width="900" height="550" src="' + embedTvShowUrl + '" frameborder="0" allowfullscreen></iframe>');
+$('#tvShowEmbedContainer').html('<iframe width="900" height="550" src="' + embedTvShowUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
+
 $('#tvShowEmbedContainer').css({
-    'display': 'flex',
-    'justify-content': 'center',
-    'align-items': 'center',
-    'height': '70vh' 
-  });
+  'display': 'flex',
+  'justify-content': 'center',
+  'align-items': 'center',
+  'height': '70vh'
+});
+
     }
     
 

@@ -360,14 +360,15 @@ moviePoster.style.height = 'auto';
   $(document).ready(function() {
   var embedUrl = 'https://vidsrc.to/embed/movie/' + imdbID;
 
-  $('#movieEmbedContainer').html('<iframe width="1200" height="650" src="' + embedUrl + '" frameborder="0" allowfullscreen></iframe>');
+  $('#movieEmbedContainer').html('<iframe width="1200" height="650" src="' + embedUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
 
-  $('#movieEmbedContainer').css({
-    'display': 'flex',
-    'justify-content': 'center',
-    'align-items': 'center',
-    'height': '70vh'
-  });
+$('#movieEmbedContainer').css({
+  'display': 'flex',
+  'justify-content': 'center',
+  'align-items': 'center',
+  'height': '70vh'
+});
+
 });
 
     }

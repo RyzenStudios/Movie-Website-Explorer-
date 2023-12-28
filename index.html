@@ -70,7 +70,6 @@
   </div>
 <br>
 
-<!-- The dots/circles -->
 <div style="text-align:center">
   <span class="dot" onclick="currentSlide(1)"></span>
   <span class="dot" onclick="currentSlide(2)"></span>
@@ -172,19 +171,22 @@ showSlides();
 </header>
  
 <strong>Featured Movies</strong>
+<div class="page-selector">
+  <button id="prev-button" class="page-button">←</button>
+  <span id="page-number"></span>
+  <button id="next-button" class="page-button">→</button>
+</div>
 
   <main id="movies-container"></main>
+  
+  <hr> 
+
 
   <strong>Trending Shows</strong>
 
   <main id="tv-container"></main>
 
-  <div class="page-selector">
-    <button id="prev-button" class="page-button">Prev</button>
-    <span id="page-number"></span>
-    <button id="next-button" class="page-button">Next</button>
-    
-  </div>
+
 
   <script>
 
@@ -200,7 +202,7 @@ showSlides();
         const data = await response.json();
 
         if (response.ok) {
-          return data.results.slice(0, 8);
+          return data.results.slice(0, 16);
         } else {
           throw new Error(data.status_message || 'Failed to fetch movies');
         }
@@ -369,7 +371,7 @@ async function fetchTrendingTVShows() {
     const data = await response.json();
 
     if (response.ok) {
-      return data.results.slice(0, 7);
+      return data.results.slice(0, 16);
     } else {
       throw new Error(data.status_message || 'Failed to fetch trending TV shows');
     }

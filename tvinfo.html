@@ -49,12 +49,12 @@
         <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
         
       </div>
-      <div id="trailer-container" class="trailer-container">
-        <div id="trailer-wrapper"></div>
-      </div>
+
 
     </div>
-    
+    <div id="trailer-container" class="trailer-container">
+      <div id="trailer-wrapper"></div>
+    </div> 
 
     <div class="comment-section">
       <h3>Comments</h3>
@@ -315,6 +315,7 @@ window.addEventListener('load', applyWatchedState);
       const movieId = new URLSearchParams(window.location.search).get('movieId');
 
       const imdbID = movieId; 
+      
 
 
       moviePoster.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
@@ -357,7 +358,7 @@ $('#tvShowEmbedContainer').css({
           const trailerHTML = `
             <h3>Official Trailer</h3>
             <div class="trailer-wrapper">
-              <iframe class="trailer-iframe" width="640" height="480" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>
+              <iframe class="trailer-iframe" width="640" height="380" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>
             </div>
           `;
 
@@ -578,7 +579,7 @@ function displayRelatedMovies(relatedMovies) {
 <footer>
   <div class="footer-content">
     <div class="contact-info">
-      <p>Free movies online, here you can watch movies online in high quality for free without annoying of advertising, just come and enjoy your movies online.</p>
+      <p>Free movies online, here you can watch movies online in high quality for free without annoying advertising</p>
     </div>
 
   </div>

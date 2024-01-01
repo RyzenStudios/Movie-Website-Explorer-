@@ -80,7 +80,7 @@ main {
 }
 
 .dark-theme {
-    background-color: #222;
+    background-color: #0f0f0f;
     color: #fff;
     background: linear-gradient(to bottom,#10101d, #010102);
 }
@@ -230,33 +230,46 @@ margin-right: 10px;
     border-radius: 7px;
     margin-right: 20px; 
     z-index: 1;
+    transition: all 0.3s ease-in-out;
+    border: 2px solid transparent;
+
 }
 
+#movie-poster:hover {
+  opacity: 80%;
+  border: 2px solid rgb(118, 42, 168);
+}
 
 .movie-info {
     flex: 1; 
-    margin-left: 20px;
+    margin-left: 50px;
+
 }
 
 .movie-info h2 {
     margin: 0;
     font-size: 28px;
     font-weight: bold;
+
 }
 
 .movie-info p {
     margin: 10px 0;
-    font-size: 16px;
+    font-size: 20px;
+
 }
 
 .movie-info ul {
     margin: 10px 0;
+    max-width: 800px; 
+
     padding: 0;
 }
 
 .movie-info ul li {
     margin-bottom: 5px;
     font-size: 16px;
+    
 }
 
 
@@ -270,7 +283,7 @@ margin-right: 10px;
     cursor: pointer;
     position: absolute;
     top: 72px;
-    left: 522px; 
+    left: 550px; 
     font-size: 24px;
 
     z-index: 1;
@@ -347,11 +360,9 @@ margin-right: 10px;
 }
 
 
-
 .watch-button {
     display: block;
-    margin-top: -55px;
-    margin-left: 2px; 
+    margin-top: -60px;
     padding: 1px 210px;
     font-size: 12px;
     background-color: #2e1e1e;
@@ -364,12 +375,14 @@ margin-right: 10px;
   
   .watch-button:hover {
     background-color:#4d3333;
-    padding: 2px 210px;
+
   }
   
   .watched {
     background-color: #252b26;
     color: darkgray;
+    padding: 1px 205px;
+
   }
 
   .watched:hover{
@@ -498,32 +511,4 @@ margin-right: 10px;
     padding: 10px;
   }
 
-
-.trailer-container {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.trailer-wrapper {
-  position: relative;
-  padding-bottom: 56.25%;
-  height: 0;
-  overflow: hidden;
-}
-
-
-@media (max-width: 600px) {
-  .trailer-container {
-    max-width: 90%;
-  }
-}
-
-
-.trailer-iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
 

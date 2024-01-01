@@ -51,18 +51,18 @@
         <p id="movie-overview"> </p>
         <p id="movie-release-date" ></p>
         <p id="movie-rating" ></p>
-        <h3>Cast</h3>
-        <ul id="cast-list"></ul>
+        <h3 class="cast-heading">Cast</h3>
+        <ul id="cast-list" class="cast-list"></ul>
         <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
         
       </div>
-      <div id="trailer-container" class="trailer-container">
-        <div id="trailer-wrapper"></div>
-      </div>
+
       
 
     </div>
-    
+    <div id="trailer-container" class="trailer-container">
+      <div id="trailer-wrapper"></div>
+    </div>
 
 
 
@@ -393,7 +393,7 @@ $('#movieEmbedContainer').css({
           const trailerHTML = `
             <h3>Official Trailer</h3>
             <div class="trailer-wrapper">
-              <iframe class="trailer-iframe" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>
+              <iframe class="trailer-iframe" width="640" height="380" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>
             </div>
           `;
 
@@ -507,6 +507,7 @@ function handleWatchButtonClick() {
         throw error;
       }
     }
+    
 
 function displayRelatedMovies(relatedMovies) {
   const relatedMoviesContainer = document.getElementById('related-movies-container');
@@ -608,4 +609,16 @@ function displayRelatedMovies(relatedMovies) {
 
   </script>
 </body>
+<footer>
+  <div class="footer-content">
+    <div class="contact-info">
+      <p>Free movies online, here you can watch movies online in high quality for free without annoying advertising</p>
+    </div>
+
+  </div>
+
+  <div class="copyright">
+    <p>&copy; 2024 Ryzen Movie Haven. All rights reserved.</p>
+  </div>
+</footer>
 </html>

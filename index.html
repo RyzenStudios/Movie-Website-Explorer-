@@ -677,38 +677,42 @@ window.addEventListener('load', applyNightModePreference);
 
 window.addEventListener('load', init);
 
+const nightModeButton = document.getElementById('night-mode-button');
+nightModeButton.addEventListener('click', toggleNightMode);
 
-    const nightModeButton = document.getElementById('night-mode-button');
-    nightModeButton.addEventListener('click', toggleNightMode);
+const searchButton = document.getElementById('search-button');
+searchButton.addEventListener('click', handleSearch); 
 
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    handleSearch();
+  }
+});
 
-  const searchButton = document.getElementById('search-button');
-  searchButton.addEventListener('click', async () => {
-  const searchInput = document.getElementById('search-input');
+const elementsToHide = [
+  document.querySelector('.slideshow-container'),
+  document.getElementById('prev-button'),
+  document.getElementById('next-button'),
+  document.getElementById('page-number'),
+  document.getElementById('tv-container'),
+  document.getElementById('trending-shows-title'),
+  document.getElementById('featured-movies-title'),
+];
+
+async function handleSearch() {
   const query = searchInput.value.trim();
-
-  const elementsToHide = [
-    document.querySelector('.slideshow-container'),
-    document.getElementById('prev-button'),
-    document.getElementById('next-button'),
-    document.getElementById('page-number'),
-    document.getElementById('tv-container'),
-    document.getElementById('trending-shows-title'),
-    document.getElementById('featured-movies-title'),
-  ];
-
 
   if (query !== '') {
     try {
       const [movies, shows] = await Promise.all([searchMovies(query), searchTVShows(query)]);
       displayResults2([...movies, ...shows]);
-      
-      elementsToHide.forEach(element => {
-      if (element) {
-        element.style.display = 'none';
-      }
-    })
-  
+
+      elementsToHide.forEach((element) => {
+        if (element) {
+          element.style.display = 'none';
+        }
+      });
     } catch (error) {
       console.error(error);
 
@@ -718,7 +722,7 @@ window.addEventListener('load', init);
       moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
     }
   }
-});
+}
 
 
 

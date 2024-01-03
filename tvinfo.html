@@ -8,6 +8,9 @@
 
 
 </head>
+<div id="loading-screen">
+  <div id="loading-spinner"></div>
+</div>
 <body>
   <header>
     <nav class="navbar">
@@ -74,6 +77,26 @@
 
 
   <script>
+function showLoadingScreen() {
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.style.display = 'flex';
+}
+
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.style.display = 'none';
+}
+
+function simulateLoading() {
+  showLoadingScreen();
+
+  setTimeout(() => {
+    hideLoadingScreen();
+  }, 500); 
+}
+
+window.addEventListener('load', simulateLoading);
+
     function toggleNightMode() {
       const body = document.body;
       body.classList.toggle('dark-theme');

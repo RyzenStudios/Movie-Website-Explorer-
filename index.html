@@ -30,6 +30,10 @@
 }
   </style>
 </head>
+<div id="loading-screen">
+  <div id="loading-spinner"></div>
+</div>
+
 <body>
 <header>
   <nav class="navbar">
@@ -39,13 +43,17 @@
       </a>
           </a>
     
-    <div class="navbar-tabs">
-      <button id="home-tab" class="nav-tab active">Home</button>
-      <button id="favorites-button" class="nav-tab">Favourite Movies</button>
-      <button id="fav-tv-button" class="nav-tab">Favourite Shows</button>
-      <button id="top-movies-tab" class="nav-tab">Top Movies</button>
-      <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
-    </div>
+          <div class="navbar-tabs">
+            <button id="home-tab" class="nav-tab active">Home</button>
+            <button id="genres-button" class="nav-tab">Genres</button>
+            <div class="genres-list" id="genres-list" style="display: none;"></div>
+        
+            <button id="favorites-button" class="nav-tab">Favourite Movies</button>
+            <button id="fav-tv-button" class="nav-tab">Favourite Shows</button>
+            <button id="top-movies-tab" class="nav-tab">Top Movies</button>
+            <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
+          </div>
+          
     <div class="search-bar">
       <input id="search-input" class="search-input" type="text" placeholder="Search movies...">
       <button id="search-button" class="search-button">Search</button>
@@ -81,6 +89,114 @@
   <span class="dot" onclick="currentSlide(2)"></span>
   <span class="dot" onclick="currentSlide(3)"></span>
 </div>
+
+
+
+<script>
+function showLoadingScreen() {
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.style.display = 'flex';
+}
+
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.style.display = 'none';
+}
+
+function simulateLoading() {
+  showLoadingScreen();
+
+  setTimeout(() => {
+    hideLoadingScreen();
+  }, 500); 
+}
+
+window.addEventListener('load', simulateLoading);
+
+  const genresButton = document.getElementById('genres-button');
+  const genresList = document.getElementById('genres-list');
+
+  const genres = ['Action', 'Adventure', 'Animation','Comedy', 'Drama', 'Fantasy', 'Horror', 'Sci-Fi', 'Thriller'];
+
+  genres.forEach(genre => {
+    const genreItem = document.createElement('div');
+    genreItem.textContent = genre;
+
+    genreItem.addEventListener('click', () => {
+      filterMoviesAndShowsByGenre(genre);
+      updateCurrentGenreText(genre);
+      const tvContainer = document.getElementById('tv-container');
+    tvContainer.style.display = 'none';
+    const trendingShowsTitle = document.getElementById('trending-shows-title');
+    trendingShowsTitle.style.display = 'none';
+    });
+
+    genresList.appendChild(genreItem);
+  });
+
+
+  async function filterMoviesAndShowsByGenre(genre) {
+    const currentPage = getCurrentPageFromURL();
+  try {
+    const movieResponse = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=a566fb0fc4bcb2f908b405cf49a573b7&with_genres=${getGenreId(genre)}&page=${currentPage}`);
+    const showResponse = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=a566fb0fc4bcb2f908b405cf49a573b7&with_genres=${getGenreId(genre)}&page=${currentPage}`);
+    
+    const movieData = await movieResponse.json();
+    const showData = await showResponse.json();
+
+    if (movieResponse.ok && showResponse.ok) {
+      const combinedResults = [...movieData.results, ...showData.results];
+      displayResults(combinedResults, 'movies-container');
+    } else {
+      throw new Error(movieData.status_message || showData.status_message || 'Failed to fetch data by genre');
+    }
+  } catch (error) {
+    console.error(error);
+
+    const moviesContainer = document.getElementById('movies-container');
+    moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+}
+
+  function getGenreId(genre) {
+    const genreMapping = {
+      'Action': 28,
+      'Adventure': 12,
+      'Animation': 16,
+      'Comedy': 35,
+      'Drama': 18,
+      'Fantasy': 14,
+      'Horror': 27,
+      'Sci-Fi': 878,
+      'Thriller': 53
+    };
+
+    return genreMapping[genre] || 0;
+  }
+
+  function displayResults(results, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    results.forEach(result => {
+      const resultElement = document.createElement('div');
+      resultElement.textContent = result.title || result.name; 
+      container.appendChild(resultElement);
+    });
+  }
+
+  genresButton.addEventListener('click', () => {
+    genresList.style.display = genresList.style.display === 'none' ? 'block' : 'none';
+  });
+
+  function updateCurrentGenreText(genre) {
+    const currentGenreElement = document.getElementById('current-genre');
+    currentGenreElement.textContent = `Current Genre: ${genre}`;
+  }
+  
+</script>
+
+
 
 <script>
 let currentMovieIndex = -1;
@@ -169,11 +285,14 @@ function showCurrentSlide() {
 
 showSlides();
 
+
+
 </script>
 
 
 </header>
 <strong id="featured-movies-title">Featured Movies</strong>
+<span id="current-genre"></span>
 
 <div class="page-selector">
   <button id="prev-button" class="page-button">←</button>
@@ -185,18 +304,23 @@ showSlides();
   
   <hr> 
 
-
   <strong id="trending-shows-title">Trending Shows</strong>
 
   <main id="tv-container"></main>
 
-
+  <div class="page-selector">
+    <button id="prev-button-tv" class="page-button" onclick="handlePrevButtonClick(true)">←</button>
+    <span id="page-number-tv"></span>
+    <button id="next-button-tv" class="page-button" onclick="handleNextButtonClick(true)">→</button>
+  </div>
 
   <script>
 
-    
 
     const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
+
+
+
 
     async function fetchMovies(page) {
       const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=${page}`;
@@ -367,8 +491,8 @@ function displayResults2(results) {
   });
 }
 
-async function fetchTrendingTVShows() {
-  const url = `https://api.themoviedb.org/3/trending/tv/day?language=en-US&api_key=${API_KEY}`;
+async function fetchTrendingTVShows(page) {
+  const url = `https://api.themoviedb.org/3/trending/tv/day?language=en-US&api_key=${API_KEY}&page=${page}`;
 
   try {
     const response = await fetch(url);
@@ -530,20 +654,20 @@ window.addEventListener('load', applyNightModePreference);
   const currentPage = getCurrentPageFromURL();
 
   try {
-    const movies = await fetchMovies(currentPage);
-    displayResults(movies, 'movies-container'); 
+    const [movies, trendingShows] = await Promise.all([
+      fetchMovies(currentPage),
+      fetchTrendingTVShows(currentPage)
+    ]);
+
+    displayResults(movies, 'movies-container');
+    displayResults(trendingShows, 'tv-container');
+
     updatePageNumber(currentPage);
   } catch (error) {
     console.error(error);
 
     const moviesContainer = document.getElementById('movies-container');
     moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-  }
-
-  try {
-    await displayTrendingTVShows();
-  } catch (error) {
-    console.error(error);
 
     const tvContainer = document.getElementById('tv-container');
     tvContainer.innerHTML = `<p>Error: ${error.message}</p>`;
@@ -598,6 +722,7 @@ window.addEventListener('load', init);
 
 
 
+
 const homeButton = document.getElementById('home-tab');
     homeButton.addEventListener('click', navigateToHome);
 
@@ -634,12 +759,14 @@ const homeButton = document.getElementById('home-tab');
       window.location.href = 'tvshows.html';
     }
     
-    
     const prevButton = document.getElementById('prev-button');
     prevButton.addEventListener('click', handlePrevButtonClick);
 
     const nextButton = document.getElementById('next-button');
     nextButton.addEventListener('click', handleNextButtonClick);
+
+    
+
   </script>
  <footer>
   <div class="footer-content">
@@ -654,5 +781,4 @@ const homeButton = document.getElementById('home-tab');
   </div>
 </footer>
 </body>
-
 </html>

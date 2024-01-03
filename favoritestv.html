@@ -7,6 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Coda&display=swap" rel="stylesheet">
 
 </head>
+<div id="loading-screen">
+  <div id="loading-spinner"></div>
+</div>
 <body>
   <nav class="navbar">
     <a href="index.html">
@@ -50,6 +53,26 @@
 </html>
 
   <script>
+
+function showLoadingScreen() {
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.style.display = 'flex';
+}
+
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.style.display = 'none';
+}
+
+function simulateLoading() {
+  showLoadingScreen();
+
+  setTimeout(() => {
+    hideLoadingScreen();
+  }, 500); 
+}
+
+window.addEventListener('load', simulateLoading);
     const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
 
  

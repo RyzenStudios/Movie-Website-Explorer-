@@ -82,16 +82,16 @@ main {
 .dark-theme {
     background-color: #0f0f0f;
     color: #fff;
-    background: linear-gradient(to bottom,#10101d, #010102);
+    background: linear-gradient(to bottom,#090911, #000000);
 }
 
 .dark-theme .movie-details-card {
     background-color: #333;
-    background: linear-gradient(to bottom, rgb(12, 0, 24), #0b0a0c);
+    background: linear-gradient(to bottom, rgb(12, 10, 14), rgb(0, 0, 0));
 }
 
 .dark-theme header{
-  background: linear-gradient(to bottom, rgb(12, 12, 15), #06001f49);
+  background: linear-gradient(to bottom, rgb(12, 12, 15), #02000c49);
   color: rgb(253, 253, 253);
 }
 
@@ -505,10 +505,38 @@ margin-right: 10px;
   }
 
   .dark-theme footer{
-    background: linear-gradient(to bottom,#08080f, #010102);
+    background: linear-gradient(to bottom,#05050a, #010102);
     color: rgb(156, 156, 156);
     text-align: center;
     padding: 10px;
   }
 
 
+  #loading-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000; 
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+  }
+  
+  #loading-spinner {
+    border: 8px solid #000000;
+    border-top: 8px solid #8a34db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

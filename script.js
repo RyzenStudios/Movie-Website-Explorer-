@@ -1,7 +1,6 @@
-// API key for The Movie Database (TMDb)
+// API key 
 const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
 
-// Function to fetch popular movies from TMDb API
 async function fetchMovies() {
   const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`;
 
@@ -28,7 +27,6 @@ const homeButton = document.getElementById('home-tab');
 homeButton.addEventListener('click', handleHomeButtonClick);
 
 
-// Function to display movies on the webpage
 async function displayMovies(movies) {
   const moviesContainer = document.getElementById('movies-container');
   moviesContainer.innerHTML = ''; 
@@ -36,7 +34,7 @@ async function displayMovies(movies) {
   
   for (const movie of movies) {
     const movieElement = document.createElement('div');
-    movieElement.classList.add('movie-card'); // Add the 'movie-card' class
+    movieElement.classList.add('movie-card');
 
     movieElement.innerHTML = `
       <h2>${movie.title}</h2>
@@ -48,51 +46,41 @@ async function displayMovies(movies) {
 
 
     movieElement.addEventListener('click', () => {
-      window.location.href = `movie.html?movieId=${movie.id}`; // Navigate to movie.html with movie ID as a query parameter
+      window.location.href = `movie.html?movieId=${movie.id}`; 
     });
 
     moviesContainer.appendChild(movieElement);
   }
 }
 
-// Function to toggle night mode (dark theme)
 function toggleNightMode() {
   const body = document.body;
   body.classList.toggle('dark-theme');
 }
 
-// Function to handle the watch button click
 function handleWatchButtonClick() {
   const watchButton = document.getElementById('watch-button');
 
-  // Check if the button has the 'watched' class
   if (watchButton.classList.contains('watched')) {
-    // Button is already marked as watched, do nothing
     return;
   }
 
-  // Toggle the 'watched' class on the button
   watchButton.classList.toggle('watched');
 
-  // Update the button text based on the class
   if (watchButton.classList.contains('watched')) {
     watchButton.textContent = 'Watched';
-    // Store the watched state in local storage
     localStorage.setItem('watched', 'true');
   } else {
     watchButton.textContent = 'Watch';
-    // Remove the watched state from local storage
     localStorage.removeItem('watched');
   }
 }
 
-// Add event listener to the watch button
 document.addEventListener('DOMContentLoaded', function() {
   const watchButton = document.getElementById('watch-button');
 
   watchButton.addEventListener('click', handleWatchButtonClick);
 
-  // Check the watched state from local storage and update the button accordingly
   const watchedState = localStorage.getItem('watched');
   if (watchedState === 'true') {
     watchButton.classList.add('watched');
@@ -101,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Function to search movies
 async function searchMovies(query) {
   const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
 
@@ -120,7 +107,6 @@ async function searchMovies(query) {
   }
 }
 
-// Function to initialize the movie app
 async function init() {
   try {
     const movies = await fetchMovies();
@@ -133,14 +119,11 @@ async function init() {
   }
 }
 
-// Call the init function when the page loads
 window.addEventListener('load', init);
 
-// Event listener for night mode button
 const nightModeButton = document.getElementById('night-mode-button');
 nightModeButton.addEventListener('click', toggleNightMode);
 
-// Event listener for search button
 const searchButton = document.getElementById('search-button');
 searchButton.addEventListener('click', async () => {
   const searchInput = document.getElementById('search-input');

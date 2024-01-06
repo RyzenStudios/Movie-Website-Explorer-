@@ -348,10 +348,18 @@ window.addEventListener('load', applyWatchedState);
       movieRating.textContent = `Rating: ${movie.vote_average.toFixed(1)}`;
 
 
+// TV SHOW PLAYER
 var tvShowId = imdbID; 
 var embedTvShowUrl = 'https://vidsrc.xyz/embed/tv/' + tvShowId;
 
+$('#tvShowEmbedContainer').html('<iframe width="900" height="550" src="' + embedTvShowUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
 
+$('#tvShowEmbedContainer').css({
+  'display': 'flex',
+  'justify-content': 'center',
+  'align-items': 'center',
+  'height': '70vh'
+});
 
     }
     

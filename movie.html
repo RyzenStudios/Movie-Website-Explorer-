@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Movie Details</title>
   <link rel="stylesheet" href="moviestyle.css">
@@ -11,13 +12,14 @@
 <div id="loading-screen">
   <div id="loading-spinner"></div>
 </div>
+
 <body>
   <header>
     <nav class="navbar">
       <a href="index.html">
         <img src="logo.png" alt="Logo" class="logo">
       </a>
-        
+
       <div class="navbar-tabs">
         <button id="home-tab" class="nav-tab active">Home</button>
         <button id="favorites-button" class="nav-tab">Favourite Movies</button>
@@ -27,39 +29,42 @@
       </div>
 
       <button id="night-mode-button" class="toggle-button">
-        <span class="icon moon-icon">&#9728;</span>
-        <span class="icon sun-icon" style="color: black;">&#9790;</span>
       </button>
-        </nav>
-  
+
+      <label class="switch">
+        <input type="checkbox" id="night-mode-checkbox" class="toggle-button" onclick="toggleNightMode()">
+        <span class="slider"></span>
+      </label>
+    </nav>
+
   </header>
   <h2 id="movie-title" style="font-size: 30px; font-family: 'Trebuchet MS'; margin-left: 350px;">Movie Title</h2>
 
   <div id="movieEmbedContainer"></div>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-  
+
   <main id="movie-details-container" class="container">
     <div class="movie-details-card">
       <div class="poster-container">
         <img id="movie-poster" src="" alt="Movie Poster">
         <button id="watch-button" class="watch-button">Watch</button>
 
-        
+
 
       </div>
       <div class="movie-info">
         <h2 id="movie-title-info"></h2>
         <p id="movie-overview"> </p>
-        <p id="movie-release-date" ></p>
-        <p id="movie-rating" ></p>
+        <p id="movie-release-date"></p>
+        <p id="movie-rating"></p>
         <h3 class="cast-heading">Cast</h3>
         <ul id="cast-list" class="cast-list"></ul>
         <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
-        
+
       </div>
 
-      
+
 
     </div>
     <div id="trailer-container" class="trailer-container">
@@ -76,35 +81,35 @@
         <textarea id="comment-input" placeholder="Add a comment" required></textarea>
         <button type="submit">Submit</button>
       </form>
-    
-    <div class="related-movies">
-      <h3>Related Movies</h3>
-      <div id="related-movies-container" class="related-movies-container"></div>
-    </div>
+
+      <div class="related-movies">
+        <h3>Related Movies</h3>
+        <div id="related-movies-container" class="related-movies-container"></div>
+      </div>
   </main>
 
 
 
   <script>
-function showLoadingScreen() {
-  const loadingScreen = document.getElementById('loading-screen');
-  loadingScreen.style.display = 'flex';
-}
+    function showLoadingScreen() {
+      const loadingScreen = document.getElementById('loading-screen');
+      loadingScreen.style.display = 'flex';
+    }
 
-function hideLoadingScreen() {
-  const loadingScreen = document.getElementById('loading-screen');
-  loadingScreen.style.display = 'none';
-}
+    function hideLoadingScreen() {
+      const loadingScreen = document.getElementById('loading-screen');
+      loadingScreen.style.display = 'none';
+    }
 
-function simulateLoading() {
-  showLoadingScreen();
+    function simulateLoading() {
+      showLoadingScreen();
 
-  setTimeout(() => {
-    hideLoadingScreen();
-  }, 500); 
-}
+      setTimeout(() => {
+        hideLoadingScreen();
+      }, 500);
+    }
 
-window.addEventListener('load', simulateLoading);
+    window.addEventListener('load', simulateLoading);
 
 
     function toggleNightMode() {
@@ -169,7 +174,7 @@ window.addEventListener('load', simulateLoading);
     }
 
     function createCommentElement(name, comment, timestamp) {
-      
+
       const commentContainer = document.createElement('div');
       commentContainer.classList.add('comment');
 
@@ -200,79 +205,79 @@ window.addEventListener('load', simulateLoading);
       commentContainer.appendChild(commentContent);
 
       const deleteButton = document.createElement('button');
-  deleteButton.classList.add('delete-button');
-  deleteButton.innerHTML = '&#10006;'; 
-  deleteButton.addEventListener('click', () => {
-    deleteComment(name, timestamp);
-    commentContainer.remove(); 
-  });
+      deleteButton.classList.add('delete-button');
+      deleteButton.innerHTML = '&#10006;';
+      deleteButton.addEventListener('click', () => {
+        deleteComment(name, timestamp);
+        commentContainer.remove();
+      });
 
-    commentContainer.appendChild(deleteButton);
-      
+      commentContainer.appendChild(deleteButton);
+
 
       return commentContainer;
-}
+    }
 
-function deleteComment(name, timestamp) {
-    const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
-    const updatedComments = existingComments.filter(
-      (comment) => comment.name !== name || comment.timestamp !== timestamp
-    );
-    localStorage.setItem('comments', JSON.stringify(updatedComments));
-  }
+    function deleteComment(name, timestamp) {
+      const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
+      const updatedComments = existingComments.filter(
+        (comment) => comment.name !== name || comment.timestamp !== timestamp
+      );
+      localStorage.setItem('comments', JSON.stringify(updatedComments));
+    }
 
-function handleCommentSubmission(event) {
-  event.preventDefault();
+    function handleCommentSubmission(event) {
+      event.preventDefault();
 
-  const name = nameInput.value.trim();
-  const comment = commentInput.value.trim();
+      const name = nameInput.value.trim();
+      const comment = commentInput.value.trim();
 
-  if (name === '' || comment === '') {
-    return;
-  }
+      if (name === '' || comment === '') {
+        return;
+      }
 
-  const timestamp = new Date().toLocaleString();
-  const commentElement = createCommentElement(name, comment, timestamp);
-  commentsContainer.appendChild(commentElement);
+      const timestamp = new Date().toLocaleString();
+      const commentElement = createCommentElement(name, comment, timestamp);
+      commentsContainer.appendChild(commentElement);
 
-  saveCommentToLocalStorage(name, comment, timestamp);
+      saveCommentToLocalStorage(name, comment, timestamp);
 
-  nameInput.value = '';
-  commentInput.value = '';
-}
+      nameInput.value = '';
+      commentInput.value = '';
+    }
 
-function saveCommentToLocalStorage(name, comment, timestamp) {
-  const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
-  existingComments.push({ name, comment, timestamp });
-  localStorage.setItem('comments', JSON.stringify(existingComments));
-}
+    function saveCommentToLocalStorage(name, comment, timestamp) {
+      const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
+      existingComments.push({ name, comment, timestamp });
+      localStorage.setItem('comments', JSON.stringify(existingComments));
+    }
 
-function loadCommentsFromLocalStorage() {
-  const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
+    function loadCommentsFromLocalStorage() {
+      const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
 
-  existingComments.forEach(({ name, comment, timestamp }) => {
-    const commentElement = createCommentElement(name, comment, timestamp);
-    commentsContainer.appendChild(commentElement);
-  });
-}
+      existingComments.forEach(({ name, comment, timestamp }) => {
+        const commentElement = createCommentElement(name, comment, timestamp);
+        commentsContainer.appendChild(commentElement);
+      });
+    }
 
-window.addEventListener('load', loadCommentsFromLocalStorage);
+    window.addEventListener('load', loadCommentsFromLocalStorage);
 
 
     function applyWatchedState() {
-  const watchButton = document.getElementById('watch-button');
-  const movieId = new URLSearchParams(window.location.search).get('movieId');
-  const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
+      const watchButton = document.getElementById('watch-button');
+      const movieId = new URLSearchParams(window.location.search).get('movieId');
+      const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
 
-  if (watchedMovies.includes(movieId)) {
-    watchButton.textContent = 'Watched';
-    watchButton.classList.add('watched');
-  } else {
-    watchButton.textContent = 'Watch';
-    watchButton.classList.remove('watched');
-  }
-}
-window.addEventListener('load', applyWatchedState);
+      if (watchedMovies.includes(movieId)) {
+        watchButton.textContent = 'Watched';
+        watchButton.classList.add('watched');
+      } else {
+        watchButton.textContent = 'Watch';
+        watchButton.classList.remove('watched');
+      }
+    }
+    window.addEventListener('load', applyWatchedState);
 
 
     window.addEventListener('load', applyNightModePreference);
@@ -346,13 +351,13 @@ window.addEventListener('load', applyWatchedState);
       const movieRating = document.getElementById('movie-rating');
 
       moviePoster.src = movie.poster_path
-  ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-  : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg';
-  moviePoster.alt = `${movie.title}`;
-moviePoster.style.width = '450px'; 
-moviePoster.style.height = 'auto';  
-  
-  
+        ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+        : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg';
+      moviePoster.alt = `${movie.title}`;
+      moviePoster.style.width = '450px';
+      moviePoster.style.height = 'auto';
+
+
       movieTitle.textContent = movie.title;
       movieTitleInfo.textContent = movie.title;
 
@@ -360,47 +365,47 @@ moviePoster.style.height = 'auto';
       movieReleaseDate.textContent = `Release Date: ${movie.release_date}`;
       movieRating.textContent = `Rating: ${movie.vote_average.toFixed(1)}`;
 
-  const imdbLogo = document.createElement('img');
-  imdbLogo.src = 'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/171_Imdb_logo_logos-512.png';
-  imdbLogo.alt = 'IMDb Logo';
-  imdbLogo.style.width = '25px';
-  imdbLogo.style.height = '25px';
-  imdbLogo.style.marginRight = '15px';
-  imdbLogo.style.marginBottom = '10px';
-  imdbLogo.style.verticalAlign = 'middle';
+      const imdbLogo = document.createElement('img');
+      imdbLogo.src = 'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/171_Imdb_logo_logos-512.png';
+      imdbLogo.alt = 'IMDb Logo';
+      imdbLogo.style.width = '25px';
+      imdbLogo.style.height = '25px';
+      imdbLogo.style.marginRight = '15px';
+      imdbLogo.style.marginBottom = '10px';
+      imdbLogo.style.verticalAlign = 'middle';
 
-  const movieId = new URLSearchParams(window.location.search).get('movieId');
-  const imdbLink = document.createElement('a');
-  imdbLink.href = `https://www.imdb.com/title/${movie.imdb_id}`;
-  imdbLink.target = '_blank';
-  const imdbID = movieId; 
-  imdbLink.appendChild(imdbLogo);
+      const movieId = new URLSearchParams(window.location.search).get('movieId');
+      const imdbLink = document.createElement('a');
+      imdbLink.href = `https://www.imdb.com/title/${movie.imdb_id}`;
+      imdbLink.target = '_blank';
+      const imdbID = movieId;
+      imdbLink.appendChild(imdbLogo);
 
-  movieRating.appendChild(imdbLink);
-  $(document).ready(function() {
-  var embedUrl = 'https://vidsrc.xyz/embed/movie/' + imdbID;
+      movieRating.appendChild(imdbLink);
+      $(document).ready(function () {
+        var embedUrl = 'https://vidsrc.xyz/embed/movie/' + imdbID;
 
-  $('#movieEmbedContainer').html('<iframe width="900" height="550" src="' + embedUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
+        $('#movieEmbedContainer').html('<iframe width="900" height="550" src="' + embedUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
 
-$('#movieEmbedContainer').css({
-  'display': 'flex',
-  'justify-content': 'center',
-  'align-items': 'center',
-  'height': '70vh'
-});
+        $('#movieEmbedContainer').css({
+          'display': 'flex',
+          'justify-content': 'center',
+          'align-items': 'center',
+          'height': '70vh'
+        });
 
-});
+      });
 
     }
-    
+
 
 
 
     async function displayCastList(cast) {
-  const castList = document.getElementById('cast-list');
-  const castNames = cast.slice(0, 25).map(actor => actor.name).join(', ');
-  castList.textContent = castNames;
-}
+      const castList = document.getElementById('cast-list');
+      const castNames = cast.slice(0, 25).map(actor => actor.name).join(', ');
+      castList.textContent = castNames;
+    }
 
 
     async function displayOfficialTrailer(movieId) {
@@ -432,35 +437,35 @@ $('#movieEmbedContainer').css({
     }
 
     function toggleWatchedState(movieId) {
-  const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
+      const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
 
-  if (watchedMovies.includes(movieId)) {
-    const index = watchedMovies.indexOf(movieId);
-    watchedMovies.splice(index, 1);
-  } else {
-    watchedMovies.push(movieId);
-  }
+      if (watchedMovies.includes(movieId)) {
+        const index = watchedMovies.indexOf(movieId);
+        watchedMovies.splice(index, 1);
+      } else {
+        watchedMovies.push(movieId);
+      }
 
-  localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
-}
+      localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
+    }
 
 
 
-function handleWatchButtonClick() {
-  const watchButton = document.getElementById('watch-button');
-  const movieId = new URLSearchParams(window.location.search).get('movieId');
-  const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
+    function handleWatchButtonClick() {
+      const watchButton = document.getElementById('watch-button');
+      const movieId = new URLSearchParams(window.location.search).get('movieId');
+      const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
 
-  toggleWatchedState(movieId);
+      toggleWatchedState(movieId);
 
-  if (watchedMovies.includes(movieId)) {
-    watchButton.textContent = 'Watch';
-    watchButton.classList.remove('watched');
-  } else {
-    watchButton.textContent = 'Watched';
-    watchButton.classList.add('watched');
-  }
-}
+      if (watchedMovies.includes(movieId)) {
+        watchButton.textContent = 'Watch';
+        watchButton.classList.remove('watched');
+      } else {
+        watchButton.textContent = 'Watched';
+        watchButton.classList.add('watched');
+      }
+    }
 
 
 
@@ -527,30 +532,30 @@ function handleWatchButtonClick() {
         throw error;
       }
     }
-    
 
-function displayRelatedMovies(relatedMovies) {
-  const relatedMoviesContainer = document.getElementById('related-movies-container');
-  relatedMoviesContainer.innerHTML = '';
 
-  relatedMovies.forEach((movie) => {
-    const movieElement = document.createElement('div');
-    movieElement.classList.add('related-movie-card');
+    function displayRelatedMovies(relatedMovies) {
+      const relatedMoviesContainer = document.getElementById('related-movies-container');
+      relatedMoviesContainer.innerHTML = '';
 
-    movieElement.innerHTML = `
+      relatedMovies.forEach((movie) => {
+        const movieElement = document.createElement('div');
+        movieElement.classList.add('related-movie-card');
+
+        movieElement.innerHTML = `
   <img src="${movie.poster_path
-    ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-    : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg'}" alt="${movie.title}">
+            ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+            : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg'}" alt="${movie.title}">
   <h4>${movie.title}</h4>
 `;
 
-    movieElement.addEventListener('click', () => {
-      window.location.href = `movie.html?movieId=${movie.id}`;
-    });
+        movieElement.addEventListener('click', () => {
+          window.location.href = `movie.html?movieId=${movie.id}`;
+        });
 
-    relatedMoviesContainer.appendChild(movieElement);
-  });
-}
+        relatedMoviesContainer.appendChild(movieElement);
+      });
+    }
 
     async function init() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -571,7 +576,7 @@ function displayRelatedMovies(relatedMovies) {
           favoriteButton.classList.add('favorited');
           favoriteButton.innerHTML = '<i class="fas fa-heart"></i>';
         }
-        
+
 
         favoriteButton.addEventListener('click', handleFavoriteButtonClick);
       } catch (error) {
@@ -583,9 +588,9 @@ function displayRelatedMovies(relatedMovies) {
 
     window.addEventListener('DOMContentLoaded', init);
 
-      const watchButton = document.getElementById('watch-button');
-      toggleWatchedState(watchButton);
-      watchButton.addEventListener('click', handleWatchButtonClick);
+    const watchButton = document.getElementById('watch-button');
+    toggleWatchedState(watchButton);
+    watchButton.addEventListener('click', handleWatchButtonClick);
 
     const nightModeButton = document.getElementById('night-mode-button');
     nightModeButton.addEventListener('click', toggleNightMode);
@@ -641,4 +646,5 @@ function displayRelatedMovies(relatedMovies) {
     <p>&copy; 2024 Ryzen Movie Haven. All rights reserved.</p>
   </div>
 </footer>
+
 </html>

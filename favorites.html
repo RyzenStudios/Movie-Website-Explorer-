@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Favorite Movies</title>
   <link rel="stylesheet" href="style.css">
@@ -11,12 +12,13 @@
 <div id="loading-screen">
   <div id="loading-spinner"></div>
 </div>
+
 <body>
   <nav class="navbar">
     <a href="index.html">
       <img src="logo.png" alt="Logo" class="logo">
     </a>
-    
+
     <div class="navbar-tabs">
       <button id="home-tab" class="nav-tab active">Home</button>
       <button id="favourite-button" class="nav-tab">Favorite Movies</button>
@@ -26,10 +28,14 @@
     </div>
 
     <button id="night-mode-button" class="toggle-button">
-      <span class="icon moon-icon">&#9728;</span>
-      <span class="icon sun-icon" style="color: black;">&#9790;</span>
     </button>
-      </nav>
+
+    <label class="switch">
+      <input type="checkbox" id="night-mode-checkbox" class="toggle-button" onclick="toggleNightMode()">
+      <span class="slider"></span>
+    </label>
+  </nav>
+
 
   </header>
   <h1>Favourite Movies</h1>
@@ -42,69 +48,72 @@
     <button id="next-button" class="page-button">Next</button>
   </div>
   <html>
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="favorites.css">
-</head>
-<body>
-  <header>
-  </header>
-  <main>
-  </main>
-</body>
-</html>
+
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="favorites.css">
+  </head>
+
+  <body>
+    <header>
+    </header>
+    <main>
+    </main>
+  </body>
+
+  </html>
 
   <script>
     function showLoadingScreen() {
-  const loadingScreen = document.getElementById('loading-screen');
-  loadingScreen.style.display = 'flex';
-}
+      const loadingScreen = document.getElementById('loading-screen');
+      loadingScreen.style.display = 'flex';
+    }
 
-function hideLoadingScreen() {
-  const loadingScreen = document.getElementById('loading-screen');
-  loadingScreen.style.display = 'none';
-}
+    function hideLoadingScreen() {
+      const loadingScreen = document.getElementById('loading-screen');
+      loadingScreen.style.display = 'none';
+    }
 
-function simulateLoading() {
-  showLoadingScreen();
+    function simulateLoading() {
+      showLoadingScreen();
 
-  setTimeout(() => {
-    hideLoadingScreen();
-  }, 500); 
-}
+      setTimeout(() => {
+        hideLoadingScreen();
+      }, 500);
+    }
 
-window.addEventListener('load', simulateLoading);
+    window.addEventListener('load', simulateLoading);
 
     const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
 
     async function fetchMoviesByIds(movieIds) {
-  const promises = movieIds.map(async (movieId) => {
-    const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-  });
+      const promises = movieIds.map(async (movieId) => {
+        const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+      });
 
-  try {
-    const movieData = await Promise.all(promises);
-    const movies = movieData.filter((movie) => movie && movie.title && !movie.first_air_date);
-    return movies;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
+      try {
+        const movieData = await Promise.all(promises);
+        const movies = movieData.filter((movie) => movie && movie.title && !movie.first_air_date);
+        return movies;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
 
     function displayMovies(movies) {
-  const moviesContainer = document.getElementById('movies-container');
-  moviesContainer.innerHTML = '';
+      const moviesContainer = document.getElementById('movies-container');
+      moviesContainer.innerHTML = '';
 
-  movies.forEach(movie => {
-    if (movie !== null) {
-      const movieElement = document.createElement('div');
-      movieElement.classList.add('movie-card');
+      movies.forEach(movie => {
+        if (movie !== null) {
+          const movieElement = document.createElement('div');
+          movieElement.classList.add('movie-card');
 
-      movieElement.innerHTML = `
+          movieElement.innerHTML = `
         <h2>${movie.title}</h2>
         <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
         <p>${movie.overview}</p>
@@ -113,43 +122,43 @@ window.addEventListener('load', simulateLoading);
         <button class="favourite-button">Remove from Favorites</button>
       `;
 
-      movieElement.addEventListener('click', () => {
-        window.location.href = `movie.html?movieId=${movie.id}`;
-      });
+          movieElement.addEventListener('click', () => {
+            window.location.href = `movie.html?movieId=${movie.id}`;
+          });
 
-      const favoriteButton = movieElement.querySelector('.favourite-button');
-      favoriteButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        removeFromFavorites(movie.id);
-      });
+          const favoriteButton = movieElement.querySelector('.favourite-button');
+          favoriteButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            removeFromFavorites(movie.id);
+          });
 
-      moviesContainer.appendChild(movieElement);
+          moviesContainer.appendChild(movieElement);
+        }
+      });
     }
-  });
-}
 
 
-function handlePrevButtonClick() {
-  const currentPage = getCurrentPageFromURL();
+    function handlePrevButtonClick() {
+      const currentPage = getCurrentPageFromURL();
 
-  if (currentPage > 1) {
-    navigateToPage(currentPage - 1);
-  }
-}
+      if (currentPage > 1) {
+        navigateToPage(currentPage - 1);
+      }
+    }
 
-function handleNextButtonClick() {
-  const currentPage = getCurrentPageFromURL();
+    function handleNextButtonClick() {
+      const currentPage = getCurrentPageFromURL();
 
 
-  if (currentPage < maxNumberOfPages) {
-    navigateToPage(currentPage + 1);
-  }
-}
+      if (currentPage < maxNumberOfPages) {
+        navigateToPage(currentPage + 1);
+      }
+    }
 
-function updatePageNumber(currentPage, maxNumberOfPages) {
-  const pageNumberElement = document.getElementById('page-number');
-  pageNumberElement.textContent = `Page ${currentPage} of ${maxNumberOfPages}`;
-}
+    function updatePageNumber(currentPage, maxNumberOfPages) {
+      const pageNumberElement = document.getElementById('page-number');
+      pageNumberElement.textContent = `Page ${currentPage} of ${maxNumberOfPages}`;
+    }
 
 
     function getCurrentPageFromURL() {
@@ -211,54 +220,54 @@ function updatePageNumber(currentPage, maxNumberOfPages) {
 
 
 
-  async function init() {
-  const currentPage = getCurrentPageFromURL();
-  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  let moviesPerPage = 18;  
+    async function init() {
+      const currentPage = getCurrentPageFromURL();
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      let moviesPerPage = 18;
 
-  const moviesContainer = document.getElementById('movies-container');
+      const moviesContainer = document.getElementById('movies-container');
 
-  const maxNumberOfPages = Math.ceil(favorites.length / moviesPerPage);
+      const maxNumberOfPages = Math.ceil(favorites.length / moviesPerPage);
 
-  try {
-    const start = (currentPage - 1) * moviesPerPage;
-    const end = start + moviesPerPage;
+      try {
+        const start = (currentPage - 1) * moviesPerPage;
+        const end = start + moviesPerPage;
 
-    const movieIds = favorites.slice(start, Math.min(end, favorites.length)).map((movie) => movie.id);
-    const movies = await fetchMoviesByIds(movieIds);
+        const movieIds = favorites.slice(start, Math.min(end, favorites.length)).map((movie) => movie.id);
+        const movies = await fetchMoviesByIds(movieIds);
 
-    if (movies.length === 0) {
-      moviesContainer.innerHTML = '<p>No Movies Favourited</p>' ;
-    } else {
-      displayMovies(movies);
-      updatePageNumber(currentPage, maxNumberOfPages);
-    }
+        if (movies.length === 0) {
+          moviesContainer.innerHTML = '<p>No Movies Favourited</p>';
+        } else {
+          displayMovies(movies);
+          updatePageNumber(currentPage, maxNumberOfPages);
+        }
 
 
-    const prevButton = document.getElementById('prev-button');
-    prevButton.addEventListener('click', handlePrevButtonClick);
+        const prevButton = document.getElementById('prev-button');
+        prevButton.addEventListener('click', handlePrevButtonClick);
 
-    const nextButton = document.getElementById('next-button');
-    nextButton.addEventListener('click', handleNextButtonClick);
+        const nextButton = document.getElementById('next-button');
+        nextButton.addEventListener('click', handleNextButtonClick);
 
-    function handlePrevButtonClick() {
-      if (currentPage > 1) {
-        navigateToPage(currentPage - 1);
+        function handlePrevButtonClick() {
+          if (currentPage > 1) {
+            navigateToPage(currentPage - 1);
+          }
+        }
+
+        function handleNextButtonClick() {
+          if (currentPage < maxNumberOfPages) {
+            navigateToPage(currentPage + 1);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+
+        const moviesContainer = document.getElementById('movies-container');
+        moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
       }
     }
-
-    function handleNextButtonClick() {
-      if (currentPage < maxNumberOfPages) {
-        navigateToPage(currentPage + 1);
-      }
-    }
-  } catch (error) {
-    console.error(error);
-
-    const moviesContainer = document.getElementById('movies-container');
-    moviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-  }
-}
 
 
 
@@ -328,7 +337,7 @@ function updatePageNumber(currentPage, maxNumberOfPages) {
     nextButton.addEventListener('click', handleNextButtonClick);
   </script>
 
-  
+
 </body>
 
 </html>

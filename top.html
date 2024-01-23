@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Highest Reviewed Movies</title>
   <link rel="stylesheet" href="top.css">
@@ -11,13 +12,14 @@
 <div id="loading-screen">
   <div id="loading-spinner"></div>
 </div>
+
 <body>
   <header>
     <nav class="navbar">
       <a href="index.html">
         <img src="logo.png" alt="Logo" class="logo">
       </a>
-        
+
       <div class="navbar-tabs">
         <button id="home-tab" class="nav-tab active">Home</button>
         <button id="favorites-button" class="nav-tab">Favourite Movies</button>
@@ -27,10 +29,14 @@
       </div>
 
       <button id="night-mode-button" class="toggle-button">
-        <span class="icon moon-icon">&#9728;</span>
-        <span class="icon sun-icon" style="color: black;">&#9790;</span>
       </button>
-        </nav>
+
+      <label class="switch">
+        <input type="checkbox" id="night-mode-checkbox" class="toggle-button" onclick="toggleNightMode()">
+        <span class="slider"></span>
+      </label>
+
+    </nav>
     </nav>
     <h1>Highest Reviewed Movies</h1>
   </header>
@@ -48,25 +54,25 @@
 
   <script>
 
-function showLoadingScreen() {
-  const loadingScreen = document.getElementById('loading-screen');
-  loadingScreen.style.display = 'flex';
-}
+    function showLoadingScreen() {
+      const loadingScreen = document.getElementById('loading-screen');
+      loadingScreen.style.display = 'flex';
+    }
 
-function hideLoadingScreen() {
-  const loadingScreen = document.getElementById('loading-screen');
-  loadingScreen.style.display = 'none';
-}
+    function hideLoadingScreen() {
+      const loadingScreen = document.getElementById('loading-screen');
+      loadingScreen.style.display = 'none';
+    }
 
-function simulateLoading() {
-  showLoadingScreen();
+    function simulateLoading() {
+      showLoadingScreen();
 
-  setTimeout(() => {
-    hideLoadingScreen();
-  }, 500); 
-}
+      setTimeout(() => {
+        hideLoadingScreen();
+      }, 500);
+    }
 
-window.addEventListener('load', simulateLoading);
+    window.addEventListener('load', simulateLoading);
     let currentPage = 1;
     let totalPages = 0;
 
@@ -93,15 +99,15 @@ window.addEventListener('load', simulateLoading);
     async function fetchTopMovies(page) {
       const API_KEY = 'a566fb0fc4bcb2f908b405cf49a573b7';
       const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&page=${page}`;
-      const moviesPerPage = 18; 
+      const moviesPerPage = 18;
 
       try {
         const response = await fetch(url);
         const data = await response.json();
 
         if (response.ok) {
-          totalPages = data.total_pages; 
-          return data.results.slice(0, moviesPerPage); 
+          totalPages = data.total_pages;
+          return data.results.slice(0, moviesPerPage);
         } else {
           throw new Error(data.status_message || 'Failed to fetch top movies');
         }
@@ -117,11 +123,11 @@ window.addEventListener('load', simulateLoading);
 
     function displayTopMovies(movies) {
       const movieList = document.getElementById('movies-container');
-      movieList.innerHTML = ''; 
+      movieList.innerHTML = '';
 
       movies.forEach((movie) => {
         const listItem = document.createElement('li');
-        listItem.classList.add('movie-card'); 
+        listItem.classList.add('movie-card');
 
         listItem.addEventListener('click', () => handleMovieCardClick(movie));
 
@@ -144,17 +150,17 @@ window.addEventListener('load', simulateLoading);
     }
 
     async function goToPage(page) {
-  try {
-    const topMovies = await fetchTopMovies(page);
-    displayTopMovies(topMovies);
-    currentPage = page;
-    updatePageSelector();
-  } catch (error) {
-    console.error(error);
-    const topMoviesContainer = document.getElementById('top-movies-container');
-    topMoviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-  }
-}
+      try {
+        const topMovies = await fetchTopMovies(page);
+        displayTopMovies(topMovies);
+        currentPage = page;
+        updatePageSelector();
+      } catch (error) {
+        console.error(error);
+        const topMoviesContainer = document.getElementById('top-movies-container');
+        topMoviesContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    }
 
 
     function updatePageSelector() {
@@ -216,7 +222,7 @@ window.addEventListener('load', simulateLoading);
       window.location.href = 'tvshows.html';
     }
 
-    
+
     const previousPageButton = document.getElementById('previous-page-button');
     previousPageButton.addEventListener('click', () => {
       if (currentPage > 1) {
@@ -245,4 +251,5 @@ window.addEventListener('load', simulateLoading);
     <p>&copy; 2024 Ryzen Movie Haven. All rights reserved.</p>
   </div>
 </footer>
+
 </html>

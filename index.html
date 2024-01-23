@@ -59,15 +59,15 @@
         <input id="search-input" class="search-input" type="text" placeholder="Search movies...">
         <button id="search-button" class="search-button">Search</button>
       </div>
-
-      <button id="night-mode-button" class="toggle-button">
-
-      </button>
-
       <label class="switch">
         <input type="checkbox" id="night-mode-checkbox" class="toggle-button" onclick="toggleNightMode()">
         <span class="slider"></span>
       </label>
+      <button id="night-mode-button" class="toggle-button">
+
+      </button>
+
+
 
     </nav>
     <div class="slideshow-container">
@@ -115,7 +115,7 @@
 
           setTimeout(() => {
             hideLoadingScreen();
-          }, 500);
+          }, 200);
         }
 
         window.addEventListener('load', simulateLoading);
@@ -123,7 +123,7 @@
         const genresButton = document.getElementById('genres-button');
         const genresList = document.getElementById('genres-list');
 
-        const genres = ['Action', 'Adventure', 'Animation', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Sci-Fi', 'Thriller'];
+        const genres = ['Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Drama', 'Fantasy', 'Horror', 'Romance', 'Sci-Fi', 'Thriller'];
 
         genres.forEach(genre => {
           const genreItem = document.createElement('div');
@@ -175,7 +175,9 @@
             'Fantasy': 14,
             'Horror': 27,
             'Sci-Fi': 878,
-            'Thriller': 53
+            'Thriller': 53,
+            'Romance': 10749,
+            'Crime': 80
           };
 
           return genreMapping[genre] || 0;

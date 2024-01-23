@@ -27,7 +27,6 @@ header {
 
 h1 {
   margin: 0;
-  transition: color 0.3s ease;
 }
 
 main {
@@ -40,6 +39,8 @@ main {
   display: grid;
   grid-gap: 20px;
   cursor: pointer;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (min-width: 600px) {
@@ -171,35 +172,40 @@ main {
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
+
+
 }
 
 .navbar-tabs {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
+  margin-right: 10px;
+
 }
 
 .nav-tab {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s ease-in-out;
+  font-size: 15px;
+  transition: all 0.3s;
   color: rgb(0, 0, 0);
   font-family: 'Coda', sans-serif;
-  margin-right: 10px;
 }
 
 .dark-theme .nav-tab {
   color: rgb(255, 255, 255);
+  font-size: 15px;
 }
 
 
 .switch {
-  font-size: 17px;
+  font-size: 12px;
   position: relative;
   display: inline-block;
   width: 3.5em;
   height: 2em;
+  margin-left: 5px;
 }
 
 .switch input {
@@ -259,7 +265,6 @@ main {
 
 .nav-tab:hover {
   color: #a25bff;
-  transform: scale(1.05);
 }
 
 .search-bar {
@@ -267,13 +272,13 @@ main {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 350px;
+  width: 280px;
   position: relative;
 }
 
 .search-icon {
   cursor: pointer;
-  font-size: 20px;
+  font-size: 10px;
   color: #333;
   margin-right: 10px;
   transition: color 0.3s ease;
@@ -295,14 +300,12 @@ main {
   font-size: 16px;
   box-shadow: 10px 44px 55px rgba(0, 0, 0, 0.21);
   font-family: 'Coda', sans-serif;
-  transition: width 0.3s ease;
 }
 
 
 .dark-theme .search-input {
   color: white;
   background-color: #0000007a;
-  transition: all 0.3s ease-in-out;
 }
 
 .dark-theme .search-input:hover {
@@ -327,18 +330,17 @@ main {
   font-size: 16px;
   cursor: pointer;
   font-family: 'Coda', sans-serif;
-  transition: background-color 0.3s ease;
   display: block;
 
 }
 
-@media (max-width: 768px) {
+@media (max-width: 968px) {
   .search-bar {
     width: 100%;
   }
 
   .search-input {
-    width: 50px;
+    width: 100px;
   }
 
   .search-button {
@@ -377,7 +379,6 @@ main {
   font-weight: bold;
   border-radius: 5px;
   text-decoration: none;
-  transition: background-color 0.3s ease;
 }
 
 .back-button:hover {
@@ -522,15 +523,24 @@ hr {
 #movies-container p {
   color: rgb(0, 0, 0);
   font-size: 15px;
+
 }
 
 .dark-theme #movies-container p {
   color: rgb(211, 209, 214);
   font-size: 15px;
+
+}
+
+.genres-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .genres-list div {
   cursor: pointer;
+  font-size: 15px;
   padding: 3px;
   margin: 3px;
   background-color: #4c3d5a23;
@@ -538,11 +548,12 @@ hr {
   border-radius: 5px;
   display: inline-block;
   transition: all 0.3s ease-in-out;
+  width: calc(15.6667% - 20px);
+
 }
 
 .genres-list div:hover {
   cursor: pointer;
-  margin: 6px;
   background-color: #8356ad;
   color: #fff;
 }

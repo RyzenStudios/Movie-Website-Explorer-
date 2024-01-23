@@ -200,7 +200,7 @@ main {
 
 @media screen and (max-width: 1000px) {
   .nav-tab {
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .dark-theme .nav-tab {

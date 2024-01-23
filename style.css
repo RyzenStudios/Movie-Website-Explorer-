@@ -4,7 +4,6 @@ body {
   padding: 0;
   opacity: 0;
   animation: fade-in 0.9s forwards;
-  align-items: center;
 
 }
 
@@ -333,8 +332,18 @@ main {
 
 }
 
-.search-button:hover {
-  background-color: #392f50;
+@media (max-width: 768px) {
+  .search-bar {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 50px;
+  }
+
+  .search-button {
+    display: block;
+  }
 }
 
 .page-selector {

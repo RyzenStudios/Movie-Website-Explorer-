@@ -187,7 +187,7 @@ main {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 17px;
   transition: all 0.3s;
   color: rgb(0, 0, 0);
   font-family: 'Coda', sans-serif;
@@ -195,9 +195,24 @@ main {
 
 .dark-theme .nav-tab {
   color: rgb(255, 255, 255);
-  font-size: 15px;
+  font-size: 17px;
 }
 
+@media screen and (max-width: 1000px) {
+  .nav-tab {
+    font-size: 15px;
+  }
+
+  .dark-theme .nav-tab {
+    font-size: 13px;
+  }
+
+  .navbar-tabs {
+    display: flex;
+    gap: 0.2rem;
+    margin-right: 10px;
+  }
+}
 
 .switch {
   font-size: 12px;
@@ -334,13 +349,24 @@ main {
 
 }
 
-@media (max-width: 968px) {
+@media screen and (max-width: 1000px) {
   .search-bar {
     width: 100%;
+    margin-right: 10px;
+
+  }
+
+  .switch {
+    font-size: 12px;
+    position: relative;
+    display: inline-block;
+    width: 6.5em;
+    height: 2em;
+    margin-left: 5px;
   }
 
   .search-input {
-    width: 100px;
+    width: 200px;
   }
 
   .search-button {
@@ -536,6 +562,7 @@ hr {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+
 }
 
 .genres-list div {
@@ -549,13 +576,25 @@ hr {
   display: inline-block;
   transition: all 0.3s ease-in-out;
   width: calc(15.6667% - 20px);
-
+  box-sizing: border-box;
 }
 
 .genres-list div:hover {
   cursor: pointer;
   background-color: #8356ad;
   color: #fff;
+}
+
+
+@media screen and (max-width: 1000px) {
+  .genres-list {
+    flex-direction: column;
+  }
+
+  .genres-list div {
+    width: 90%;
+    margin: 1px 1%;
+  }
 }
 
 #current-genre {

@@ -6,10 +6,7 @@
   <link rel="stylesheet" href="moviestyle.css">
   <link rel="icon" href="png.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Coda&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    integrity="sha384-wvfXpqpZZVQGK6TAh5D5PvflSF5r3xQXdRTwDZ9ZqFG6W5NHTiRBffWgHQ2&" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    integrity="sha384-LCQOdrG7bAYxAaaAruOCZfrjNjZ5fjwDvGg9x2bCG9TxUI1dR5un2hLU2gJkMU7T" crossorigin="anonymous">
+
 
 </head>
 <div id="loading-screen">
@@ -24,13 +21,12 @@
       </a>
 
       <div class="navbar-tabs">
-        <button id="home-tab" class="nav-tab active"><i class="fas fa-home"></i> HOME</button>
-        <button id="favorites-button" class="nav-tab"><i class="fas fa-heart"></i> FAVOURITE MOVIES</button>
-        <button id="fav-tv-button" class="nav-tab"><i class="fas fa-tv"></i> FAVOURITE SHOWS</button>
-        <button id="top-movies-tab" class="nav-tab"><i class="fas fa-film"></i> TOP MOVIES</button>
-        <button id="top-shows-tab" class="nav-tab"><i class="fas fa-tv"></i> TOP TV SHOWS</button>
+        <button id="home-tab" class="nav-tab active">Home</button>
+        <button id="favorites-button" class="nav-tab">Favourite Movies</button>
+        <button id="fav-tv-button" class="nav-tab">Favourite Shows</button>
+        <button id="top-movies-tab" class="nav-tab">Top Movies</button>
+        <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
       </div>
-
 
       <button id="night-mode-button" class="toggle-button">
       </button>
@@ -47,6 +43,7 @@
     <div class="movie-details-card">
       <div class="poster-container">
         <img id="movie-poster" src="" alt="Movie Poster">
+        <button id="watch-button" class="watch-button">Watch</button>
 
 
       </div>
@@ -259,6 +256,21 @@
     window.addEventListener('load', loadCommentsFromLocalStorage);
 
 
+    function applyWatchedState() {
+      const watchButton = document.getElementById('watch-button');
+      const movieId = new URLSearchParams(window.location.search).get('movieId');
+      const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
+
+      if (watchedMovies.includes(movieId)) {
+        watchButton.textContent = 'Watched';
+        watchButton.classList.add('watched');
+      } else {
+        watchButton.textContent = 'Watch';
+        watchButton.classList.remove('watched');
+      }
+    }
+
+    window.addEventListener('load', applyWatchedState);
 
 
     window.addEventListener('load', applyNightModePreference);
@@ -388,6 +400,40 @@
       }
     }
 
+    function isMovieWatched() {
+      return localStorage.getItem('watched') === 'true';
+    }
+
+    function toggleWatchedState(movieId) {
+      const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
+
+      if (watchedMovies.includes(movieId)) {
+        const index = watchedMovies.indexOf(movieId);
+        watchedMovies.splice(index, 1);
+      } else {
+        watchedMovies.push(movieId);
+      }
+
+      localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
+    }
+
+
+
+    function handleWatchButtonClick() {
+      const watchButton = document.getElementById('watch-button');
+      const movieId = new URLSearchParams(window.location.search).get('movieId');
+      const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies')) || [];
+
+      toggleWatchedState(movieId);
+
+      if (watchedMovies.includes(movieId)) {
+        watchButton.textContent = 'Watch';
+        watchButton.classList.remove('watched');
+      } else {
+        watchButton.textContent = 'Watched';
+        watchButton.classList.add('watched');
+      }
+    }
 
 
 
@@ -511,7 +557,9 @@
 
     window.addEventListener('DOMContentLoaded', init);
 
-
+    const watchButton = document.getElementById('watch-button');
+    toggleWatchedState(watchButton);
+    watchButton.addEventListener('click', handleWatchButtonClick);
 
     const nightModeButton = document.getElementById('night-mode-button');
     nightModeButton.addEventListener('click', toggleNightMode);

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600&display=swap');
+
 body {
   font-family: 'Coda', sans-serif;
   margin: 0;
@@ -144,12 +146,23 @@ main {
   color: rgb(253, 253, 253);
 }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .switch {
-  font-size: 17px;
+  font-size: 12px;
   position: relative;
   display: inline-block;
   width: 3.5em;
   height: 2em;
+  margin-left: 5px;
 }
 
 .switch input {
@@ -361,11 +374,12 @@ main {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s ease-in-out;
+  font-size: 15px;
+  transition: all 0.3s;
   color: rgb(0, 0, 0);
-  font-family: 'Coda', sans-serif;
-  margin-right: 10px;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 1000;
+  margin-left: 8px;
 }
 
 .dark-theme .nav-tab {

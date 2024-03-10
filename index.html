@@ -419,11 +419,9 @@
           for (let i = 0; i < slides.length; i++) {
             slides[i].style.display = 'none';
           }
-
           currentSlideIndex = (currentSlideIndex + 1) % slides.length;
           slides[currentSlideIndex].style.display = 'block';
-
-          setTimeout(showCurrentSlide, 500);
+          setTimeout(showCurrentSlide, 5000);
         }
 
         showSlides();

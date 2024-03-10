@@ -239,6 +239,8 @@
             ratedShowsText.style.display = 'none';
             const featuredText = document.getElementById('rated-shows-title');
             featuredText.style.display = 'none';
+            const slideshowContainer = document.querySelector('.slideshow-container');
+            slideshowContainer.style.display = 'none';
           });
 
           genresList.appendChild(genreItem);
@@ -372,9 +374,14 @@
                 watchNowButton.classList.add('watch-now-button');
                 watchNowButton.textContent = 'Watch Now';
                 watchNowButton.addEventListener('click', () => {
-                  window.location.href = `details.html?type=${item.media_type}&id=${item.id}`;
+                  if (item.media_type === 'movie') {
+                    window.location.href = `movie.html?movieId=${item.id}`;
+                  } else if (item.media_type === 'tv') {
+                    window.location.href = `tvinfo.html?movieId=${item.id}`;
+                  } else {
+                    console.error(`Unsupported media_type: ${item.media_type}`);
+                  }
                 });
-
                 slide.appendChild(numbertext);
                 slide.appendChild(text);
                 slide.appendChild(description);
@@ -416,7 +423,7 @@
           currentSlideIndex = (currentSlideIndex + 1) % slides.length;
           slides[currentSlideIndex].style.display = 'block';
 
-          setTimeout(showCurrentSlide, 5000);
+          setTimeout(showCurrentSlide, 500);
         }
 
         showSlides();

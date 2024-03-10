@@ -6,10 +6,7 @@
   <link rel="stylesheet" href="moviestyle.css">
   <link rel="icon" href="png.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Coda&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    integrity="sha384-wvfXpqpZZVQGK6TAh5D5PvflSF5r3xQXdRTwDZ9ZqFG6W5NHTiRBffWgHQ2&" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    integrity="sha384-LCQOdrG7bAYxAaaAruOCZfrjNjZ5fjwDvGg9x2bCG9TxUI1dR5un2hLU2gJkMU7T" crossorigin="anonymous">
+
 
 </head>
 <div id="loading-screen">
@@ -22,14 +19,14 @@
       <a href="index.html">
         <img src="logo.png" alt="Logo" class="logo">
       </a>
-      <div class="navbar-tabs">
-        <button id="home-tab" class="nav-tab active"><i class="fas fa-home"></i> HOME</button>
-        <button id="favorites-button" class="nav-tab"><i class="fas fa-heart"></i> FAVOURITE MOVIES</button>
-        <button id="fav-tv-button" class="nav-tab"><i class="fas fa-tv"></i> FAVOURITE SHOWS</button>
-        <button id="top-movies-tab" class="nav-tab"><i class="fas fa-film"></i> TOP MOVIES</button>
-        <button id="top-shows-tab" class="nav-tab"><i class="fas fa-tv"></i> TOP TV SHOWS</button>
-      </div>
 
+      <div class="navbar-tabs">
+        <button id="home-tab" class="nav-tab active">Home</button>
+        <button id="favorites-button" class="nav-tab">Favourite Movies</button>
+        <button id="fav-tv-button" class="nav-tab">Favourite Shows</button>
+        <button id="top-movies-tab" class="nav-tab">Top Movies</button>
+        <button id="top-shows-tab" class="nav-tab">Top TV Shows</button>
+      </div>
 
       <button id="night-mode-button" class="toggle-button">
       </button>
@@ -46,6 +43,7 @@
     <div class="movie-details-card">
       <div class="poster-container">
         <img id="movie-poster" src="" alt="Movie Poster">
+        <button id="watch-button" class="watch-button">Watch</button>
 
 
       </div>
@@ -57,11 +55,7 @@
         <h3>Cast</h3>
         <ul id="cast-list"></ul>
         <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
-        <div class="gallery-container">
-          <button id="prevButton" class="arrow-button">&lt;</button>
-          <div id="movie-images-container" class="image-gallery"></div>
-          <button id="nextButton" class="arrow-button">&gt;</button>
-        </div>
+
       </div>
 
 
@@ -88,68 +82,6 @@
 
 
   <script>
-    const apiKey = 'a566fb0fc4bcb2f908b405cf49a573b7';
-    const movieId = new URLSearchParams(window.location.search).get('movieId');
-    let currentIndex = 0;
-    let images; // Declare images globally
-
-    const movieImagesContainer = document.getElementById('movie-images-container');
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
-
-    fetch(`https://api.themoviedb.org/3/tv/${movieId}/images?api_key=${apiKey}`)
-      .then(response => response.json())
-      .then(data => {
-        images = data.backdrops || [];
-
-        if (images.length > 0) {
-          images.forEach((image, index) => {
-            const imageElement = document.createElement('img');
-            imageElement.src = `https://image.tmdb.org/t/p/w500/${image.file_path}`;
-            imageElement.alt = 'Movie Image';
-            movieImagesContainer.appendChild(imageElement);
-
-            // Hide all images except the first one
-            if (index !== 0) {
-              imageElement.style.display = 'none';
-            }
-          });
-
-          // Set up event listeners for the buttons
-          prevButton.addEventListener('click', showPrevImage);
-          nextButton.addEventListener('click', showNextImage);
-        } else {
-          const noImagesMessage = document.createElement('p');
-          noImagesMessage.textContent = 'No images available for this movie.';
-          movieImagesContainer.appendChild(noImagesMessage);
-        }
-      });
-
-    function showPrevImage() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      updateImageDisplay();
-    }
-
-    function showNextImage() {
-      currentIndex = (currentIndex + 1) % images.length;
-      updateImageDisplay();
-    }
-
-    function updateImageDisplay() {
-      const images = document.querySelectorAll('#movie-images-container img');
-
-      images.forEach((image, index) => {
-        if (index === currentIndex) {
-          image.style.display = 'block';
-        } else {
-          image.style.display = 'none';
-        }
-      });
-    }
-
-
-
-
     function showLoadingScreen() {
       const loadingScreen = document.getElementById('loading-screen');
       loadingScreen.style.display = 'flex';

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600&display=swap');
+
 body {
   font-family: 'Coda', sans-serif;
   margin: 0;
@@ -37,6 +39,39 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.gallery-container {
+  position: relative;
+  margin-top: 50px;
+
+  display: flex;
+  overflow: hidden;
+}
+
+.image-gallery {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+#movie-images-container img {
+  width: 100%;
+
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.arrow-button {
+  background-color: #26283a56;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.arrow-button:hover {
+  background-color: #33364e56;
 }
 
 
@@ -143,6 +178,7 @@ main {
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
+
 }
 
 .navbar-tabs {
@@ -155,12 +191,12 @@ main {
   background: none;
   border: none;
   cursor: pointer;
-
-  font-size: 16px;
-  transition: all 0.3s ease-in-out;
+  font-size: 15px;
+  transition: all 0.3s;
   color: rgb(0, 0, 0);
-  font-family: 'Coda', sans-serif;
-  margin-right: 10px;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 1000;
+  margin-left: 8px;
 }
 
 
@@ -263,8 +299,6 @@ main {
 .favorite-button {
   background-color: #00000000;
   color: white;
-  width: 32px;
-  height: 32px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -282,7 +316,6 @@ main {
 }
 
 .favorite-button:before {
-  content: '\2764';
   position: relative;
   font-size: 24px;
 }
@@ -534,12 +567,14 @@ footer {
   }
 }
 
+
 .switch {
-  font-size: 17px;
+  font-size: 12px;
   position: relative;
   display: inline-block;
   width: 3.5em;
   height: 2em;
+  margin-left: 5px;
 }
 
 .switch input {

@@ -6,7 +6,6 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  /* Hide horizontal overflow */
   overflow-y: auto;
   opacity: 0;
   animation: fade-in 0.9s forwards;
@@ -315,13 +314,14 @@ main {
   transition: all 0.2s ease-out;
 }
 
+
+
 .star-rating {
   position: absolute;
   top: 700px;
   left: 60px;
   font-size: 30px;
   color: #ffd700;
-  /* Gold color for stars */
 }
 
 .logo {
@@ -411,7 +411,7 @@ main {
     font-size: 12px;
     position: relative;
     display: inline-block;
-    width: 6.5em;
+    width: 8.5em;
     height: 2em;
     margin-left: 5px;
   }

@@ -309,19 +309,18 @@
 
 
 
-
       <script>
-        let currentMovieIndex = -1;
+        let currentSlideIndex = -1;
 
         function showSlides() {
-          fetch('https://api.themoviedb.org/3/trending/movie/day?language=en-US&api_key=a566fb0fc4bcb2f908b405cf49a573b7')
+          fetch('https://api.themoviedb.org/3/trending/all/day?language=en-US&api_key=a566fb0fc4bcb2f908b405cf49a573b7')
             .then(response => response.json())
             .then(data => {
               const slideshowContainer = document.querySelector('.slideshow-container');
               slideshowContainer.innerHTML = '';
-              const totalMovies = Math.min(data.results.length, 20);
+              const totalItems = Math.min(data.results.length, 20);
 
-              const fetchPromises = data.results.slice(0, totalMovies).map((movie, index) => {
+              const fetchPromises = data.results.slice(0, totalItems).map((item, index) => {
                 const slide = document.createElement('div');
                 slide.classList.add('fade');
                 slide.style.width = '100%';
@@ -329,13 +328,12 @@
 
                 const starRating = document.createElement('div');
                 starRating.classList.add('star-rating');
-                starRating.innerHTML = getStarRating(movie.vote_average);
+                starRating.innerHTML = getStarRating(item.vote_average);
 
                 const numbertext = document.createElement('div');
                 numbertext.classList.add('numbertext');
                 numbertext.textContent = `${index + 1} / ${data.results.length}`;
                 numbertext.style.opacity = "0%";
-
 
                 const text = document.createElement('div');
                 text.classList.add('text');
@@ -347,10 +345,10 @@
                 text.style.fontWeight = '900';
                 text.style.overflow = 'hidden';
                 text.style.whiteSpace = 'nowrap';
-                text.title = movie.title;
-                text.textContent = movie.title;
+                text.title = item.title || item.name;
+                text.textContent = item.title || item.name;
 
-                if (movie.title.length > 20) {
+                if ((item.title || item.name).length > 20) {
                   text.style.fontSize = '60px';
                 } else {
                   text.style.fontSize = '74px';
@@ -368,13 +366,13 @@
                 description.style.webkitBoxOrient = 'vertical';
                 description.style.webkitLineClamp = '4';
                 description.style.overflow = 'hidden';
-                description.textContent = movie.overview;
+                description.textContent = item.overview;
 
                 const watchNowButton = document.createElement('button');
                 watchNowButton.classList.add('watch-now-button');
                 watchNowButton.textContent = 'Watch Now';
                 watchNowButton.addEventListener('click', () => {
-                  window.location.href = `movie.html?movieId=${movie.id}`;
+                  window.location.href = `details.html?type=${item.media_type}&id=${item.id}`;
                 });
 
                 slide.appendChild(numbertext);
@@ -383,13 +381,14 @@
                 slide.appendChild(watchNowButton);
                 slideshowContainer.appendChild(slide);
                 slide.appendChild(starRating);
+
                 function getStarRating(voteAverage) {
                   const rating = Math.round(voteAverage / 2);
                   const stars = '\u2605'.repeat(rating) + '\u2606'.repeat(5 - rating);
-
                   return stars;
                 }
-                return fetch(`https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=a566fb0fc4bcb2f908b405cf49a573b7`)
+
+                return fetch(`https://api.themoviedb.org/3/${item.media_type}/${item.id}/images?api_key=a566fb0fc4bcb2f908b405cf49a573b7`)
                   .then(response => response.json())
                   .then(imageData => {
                     const firstImagePath = imageData.backdrops && imageData.backdrops.length > 0
@@ -414,8 +413,8 @@
             slides[i].style.display = 'none';
           }
 
-          currentMovieIndex = (currentMovieIndex + 1) % slides.length;
-          slides[currentMovieIndex].style.display = 'block';
+          currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+          slides[currentSlideIndex].style.display = 'block';
 
           setTimeout(showCurrentSlide, 5000);
         }

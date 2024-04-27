@@ -35,17 +35,9 @@
 
 
 
-      <button id="night-mode-button" class="toggle-button">
-      </button>
-
-      <label class="switch">
-        <input type="checkbox" id="night-mode-checkbox" class="toggle-button" onclick="toggleNightMode()">
-        <span class="slider"></span>
-      </label>
     </nav>
 
   </header>
-  <h2 id="movie-title" style="font-size: 30px; font-family: 'Trebuchet MS'; margin-left: 350px;">Movie Title</h2>
 
   <div id="movieEmbedContainer"></div>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -69,9 +61,6 @@
         <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
 
       </div>
-
-
-
     </div>
     <div id="trailer-container" class="trailer-container">
       <div id="trailer-wrapper"></div>
@@ -116,26 +105,6 @@
     }
 
     window.addEventListener('load', simulateLoading);
-
-
-    function toggleNightMode() {
-      const body = document.body;
-      body.classList.toggle('dark-theme');
-      const nightModeEnabled = body.classList.contains('dark-theme');
-      localStorage.setItem('nightMode', nightModeEnabled);
-    }
-
-    function applyNightModePreference() {
-      const body = document.body;
-      const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
-
-      if (nightModeEnabled) {
-        body.classList.add('dark-theme');
-      } else {
-        body.classList.remove('dark-theme');
-      }
-    }
-
     const commentForm = document.getElementById('comment-form');
     const nameInput = document.getElementById('name-input');
     const commentInput = document.getElementById('comment-input');
@@ -270,8 +239,6 @@
     window.addEventListener('load', loadCommentsFromLocalStorage);
 
 
-    window.addEventListener('load', applyNightModePreference);
-
 
 
     async function fetchMovieDetails(movieId) {
@@ -334,7 +301,6 @@
 
     function displayMovieDetails(movie) {
       const moviePoster = document.getElementById('movie-poster');
-      const movieTitle = document.getElementById('movie-title');
       const movieTitleInfo = document.getElementById('movie-title-info');
       const movieOverview = document.getElementById('movie-overview');
       const movieReleaseDate = document.getElementById('movie-release-date');
@@ -348,7 +314,6 @@
       moviePoster.style.height = 'auto';
 
 
-      movieTitle.textContent = movie.title;
       movieTitleInfo.textContent = movie.title;
 
       movieOverview.textContent = movie.overview;
@@ -375,21 +340,18 @@
       $(document).ready(function () {
         var embedUrl = 'https://vidsrc.xyz/embed/movie/' + imdbID;
 
-        $('#movieEmbedContainer').html('<iframe width="900" height="550" src="' + embedUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
+        $('#movieEmbedContainer').html('<iframe width="1720" height="950" src="' + embedUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
 
         $('#movieEmbedContainer').css({
           'display': 'flex',
           'justify-content': 'center',
           'align-items': 'center',
-          'height': '70vh'
+          'height': '100vh'
         });
 
       });
 
     }
-
-
-
 
     async function displayCastList(cast) {
       const castList = document.getElementById('cast-list');
@@ -543,8 +505,6 @@
     window.addEventListener('DOMContentLoaded', init);
 
 
-    const nightModeButton = document.getElementById('night-mode-button');
-    nightModeButton.addEventListener('click', toggleNightMode);
     const homeButton = document.getElementById('home-tab');
     homeButton.addEventListener('click', navigateToHome);
 

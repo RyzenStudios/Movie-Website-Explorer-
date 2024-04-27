@@ -32,16 +32,20 @@
       </div>
 
 
-      <button id="night-mode-button" class="toggle-button">
-      </button>
-
-      <label class="switch">
-        <input type="checkbox" id="night-mode-checkbox" class="toggle-button" onclick="toggleNightMode()">
-        <span class="slider"></span>
-      </label>
     </nav>
   </header>
   <div id="tvShowEmbedContainer"></div>
+
+  <div class="button-container">
+    <button id="prevSeasonButton"></button>
+    <button id="nextSeasonButton"></button>
+  </div>
+  <div class="button-container">
+    <button id="prevEpisodeButton"></button>
+    <button id="nextEpisodeButton"></button>
+  </div>
+
+
 
   <main id="movie-details-container" class="container">
     <div class="movie-details-card">
@@ -57,6 +61,7 @@
         <p id="movie-rating"></p>
         <h3>Cast</h3>
         <ul id="cast-list"></ul>
+        <ul id="episode-list"></ul>
         <button id="favorite-button" class="favorite-button"><i class="far fa-heart"></i></button>
 
       </div>
@@ -105,23 +110,6 @@
 
     window.addEventListener('load', simulateLoading);
 
-    function toggleNightMode() {
-      const body = document.body;
-      body.classList.toggle('dark-theme');
-      const nightModeEnabled = body.classList.contains('dark-theme');
-      localStorage.setItem('nightMode', nightModeEnabled);
-    }
-
-    function applyNightModePreference() {
-      const body = document.body;
-      const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
-
-      if (nightModeEnabled) {
-        body.classList.add('dark-theme');
-      } else {
-        body.classList.remove('dark-theme');
-      }
-    }
 
     const commentForm = document.getElementById('comment-form');
     const nameInput = document.getElementById('name-input');
@@ -261,7 +249,6 @@
 
 
 
-    window.addEventListener('load', applyNightModePreference);
 
 
     async function fetchMovieDetails(movieId) {
@@ -322,6 +309,30 @@
       }
     }
 
+    let episodeNumber = 1;
+    let seasonNumber = 1;
+    let tvShowId;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      tvShowId = urlParams.get('movieId');
+
+      const storedTvShowId = localStorage.getItem('tvShowId');
+      const storedEpisodeNumber = localStorage.getItem('episodeNumber');
+      const storedSeasonNumber = localStorage.getItem('seasonNumber');
+
+      if (storedTvShowId === tvShowId && storedEpisodeNumber && storedSeasonNumber) {
+        episodeNumber = parseInt(storedEpisodeNumber);
+        seasonNumber = parseInt(storedSeasonNumber);
+      } else {
+        localStorage.setItem('tvShowId', tvShowId);
+      }
+
+      updateButtonText();
+      displayTvShowPlayer(episodeNumber, seasonNumber);
+    });
+
+
     function displayMovieDetails(movie) {
       const moviePoster = document.getElementById('movie-poster');
       const movieTitle = document.getElementById('movie-title');
@@ -329,10 +340,7 @@
       const movieReleaseDate = document.getElementById('movie-release-date');
       const movieRating = document.getElementById('movie-rating');
       const movieId = new URLSearchParams(window.location.search).get('movieId');
-
       const imdbID = movieId;
-
-
 
       moviePoster.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
       movieTitle.textContent = movie.name;
@@ -340,21 +348,106 @@
       movieReleaseDate.textContent = `Air Date: ${movie.first_air_date}`;
       movieRating.textContent = `Rating: ${movie.vote_average.toFixed(1)}`;
 
-
       // TV SHOW PLAYER
-      var tvShowId = imdbID;
-      var embedTvShowUrl = 'https://vidsrc.xyz/embed/tv/' + tvShowId;
+      const tvShowId = imdbID;
+      const embedTvShowUrl = `https://vidsrc.xyz/embed/tv/${tvShowId}/${seasonNumber}-${episodeNumber}`;
 
-      $('#tvShowEmbedContainer').html('<iframe width="900" height="550" src="' + embedTvShowUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
+      $('#tvShowEmbedContainer').html('<iframe width="1720" height="850"  src="' + embedTvShowUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
 
       $('#tvShowEmbedContainer').css({
         'display': 'flex',
         'justify-content': 'center',
         'align-items': 'center',
-        'height': '70vh'
+        'height': '100vh'
       });
 
+      // Next Episode button
+      const incrementButton = createButton(`Next Episode (${episodeNumber})`, function () {
+        episodeNumber++;
+        localStorage.setItem('episodeNumber', episodeNumber);
+        location.reload();
+      });
+      document.getElementById('nextEpisodeButton').appendChild(incrementButton);
+
+      // Previous Episode button
+      const decrementButton = createButton(`Previous Episode (${episodeNumber})`, function () {
+        if (episodeNumber > 1) {
+          episodeNumber--;
+          localStorage.setItem('episodeNumber', episodeNumber);
+          location.reload();
+        }
+      });
+      document.getElementById('prevEpisodeButton').appendChild(decrementButton);
+
+
+      // Next Season button
+      const incrementSButton = createButton(`Next Season (${seasonNumber})`, function () {
+        seasonNumber++;
+        localStorage.setItem('seasonNumber', seasonNumber);
+        location.reload();
+      });
+      document.getElementById('nextSeasonButton').appendChild(incrementSButton);
+
+      // Previous Season button
+      const decrementSButton = createButton(`Previous Season (${seasonNumber})`, function () {
+        if (seasonNumber > 1) {
+          seasonNumber--;
+          localStorage.setItem('seasonNumber', seasonNumber);
+          location.reload();
+        }
+      });
+      document.getElementById('prevSeasonButton').appendChild(decrementSButton);
+
+
+      function createButton(text, clickHandler) {
+        const button = document.createElement('button');
+        button.textContent = text;
+        button.addEventListener('click', clickHandler);
+        return button;
+      }
     }
+
+
+    function displayTvShowPlayer(episodeNumber, seasonNumber) {
+      const embedTvShowUrl = `https://vidsrc.xyz/embed/tv/${tvShowId}/${seasonNumber}-${episodeNumber}`;
+
+      const tvShowPlayerIframe = document.getElementById('tvShowPlayerIframe');
+      tvShowPlayerIframe.src = embedTvShowUrl;
+    }
+
+
+    function displayEpisodes(movie) {
+      const episodeListContainer = document.getElementById('episode-list');
+
+      episodeListContainer.innerHTML = '';
+      const lastEpisode = movie.last_episode_to_air;
+      const lastEpisodeTitle = document.createElement('h4');
+      lastEpisodeTitle.textContent = 'Last Episode to Air';
+      const episodeName = document.createElement('p');
+      episodeName.textContent = `Name: ${lastEpisode.name}`;
+      episodeName.style.fontSize = '16px';
+
+      const airDate = document.createElement('p');
+      airDate.textContent = `Air Date: ${lastEpisode.air_date}`;
+      airDate.style.fontSize = '16px';
+
+      episodeListContainer.appendChild(lastEpisodeTitle);
+      episodeListContainer.appendChild(episodeName);
+      episodeListContainer.appendChild(airDate);
+
+      const totalSeasons = document.createElement('p');
+      totalSeasons.textContent = `Total Seasons: ${movie.number_of_seasons}`;
+      totalSeasons.style.fontSize = '14px';
+
+      const totalEpisodes = document.createElement('p');
+      totalEpisodes.textContent = `Total Episodes: ${movie.number_of_episodes}`;
+      totalEpisodes.style.fontSize = '14px';
+
+      episodeListContainer.appendChild(totalSeasons);
+      episodeListContainer.appendChild(totalEpisodes);
+    }
+
+
 
 
     async function displayCastList(cast) {
@@ -488,10 +581,13 @@
         const movie = await fetchMovieDetails(movieId);
         const cast = await fetchMovieCast(movieId);
         const relatedMovies = await fetchRelatedMovies(movieId);
+        const episodes = await fetchMovieDetails(movieId);
+
 
         displayMovieDetails(movie);
         displayCastList(cast);
         displayRelatedMovies(relatedMovies);
+        displayEpisodes(episodes);
         await displayOfficialTrailer(movieId);
 
         const favoriteButton = document.getElementById('favorite-button');
@@ -512,9 +608,6 @@
     window.addEventListener('DOMContentLoaded', init);
 
 
-
-    const nightModeButton = document.getElementById('night-mode-button');
-    nightModeButton.addEventListener('click', toggleNightMode);
 
     const homeButton = document.getElementById('home-tab');
     homeButton.addEventListener('click', navigateToHome);

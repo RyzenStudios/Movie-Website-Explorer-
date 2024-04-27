@@ -6,6 +6,9 @@ body {
   padding: 0;
   opacity: 0;
   animation: fade-in 0.9s forwards;
+  background-color: #0f0f0f;
+  color: #fff;
+  background: linear-gradient(to bottom, #090911, #000000);
 }
 
 @keyframes fade-in {
@@ -19,8 +22,8 @@ body {
 }
 
 header {
-  background: linear-gradient(to bottom, #f3f3f3, #dbdbdb60);
-  color: #111010;
+  background: linear-gradient(to bottom, rgb(12, 12, 15), #02000c49);
+  color: rgb(253, 253, 253);
   padding: 0px;
   text-align: center;
   transition: color 0.2s ease;
@@ -77,7 +80,8 @@ main {
 
 
 .movie-details-card {
-  background: linear-gradient(to bottom, #f5f8f8, #f5f4f4);
+  background-color: #333;
+  background: linear-gradient(to bottom, rgb(12, 10, 14), rgb(0, 0, 0));
   padding: 69px;
   border-radius: 5px;
   transition: transform 0.3s ease-in-out, color 0.3s ease;
@@ -115,26 +119,9 @@ main {
   margin: 15px;
 }
 
-.dark-theme {
-  background-color: #0f0f0f;
-  color: #fff;
-  background: linear-gradient(to bottom, #090911, #000000);
-}
-
-.dark-theme .movie-details-card {
-  background-color: #333;
-  background: linear-gradient(to bottom, rgb(12, 10, 14), rgb(0, 0, 0));
-}
-
-.dark-theme header {
-  background: linear-gradient(to bottom, rgb(12, 12, 15), #02000c49);
-  color: rgb(253, 253, 253);
-}
 
 
-#night-mode-button {
-  opacity: 0;
-}
+
 
 
 .icon {
@@ -145,29 +132,6 @@ main {
 
 
 
-.dark-theme .sun-icon {
-  display: none;
-}
-
-.dark-theme .moon-icon {
-  display: inline;
-}
-
-.dark-theme .night-mode-button {
-  color: #f5d430;
-}
-
-.light-theme .sun-icon {
-  display: inline;
-}
-
-.light-theme .moon-icon {
-  display: none;
-}
-
-.light-theme .night-mode-button {
-  color: #f5d430;
-}
 
 
 .navbar {
@@ -193,16 +157,10 @@ main {
   cursor: pointer;
   font-size: 15px;
   transition: all 0.3s;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   font-family: 'Mulish', sans-serif;
   font-weight: 1000;
   margin-left: 8px;
-}
-
-
-.dark-theme .nav-tab {
-  color: rgb(255, 255, 255);
-
 }
 
 .logo {
@@ -519,13 +477,6 @@ main {
 }
 
 footer {
-  background: linear-gradient(to bottom, #eaedee, #cfcfcf);
-  color: rgb(0, 0, 0);
-  text-align: center;
-  padding: 10px;
-}
-
-.dark-theme footer {
   background: linear-gradient(to bottom, #05050a, #010102);
   color: rgb(156, 156, 156);
   text-align: center;
@@ -567,60 +518,34 @@ footer {
   }
 }
 
-
-.switch {
-  font-size: 12px;
-  position: relative;
-  display: inline-block;
-  width: 3.5em;
-  height: 2em;
-  margin-left: 5px;
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
+.button-container button {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 400;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #2196F3;
-  transition: .4s;
-  border-radius: 30px;
+  background-color: #140e2c00;
+  color: #4b4b4b;
+  transition: all ease-in-out .1s;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 1.4em;
-  width: 1.4em;
-  border-radius: 20px;
-  left: 0.3em;
-  bottom: 0.3em;
-  background-color: yellow;
-  transition: .4s;
+.button-container button:hover {
+  color: #ffffff;
+  font-weight: bold;
 }
 
-.switch input:checked+.slider:before {
-  background-color: black;
-  border-radius: 50px;
-  box-shadow: inset 9px 0px 1px 0px white;
+#prevEpisodeButton {
+  margin-right: 10px;
 }
 
-.switch input:checked+.slider {
-  background-color: black;
-}
-
-.switch input:focus+.slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-.switch input:checked+.slider:before {
-  transform: translateX(1.5em);
+#episodeDisplay {
+  font-size: 18px;
+  margin-bottom: 10px;
 }

@@ -68,135 +68,27 @@
       </div>
 
 
-      <label class="switch">
-        <input type="checkbox" id="night-mode-checkbox" class="toggle-button" onclick="toggleNightMode()">
-        <span class="slider"></span>
-      </label>
-      <button id="night-mode-button" class="toggle-button">
-
-      </button>
-
     </nav>
     <div class="slideshow-container">
 
 
       <br>
 
-      <!-- <script>
-        let currentShowIndex = -1;
-      
-        function showSlides() {
-          fetch('https://api.themoviedb.org/3/trending/tv/day?language=en-US&api_key=a566fb0fc4bcb2f908b405cf49a573b7')
-            .then(response => response.json())
-            .then(data => {
-              const slideshowContainer = document.querySelector('.slideshow-container');
-              slideshowContainer.innerHTML = '';
-              const totalShows = Math.min(data.results.length, 20);
-      
-              const fetchPromises = data.results.slice(0, totalShows).map((show, index) => {
-                const slide = document.createElement('div');
-                slide.classList.add('fade');
-                slide.style.width = '100%';
-                slide.style.height = '750px';
-      
-                const starRating = document.createElement('div');
-                starRating.classList.add('star-rating');
-                starRating.innerHTML = getStarRating(show.vote_average);
-      
-                const numbertext = document.createElement('div');
-                numbertext.classList.add('numbertext');
-                numbertext.textContent = `${index + 1} / ${data.results.length}`;
-                numbertext.style.opacity = "0%";
-      
-                const text = document.createElement('div');
-                text.classList.add('text');
-                text.style.marginTop = '400px';
-                text.style.marginLeft = '50px';
-                text.style.textAlign = 'left';
-                text.style.fontFamily = 'Montserrat';
-                text.style.fontStyle = 'italic';
-                text.style.fontWeight = '900';
-                text.style.overflow = 'hidden';
-                text.style.whiteSpace = 'nowrap';
-                text.title = show.name;
-                text.textContent = show.name;
-      
-                if (show.name.length > 20) {
-                  text.style.fontSize = '60px';
-                } else {
-                  text.style.fontSize = '74px';
-                }
-      
-                const description = document.createElement('div');
-                description.classList.add('description');
-                description.style.width = '30%';
-                description.style.fontFamily = 'Montserrat';
-                description.style.textAlign = 'left';
-                description.style.marginTop = '10px';
-                description.style.marginLeft = '55px';
-                description.style.fontSize = '15px';
-                description.style.display = '-webkit-box';
-                description.style.webkitBoxOrient = 'vertical';
-                description.style.webkitLineClamp = '4';
-                description.style.overflow = 'hidden';
-                description.textContent = show.overview;
-      
-                const watchNowButton = document.createElement('button');
-                watchNowButton.classList.add('watch-now-button');
-                watchNowButton.textContent = 'Watch Now';
-                watchNowButton.addEventListener('click', () => {
-                  window.location.href = `tvshow.html?showId=${show.id}`;
-                });
-      
-                slide.appendChild(numbertext);
-                slide.appendChild(text);
-                slide.appendChild(description);
-                slide.appendChild(watchNowButton);
-                slideshowContainer.appendChild(slide);
-                slide.appendChild(starRating);
-      
-                function getStarRating(voteAverage) {
-                  const rating = Math.round(voteAverage / 2);
-                  const stars = '\u2605'.repeat(rating) + '\u2606'.repeat(5 - rating);
-                  return stars;
-                }
-      
-                return fetch(`https://api.themoviedb.org/3/tv/${show.id}/images?api_key=a566fb0fc4bcb2f908b405cf49a573b7`)
-                  .then(response => response.json())
-                  .then(imageData => {
-                    const firstImagePath = imageData.backdrops && imageData.backdrops.length > 0
-                      ? `https://image.tmdb.org/t/p/original/${imageData.backdrops[0].file_path}`
-                      : '';
-      
-                    slide.style.background = `linear-gradient(to bottom, rgba(7, 0, 31, 0.33), rgb(12, 12, 15)), url(${firstImagePath}) center/cover no-repeat`;
-                    slide.style.backgroundSize = 'cover';
-                    slide.style.borderRadius = '15px';
-                  })
-                  .catch(err => console.error(err));
-              });
-      
-              Promise.all(fetchPromises).then(() => showCurrentSlide());
-            })
-            .catch(err => console.error(err));
-        }
-      
-        function showCurrentSlide() {
-          let slides = document.getElementsByClassName('fade');
-          for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = 'none';
-          }
-      
-          currentShowIndex = (currentShowIndex + 1) % slides.length;
-          slides[currentShowIndex].style.display = 'block';
-      
-          setTimeout(showCurrentSlide, 5000);
-        }
-      
-        showSlides();
-      </script>
-       -->
-
       <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const urlParams = new URLSearchParams(window.location.search);
+          const tvShowId = urlParams.get('movieId');
+
+          const hasLoadingScreenBeenShown = localStorage.getItem('loadingScreenShown');
+
+          if (!hasLoadingScreenBeenShown) {
+            showLoadingScreen();
+
+            localStorage.setItem('loadingScreenShown', true);
+          }
+
+        });
+
         function showLoadingScreen() {
           const loadingScreen = document.getElementById('loading-screen');
           loadingScreen.style.display = 'flex';
@@ -212,8 +104,9 @@
 
           setTimeout(() => {
             hideLoadingScreen();
-          }, 200);
+          }, 150);
         }
+
 
         window.addEventListener('load', simulateLoading);
 
@@ -325,6 +218,8 @@
               const fetchPromises = data.results.slice(0, totalItems).map((item, index) => {
                 const slide = document.createElement('div');
                 slide.classList.add('fade');
+
+                slide.classList.add('fade');
                 slide.style.width = '100%';
                 slide.style.height = '750px';
 
@@ -417,10 +312,14 @@
         function showCurrentSlide() {
           let slides = document.getElementsByClassName('fade');
           for (let i = 0; i < slides.length; i++) {
+            slides[i].style.opacity = '0';
             slides[i].style.display = 'none';
           }
           currentSlideIndex = (currentSlideIndex + 1) % slides.length;
           slides[currentSlideIndex].style.display = 'block';
+          setTimeout(() => {
+            slides[currentSlideIndex].style.opacity = '1';
+          }, 10);
           setTimeout(showCurrentSlide, 5000);
         }
 
@@ -529,14 +428,14 @@
           resultHTML += `
         <img src="${result.poster_path ? `https://image.tmdb.org/t/p/w500/${result.poster_path}` : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg'}" alt="${result.title}">
         <h2>${result.title}</h2>
-        <p>Rating: ${result.vote_average.toFixed(1)}</p>
+        ${result.vote_average ? `<p>Rating: ${result.vote_average.toFixed(1)}</p>` : ''}
       `;
         } else if (result.name) {
           // It's a TV show
           resultHTML += `
         <img src="${result.poster_path ? `https://image.tmdb.org/t/p/w500/${result.poster_path}` : 'https://static.displate.com/857x1200/displate/2022-04-15/7422bfe15b3ea7b5933dffd896e9c7f9_46003a1b7353dc7b5a02949bd074432a.jpg'}" alt="${result.title}">
         <h2>${result.name}</h2>
-        <p>Rating: ${result.vote_average.toFixed(1)}</p>
+        ${result.vote_average ? `<p>Rating: ${result.vote_average.toFixed(1)}</p>` : ''}
 
         `;
         }
@@ -763,30 +662,6 @@
       window.location.href = url;
     }
 
-    function toggleNightMode() {
-      const body = document.body;
-      body.classList.toggle('dark-theme');
-      body.classList.toggle('light-theme');
-
-      const nightModeEnabled = body.classList.contains('dark-theme');
-      localStorage.setItem('nightMode', nightModeEnabled);
-    }
-
-    function applyNightModePreference() {
-      const body = document.body;
-      const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
-
-      if (nightModeEnabled) {
-        body.classList.add('dark-theme');
-      } else {
-        body.classList.add('light-theme');
-      }
-    }
-
-    window.addEventListener('load', applyNightModePreference);
-
-
-
     function isMovieInFavorites(movie) {
       const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
       return favorites.some((fav) => fav.id === movie.id);
@@ -819,7 +694,6 @@
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
     }
 
-
     async function init() {
       const currentPage = getCurrentPageFromURL();
 
@@ -828,7 +702,6 @@
           fetchMovies(currentPage),
           fetchTrendingTVShows(currentPage),
           fetchTopTVShows(currentPage)
-
         ]);
 
         displayResults(movies, 'movies-container');
@@ -836,6 +709,21 @@
         displayResults(trendingShows, 'rated-container');
 
         updatePageNumber(currentPage);
+
+        // Conditionally show or hide the slideshow container based on the current page
+        const slideshowContainer = document.querySelector('.slideshow-container');
+        if (currentPage === 1) {
+          slideshowContainer.style.display = 'block';
+        } else {
+          slideshowContainer.style.display = 'none';
+        }
+
+
+
+
+        // Use History API to change the URL without refreshing the page
+        const newURL = `index.html?page=${currentPage}`; // Adjust the URL as needed
+        history.pushState({ page: currentPage }, null, newURL);
       } catch (error) {
         console.error(error);
 
@@ -848,10 +736,9 @@
     }
 
 
+
     window.addEventListener('load', init);
 
-    const nightModeButton = document.getElementById('night-mode-button');
-    nightModeButton.addEventListener('click', toggleNightMode);
 
     const searchButton = document.getElementById('search-button');
     searchButton.addEventListener('click', handleSearch);

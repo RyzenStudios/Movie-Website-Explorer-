@@ -350,7 +350,11 @@
 
       // TV SHOW PLAYER
       const tvShowId = imdbID;
-      const embedTvShowUrl = `https://vidsrc.xyz/embed/tv/${tvShowId}/${seasonNumber}-${episodeNumber}`;
+      if (episodeNumber > 1 || seasonNumber > 1) {
+        embedTvShowUrl = `https://vidsrc.xyz/embed/tv/${tvShowId}/${seasonNumber}-${episodeNumber}`;
+      } else {
+        embedTvShowUrl = `https://vidsrc.xyz/embed/tv/${tvShowId}`;
+      }
 
       $('#tvShowEmbedContainer').html('<iframe width="1720" height="850"  src="' + embedTvShowUrl + '" referrerpolicy="origin" frameborder="0" allowfullscreen></iframe>');
 
